@@ -1,0 +1,1161 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>spez (u/spez) - Redlib</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				 <details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details> 
+			</div>
+			
+<form action="/search" id="searchbox">
+	<input id="search" type="text" name="q" placeholder="Search" title="Search redlib" value="">
+	
+	<button class="submit">
+		<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+			<path d="M20 50 H100" />
+			<path d="M75 15 L100 50 L75 85" />
+			&rarr;
+		</svg>
+	</button>
+</form> 
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/user/spez</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/user/spez" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+<main>
+    
+    <div id="column_one">
+        <form id="sort">
+            <div id="listing_options">
+                
+		<a class="selected" href="/user/spez/overview">
+			Overview
+		</a>
+	
+		<a  href="/user/spez/comments">
+			Comments
+		</a>
+	
+		<a  href="/user/spez/submitted">
+			Submitted
+		</a>
+	
+            </div>
+            <select id="sort_select" name="sort">
+                
+		<option value="hot" >
+			Hot
+		</option>
+	
+		<option value="new" >
+			New
+		</option>
+	
+		<option value="top" >
+			Top
+		</option>
+	
+		<option value="controversial" >
+			Controversial
+		</option>
+	</select
+            ><button id="sort_submit" class="submit">
+                <svg
+                    width="15"
+                    viewBox="0 0 110 100"
+                    fill="none"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                >
+                    <path d="M20 50 H100" />
+                    <path d="M75 15 L100 50 L75 85" />
+                    &rarr;
+                </svg>
+            </button>
+        </form>
+
+          
+        <div id="posts">
+             
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="96">
+                         96 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/user/spez/comments/1u7hraf/21_years_of_reddit/os0o1vi/#os0o1vi"
+                            title="21 years of Reddit"
+                            >21 years of Reddit</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/u_spez"
+                                >r/u_spez</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 16 2026, 16:59:58 UTC"
+                                >&nbsp;Jun 16 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>And thank you (mod tools suck) <a href="/u/shiruken">u/shiruken</a>!</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="45">
+                         45 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/user/spez/comments/1u7hraf/21_years_of_reddit/os0jtt9/#os0jtt9"
+                            title="21 years of Reddit"
+                            >21 years of Reddit</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/u_spez"
+                                >r/u_spez</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 16 2026, 16:41:57 UTC"
+                                >&nbsp;Jun 16 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>You were the ride</p>
+</div></p>
+                </details>
+            </div>
+               <div class="post" id="1u7hraf">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 16 2026, 16:04:27 UTC">Jun 16 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1u7hraf/21_years_of_reddit/">21 years of Reddit</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="848">
+    
+    848
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi everyone,</p>
+
+<p>Reddit turns 21 next week. Funny enough, it’s the same age I was when we started it. Save your jokes about <a href="/r/13or30">r/13or30</a>, I’ve already <a href="/img/mup6rvwj0o7h1.png">heard them</a>.</p>
+
+<p>That’s a long time in human years and an even longer time in internet years.</p>
+
+<p>When a few of us started Reddit back in 2005, the idea was simple: make it easier to find interesting things online. So we built a place where people could share links.</p>
+
+<p>And the links became prompts for conversations because people naturally like to talk about stuff. One of the first inside jokes on Reddit was, <em>&quot;I didn&#39;t read the article but… [insert 2000 words on the topic]&quot;</em> because people are more interested in the conversation than the content itself. </p>
+
+<p>(It’s not only <a href="/r/tifu/comments/2tdbig/tifu_by_enraging_the_parents_of_my_girlfriend_by/">inside jokes</a>, though. Sometimes it’s <a href="/r/AskReddit/comments/5c79n0/comment/d9uf56l/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button">heartfelt condolences</a>.)</p>
+
+<p>And what started as a place to share links evolved, for the better, into a place to form communities. What we didn’t realize at the time was that 21 years later, those communities would become one of the last places online where you can still reliably hear from real people on almost any topic imaginable.</p>
+
+<p>The internet has become more powerful, automated, and optimized for attention. And on social media, everything feels performative: one big stage, one big feed, and someone (or some thing!) fighting for your attention.</p>
+
+<p>But most people don’t want to perform.</p>
+
+<p>They want to ask personal questions and get advice from someone who’s been there. They want to compare experiences, learn from others, and find people who care about the same things they do.</p>
+
+<p>Reddit works because it’s not one giant conversation. It’s a constellation of communities, each with its own culture, norms, and rules.</p>
+
+<p>Over the last couple of decades, I’ve learned that when people gather around shared interests, they act less like performers and more like neighbors (even if sometimes the <a href="/r/neighborsfromhell">r/neighborsfromhell</a> kind). When communities set their own rules, they protect what makes those spaces valuable. And when people can speak anonymously, they’re often more honest.</p>
+
+<p>For a long time, people assumed the future of the internet would be more tied to real-world identity. But one of the things Reddit has shown is that pseudonymity can create safety, honesty, and participation. On Reddit, you can openly talk about the things you care about—or are struggling with—without having your identity be part of the story.</p>
+
+<p>As AI becomes more pervasive, that kind of human conversation only becomes more important. Real opinions, lived experience, and personal judgment matter more when the rest of the internet is filling up with synthetic content.</p>
+
+<p>I shared in <a href="/user/spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/">March</a> how we’re protecting Reddit’s authenticity without sacrificing your anonymity, and we’ll keep building in that direction.</p>
+
+<p>Since then, we’ve continued to defend Reddit against automated/bot/spammy content, including making it<a href="/r/modnews/comments/1tq9vxo/protecting_communities_from_scrapers_and_platform/"> harder to scrape Reddit at scale</a>, creating proactive moderation models that prevent up to 23 million spam views per day, and guarding against vote manipulation by revoking nearly 2 million inauthentic votes per day.</p>
+
+<p>Because the value of Reddit has never been the interface (unless you’re the <a href="/">Old Reddit</a> type, I know there are still dozens of you out there). It’s never been the algorithm. And it’s never been polished, sanitized content.</p>
+
+<p>The value of Reddit is you.</p>
+
+<p>Everything interesting about Reddit has been created by its people: the communities, the comments, the inside jokes, the rare insults, the niche expertise, the support, the debates, the brutal honesty, and the countless times someone took a minute to help a stranger for no reason other than they could.</p>
+
+<p>That is the human internet that’s worth protecting.</p>
+
+<p>Thank you for spending these last 21 years with us. I’m excited to see what the next 21 will hold.</p>
+
+<p>- <a href="/u/spez">u/spez</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1u7hraf/21_years_of_reddit/" class="post_comments" title="281 comments">281 comments</a>
+	</div>
+</div>   
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="170">
+                         170 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/redditstock/comments/1u6nnyv/uspez_ted_talk/orucdtm/#orucdtm"
+                            title="u/spez Ted Talk"
+                            >u/spez Ted Talk</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/redditstock"
+                                >r/redditstock</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 15 2026, 19:01:03 UTC"
+                                >&nbsp;Jun 15 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Haven’t forgotten about you 👊</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="27">
+                         27 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/optfyql/#optfyql"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 05 2026, 00:51:55 UTC"
+                                >&nbsp;Jun 05 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><figure><a href="/preview/pre/f1xjmxgj3d5h1.jpeg?width=1260&amp;format=pjpg&amp;auto=webp&amp;s=37fed0dc065a6553fa7a291f643bf95b60907962"><img loading="lazy" src="/preview/pre/f1xjmxgj3d5h1.jpeg?width=1260&amp;format=pjpg&amp;auto=webp&amp;s=37fed0dc065a6553fa7a291f643bf95b60907962"></a></figure>
+
+<p>Juuuust kidding. We’ll follow up with the hoodie plan. </p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="13">
+                         13 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/optcg0g/#optcg0g"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 05 2026, 00:30:43 UTC"
+                                >&nbsp;Jun 05 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><figure><a href="/preview/pre/6j6mqriszc5h1.jpeg?width=1260&amp;format=pjpg&amp;auto=webp&amp;s=d6ef9851633a7012a76d420b0ed7255d82dc950d"><img loading="lazy" src="/preview/pre/6j6mqriszc5h1.jpeg?width=1260&amp;format=pjpg&amp;auto=webp&amp;s=d6ef9851633a7012a76d420b0ed7255d82dc950d"></a></figure>
+
+<p>Oof. So close. </p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="22">
+                         22 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/oprhecj/#oprhecj"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 18:47:51 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>That is obviously where this is all heading.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="217">
+                         217 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/redditstock/comments/1twdbcz/spez_reads_every_comment_in_here/opq3e1a/#opq3e1a"
+                            title="spez reads every comment in here"
+                            >spez reads every comment in here</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/redditstock"
+                                >r/redditstock</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 15:07:12 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>He does</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="50">
+                         50 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmclva/#opmclva"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:35:04 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>I can’t comment on specific deals or timing.</p>
+
+<p>I will say that we are very aware that Reddit is an essential part of the AI and search ecosystem.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="62">
+                         62 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmb8xp/#opmb8xp"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:27:11 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>If you talk to any of the early engineers from any of the major LLMS, they’ll all tell you Reddit’s data was essential in their creation.</p>
+
+<p>Reddit is the #1 most cited domain for AI across all models, per data collected by Profound. Our content is uniquely valuable to the AI ecosystem because it’s fresh, honest, and largely text-based. And this position still holds because the fresh part really matters: ongoing indexing is more valuable than static datasets. As I said in <a href="https://s203.q4cdn.com/380862485/files/doc_financials/2026/q1/Q1-26-Shareholder-Letter.pdf">Q1’26 earnings</a>, I believe our conversations are like oil for this modern internet.</p>
+
+<p>We’ve learned a lot over the last two years and those learnings should be reflected in future partnerships, including ways to make them more product-focused versus “data for dollars.” I can’t get into specifics about deals or renewals, but can say that we fully understand the value we bring to the table.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="18">
+                         18 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmb76u/#opmb76u"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:26:54 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Since the Dev Platform beta opened in 2024, more than 2,000 developers have built apps used across 31,000+ communities, and we’ve seen good traction with mod tools, interactive experiences, and games. That’s important because it expands the canvas for what Reddit can be.</p>
+
+<p>There’s still a lot more to do there, but adoption is growing—installs of developer platform apps more than doubled from 2024 to 2025. The core technology is powerful, but there are a couple key features that will make it easier for subreddits to enjoy them (e.g. a games landing page, or the ability to have custom posts without “installing” the app).</p>
+
+<p>And for the World Cup specifically: we’ve got limited-edition 2026 national team kit avatars dropping tomorrow, so keep an eye out.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="12">
+                         12 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmb5dc/#opmb5dc"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:26:37 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>We’ve made a number of improvements to onboarding over the last couple of quarters. We’ve removed some screens, simplified the flow, and are using LLMs in topic / interest selection. While there is undoubtedly more to do here, we think the biggest driver looking forward will be the home feed, specifically the recommendation system that juggles all your interests to make your feed.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="32">
+                         32 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmb3vk/#opmb3vk"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:26:23 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Noted. Let me see what that would take.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="33">
+                         33 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmb26b/#opmb26b"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:26:07 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Reddit has co-existed with Facebook Groups for a long, long time. In fact, we’ve co-existed with everyone. We’re 21 years old this month. You mostly answered the question the way I would: We have differentiated ourselves through anonymity, authenticity, user control, and openness. Reddit succeeds or fails by either becoming the best version of Reddit, or not.</p>
+
+<p>An early piece of advice I got from Joshua Schachter, creator of del.icio.us—which invented the #hashtag and was an early inspiration for Reddit—is that you can copy the features of any company, but you can’t copy the DNA of the company that made those features. This has long been how I think about competition in this space. Reddit has 1-of-1 DNA, and we need to stay focused on perfecting Reddit and not worry too much about what others are doing.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="24">
+                         24 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmazm9/#opmazm9"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:25:42 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Paid subreddits are an opportunity, but not a priority right now. Our main focus right now is making Reddit faster, easier to use, and more relevant. There’s still so much upside for us just in building a better Reddit versus bolting on new features. </p>
+
+<p>To be successful growing outside the US, we first need to perfect the Reddit growth machine in the US. The reason is we already have content for basically everyone in America. If subreddit discovery is tough when we have the content, it’s impossible in areas where we don’t (outside the US).</p>
+
+<p>That said, we do have a handful of markets outside the US that we focus on where we think we have the best chance to grow meaningfully, including the UK, Australia, Brazil, Germany, and France. There we’re applying the same playbook: machine translation, localized content frameworks, regional marketing, and local partnerships.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="25">
+                         25 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmaxkh/#opmaxkh"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:25:22 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Some of the growth will come from steady iteration across the app. In the recent term, we’ve made incremental improvements to onboarding (removing screens, using LLMs for topic selection), push notifications (breaking news, better opt-in), app and web performance, mweb -&gt; app download, and search. Our product velocity is accelerating, and we have a ton in the works.</p>
+
+<p>And some of the growth will come from larger investments. A couple of the big ones will be the home feed (relevance, performance), and video on Reddit.<br/>
+​​<br/>
+What I’m most encouraged by is the acceleration I’m seeing from our product teams. We’re building and shipping faster, and at the end of the day we just have a lot of work to do.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="3">
+                         3 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmavr4/#opmavr4"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:25:03 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>This being a top upvoted question today was not on my (redditstock) <a href="/r/redditstock/comments/1qwpwxz/rddt_earnings_call_bingo_card_q4_2025/">bingo card</a>. As fun as it might be, it’s just not on our list at the moment. We’re focused on the core experience.</p>
+
+<p>However, I’ll make a bet with you: if this comment has exactly 1 upvote in exactly 24 hours, I will make you a custom <a href="/r/redditstock">r/redditstock</a> hoodie. Good luck.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="42">
+                         42 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/opmas4u/#opmas4u"
+                            title="Steve, Jen, and Drew here — Ask Us Anything!"
+                            >Steve, Jen, and Drew here — Ask Us Anything!</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Jun 04 2026, 00:24:28 UTC"
+                                >&nbsp;Jun 04 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>I think what we’re seeing here has less to do with Reddit and more to do with OKC being a once-in-a-generation team to hate. With that out of the way…  </p>
+
+<p>This is an example of how Reddit doesn’t compete with TV, it completes it.  </p>
+
+<p>But yes, I agree. This is a great question. These threads can be fun, but they also break Reddit in a way. One idea I’ve thought about is automatically partitioning big threads. IRC used to do this back in the day. I’m curious if you have a point of view here.  </p>
+
+<p>There being so many users that the product breaks down is usually a sign of a product opportunity, but we don’t have a specific vision for it at the moment, unfortunately.</p>
+</div></p>
+                </details>
+            </div>
+               <div class="post" id="1tvsa59">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 03 2026, 15:11:07 UTC">Jun 03 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22Speculation%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#878a8c;"
+				dir="ltr"><span>Speculation</span></a>
+		
+		<a href="/r/redditstock/comments/1tvsa59/hi_redditstock_leave_your_questions_and_well_be/">Hi redditstock, leave your questions, and we’ll be back later today to answer them.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:78px;">
+			<svg width="140px" height="78px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/pre/6mma67su135h1.png?width=140&#38;height=78&#38;auto=webp&#38;s=48a715c84daad3f73a6c42e2cab9ccffe9caedb7"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/pre/6mma67su135h1.png?width=140&#38;height=78&#38;auto=webp&#38;s=48a715c84daad3f73a6c42e2cab9ccffe9caedb7"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="103">
+    
+    103
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1tvsa59/hi_redditstock_leave_your_questions_and_well_be/" class="post_comments" title="26 comments">26 comments</a>
+	</div>
+</div>    <div class="post" id="1tp51gf">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 27 2026, 13:06:39 UTC">May 27 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1tp51gf/i_know_youve_got_a_lot_of_questions_were_doing_an/">I know you’ve got a lot of questions. We’re doing an AMA next Wednesday in r/RDDT.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/RDDT/comments/1tp4wsi/reddit_to_present_at_the_bofa_securities_2026/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="276">
+    
+    276
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1tp51gf/i_know_youve_got_a_lot_of_questions_were_doing_an/" class="post_comments" title="85 comments">85 comments</a>
+	</div>
+</div>   
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="35">
+                         35 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/redditstock/comments/1t7d1gy/please_fire_vollero_for_buyback_mismanagement/okpklb6/#okpklb6"
+                            title="Please Fire Vollero for Buyback Mismanagement"
+                            >Please Fire Vollero for Buyback Mismanagement</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/redditstock"
+                                >r/redditstock</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="May 08 2026, 20:48:30 UTC"
+                                >&nbsp;May 08 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Ding ding ding</p>
+</div></p>
+                </details>
+            </div>
+               <div class="post" id="1t4nr7v">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 05 2026, 18:19:02 UTC">May 05 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1t4nr7v/reddit_looked_old_the_day_it_was_born_i_joined_my/">Reddit looked old the day it was born. I joined my friend D. Scott Phoenix on the Progress podcast to discuss communities, AI, and what makes the internet feel human.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="65">
+    
+    65
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p><a href="/link/1t4nr7v/video/v3crs8lt1dzg1/player">https://reddit.com/link/1t4nr7v/video/v3crs8lt1dzg1/player</a></p>
+
+<p>Watch the full episode here: <a href="https://youtu.be/eAu9gTilxA0">https://youtu.be/eAu9gTilxA0</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1t4nr7v/reddit_looked_old_the_day_it_was_born_i_joined_my/" class="post_comments" title="45 comments">45 comments</a>
+	</div>
+</div>   
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="26">
+                         26 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/redditstock/comments/1t0jood/who_was_rich_from_qa_during_the_earnings_call/ojb40kw/#ojb40kw"
+                            title="Who was Rich from Q&#38;A during the earnings call?"
+                            >Who was Rich from Q&#38;A during the earnings call?</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/redditstock"
+                                >r/redditstock</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="May 01 2026, 12:32:02 UTC"
+                                >&nbsp;May 01 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>That was Rich Greenfield from LightShed. He is great. He was just giving us a friendly hard time.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="46">
+                         46 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1t07fra/reddit_announces_q126_earnings_plus_ama/oj7p61a/#oj7p61a"
+                            title="Reddit Announces Q1’26 Earnings (plus AMA!)"
+                            >Reddit Announces Q1’26 Earnings (plus AMA!)</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Apr 30 2026, 22:13:25 UTC"
+                                >&nbsp;Apr 30 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>We’ve got a couple: <a href="https://redditinc.com/news/reddit-and-google-expand-partnership">Google</a> and <a href="https://redditinc.com/news/reddit-and-oai-partner">OpenAI</a>.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <div class="comment user-comment">
+                <div class="comment_left">
+                    <p class="comment_score" title="29">
+                         29 
+                    </p>
+                    <div class="line"></div>
+                </div>
+                <details class="comment_right" open>
+                    <summary class="comment_data">
+                        <a
+                            class="comment_link"
+                            href="/r/RDDT/comments/1t07fra/reddit_announces_q126_earnings_plus_ama/oj7p40w/#oj7p40w"
+                            title="Reddit Announces Q1’26 Earnings (plus AMA!)"
+                            >Reddit Announces Q1’26 Earnings (plus AMA!)</a
+                        >
+                        <div class="user_comment_data_divider">
+                            <span class="created-in">&nbsp;in&nbsp;</span>
+                            <a
+                                class="comment_subreddit"
+                                href="/r/RDDT"
+                                >r/RDDT</a
+                            >
+                            <span class="dot">&bull;</span>
+                            <span class="created" title="Apr 30 2026, 22:13:06 UTC"
+                                >&nbsp;Apr 30 &#39;26</span
+                            >
+                        </div>
+                    </summary>
+                    <p class="comment_body"><div class="md"><p>Yes, though it’s not on the immediate roadmap, and I’m not sure about making it a paid feature versus something we do just for fun. We miss it too.</p>
+</div></p>
+                </details>
+            </div>
+              
+            <script src="/hls.min.js"></script>
+            <script src="/playHLSVideo.js"></script>
+            
+        </div>
+        
+
+        <footer>
+             
+            <a
+                href="?sort=&t=&after=t1_oj7p40w"
+                accesskey="N"
+                >NEXT</a
+            >
+            
+        </footer>
+    </div>
+    
+    <aside>
+        
+        <div class="panel" id="user">
+            <img
+                loading="lazy"
+                id="user_icon"
+                src="/style/t5_3k30p/styles/profileIcon_uj015iwx9s7g1.png?width=256&#38;height=256&#38;crop=256:256,smart&#38;s=aa819b0964f6e3019e769d1cc8ede7318c3869a3"
+                alt="User icon"
+            />
+            <h1 id="user_title">spez</h1>
+            <p id="user_name">u/spez</p>
+            <div id="user_description">Reddit CEO</div>
+            <div id="user_details">
+                <label>Karma</label>
+                <label>Created</label>
+                <div>940207</div>
+                <div>Jun 06 &#39;05</div>
+            </div>
+            <div id="user_actions">
+                
+                <div id="user_subscription">
+                    
+                    <form
+                        action="/r/u_spez/subscribe?redirect=user/spez"
+                        method="POST"
+                    >
+                        <button class="subscribe">Follow</button>
+                    </form>
+                    
+                </div>
+                <div id="user_filter">
+                    
+                    <form
+                        action="/r/u_spez/filter?redirect=user/spez"
+                        method="POST"
+                    >
+                        <button class="filter">Filter</button>
+                    </form>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </aside>
+</main>
+
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

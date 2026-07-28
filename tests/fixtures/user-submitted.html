@@ -1,0 +1,1444 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>spez (u/spez) - Redlib</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				 <details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details> 
+			</div>
+			
+<form action="/search" id="searchbox">
+	<input id="search" type="text" name="q" placeholder="Search" title="Search redlib" value="">
+	
+	<button class="submit">
+		<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+			<path d="M20 50 H100" />
+			<path d="M75 15 L100 50 L75 85" />
+			&rarr;
+		</svg>
+	</button>
+</form> 
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/user/spez/submitted</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/user/spez/submitted" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+<main>
+    
+    <div id="column_one">
+        <form id="sort">
+            <div id="listing_options">
+                
+		<a  href="/user/spez/overview">
+			Overview
+		</a>
+	
+		<a  href="/user/spez/comments">
+			Comments
+		</a>
+	
+		<a class="selected" href="/user/spez/submitted">
+			Submitted
+		</a>
+	
+            </div>
+            <select id="sort_select" name="sort">
+                
+		<option value="hot" >
+			Hot
+		</option>
+	
+		<option value="new" >
+			New
+		</option>
+	
+		<option value="top" >
+			Top
+		</option>
+	
+		<option value="controversial" >
+			Controversial
+		</option>
+	</select
+            ><button id="sort_submit" class="submit">
+                <svg
+                    width="15"
+                    viewBox="0 0 110 100"
+                    fill="none"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                >
+                    <path d="M20 50 H100" />
+                    <path d="M75 15 L100 50 L75 85" />
+                    &rarr;
+                </svg>
+            </button>
+        </form>
+
+          
+        <div id="posts">
+              <div class="post" id="1u7hraf">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 16 2026, 16:04:27 UTC">Jun 16 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1u7hraf/21_years_of_reddit/">21 years of Reddit</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="842">
+    
+    842
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi everyone,</p>
+
+<p>Reddit turns 21 next week. Funny enough, it’s the same age I was when we started it. Save your jokes about <a href="/r/13or30">r/13or30</a>, I’ve already <a href="/img/mup6rvwj0o7h1.png">heard them</a>.</p>
+
+<p>That’s a long time in human years and an even longer time in internet years.</p>
+
+<p>When a few of us started Reddit back in 2005, the idea was simple: make it easier to find interesting things online. So we built a place where people could share links.</p>
+
+<p>And the links became prompts for conversations because people naturally like to talk about stuff. One of the first inside jokes on Reddit was, <em>&quot;I didn&#39;t read the article but… [insert 2000 words on the topic]&quot;</em> because people are more interested in the conversation than the content itself. </p>
+
+<p>(It’s not only <a href="/r/tifu/comments/2tdbig/tifu_by_enraging_the_parents_of_my_girlfriend_by/">inside jokes</a>, though. Sometimes it’s <a href="/r/AskReddit/comments/5c79n0/comment/d9uf56l/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button">heartfelt condolences</a>.)</p>
+
+<p>And what started as a place to share links evolved, for the better, into a place to form communities. What we didn’t realize at the time was that 21 years later, those communities would become one of the last places online where you can still reliably hear from real people on almost any topic imaginable.</p>
+
+<p>The internet has become more powerful, automated, and optimized for attention. And on social media, everything feels performative: one big stage, one big feed, and someone (or some thing!) fighting for your attention.</p>
+
+<p>But most people don’t want to perform.</p>
+
+<p>They want to ask personal questions and get advice from someone who’s been there. They want to compare experiences, learn from others, and find people who care about the same things they do.</p>
+
+<p>Reddit works because it’s not one giant conversation. It’s a constellation of communities, each with its own culture, norms, and rules.</p>
+
+<p>Over the last couple of decades, I’ve learned that when people gather around shared interests, they act less like performers and more like neighbors (even if sometimes the <a href="/r/neighborsfromhell">r/neighborsfromhell</a> kind). When communities set their own rules, they protect what makes those spaces valuable. And when people can speak anonymously, they’re often more honest.</p>
+
+<p>For a long time, people assumed the future of the internet would be more tied to real-world identity. But one of the things Reddit has shown is that pseudonymity can create safety, honesty, and participation. On Reddit, you can openly talk about the things you care about—or are struggling with—without having your identity be part of the story.</p>
+
+<p>As AI becomes more pervasive, that kind of human conversation only becomes more important. Real opinions, lived experience, and personal judgment matter more when the rest of the internet is filling up with synthetic content.</p>
+
+<p>I shared in <a href="/user/spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/">March</a> how we’re protecting Reddit’s authenticity without sacrificing your anonymity, and we’ll keep building in that direction.</p>
+
+<p>Since then, we’ve continued to defend Reddit against automated/bot/spammy content, including making it<a href="/r/modnews/comments/1tq9vxo/protecting_communities_from_scrapers_and_platform/"> harder to scrape Reddit at scale</a>, creating proactive moderation models that prevent up to 23 million spam views per day, and guarding against vote manipulation by revoking nearly 2 million inauthentic votes per day.</p>
+
+<p>Because the value of Reddit has never been the interface (unless you’re the <a href="/">Old Reddit</a> type, I know there are still dozens of you out there). It’s never been the algorithm. And it’s never been polished, sanitized content.</p>
+
+<p>The value of Reddit is you.</p>
+
+<p>Everything interesting about Reddit has been created by its people: the communities, the comments, the inside jokes, the rare insults, the niche expertise, the support, the debates, the brutal honesty, and the countless times someone took a minute to help a stranger for no reason other than they could.</p>
+
+<p>That is the human internet that’s worth protecting.</p>
+
+<p>Thank you for spending these last 21 years with us. I’m excited to see what the next 21 will hold.</p>
+
+<p>- <a href="/u/spez">u/spez</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1u7hraf/21_years_of_reddit/" class="post_comments" title="281 comments">281 comments</a>
+	</div>
+</div>    <div class="post" id="1tvsa59">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 03 2026, 15:11:07 UTC">Jun 03 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22Speculation%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#878a8c;"
+				dir="ltr"><span>Speculation</span></a>
+		
+		<a href="/r/redditstock/comments/1tvsa59/hi_redditstock_leave_your_questions_and_well_be/">Hi redditstock, leave your questions, and we’ll be back later today to answer them.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/RDDT/comments/1tvs5jj/steve_jen_and_drew_here_ask_us_anything/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:78px;">
+			<svg width="140px" height="78px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/pre/6mma67su135h1.png?width=140&#38;height=78&#38;auto=webp&#38;s=48a715c84daad3f73a6c42e2cab9ccffe9caedb7"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/pre/6mma67su135h1.png?width=140&#38;height=78&#38;auto=webp&#38;s=48a715c84daad3f73a6c42e2cab9ccffe9caedb7"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="102">
+    
+    102
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1tvsa59/hi_redditstock_leave_your_questions_and_well_be/" class="post_comments" title="26 comments">26 comments</a>
+	</div>
+</div>    <div class="post" id="1tp51gf">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 27 2026, 13:06:39 UTC">May 27 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1tp51gf/i_know_youve_got_a_lot_of_questions_were_doing_an/">I know you’ve got a lot of questions. We’re doing an AMA next Wednesday in r/RDDT.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/RDDT/comments/1tp4wsi/reddit_to_present_at_the_bofa_securities_2026/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="274">
+    
+    274
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1tp51gf/i_know_youve_got_a_lot_of_questions_were_doing_an/" class="post_comments" title="85 comments">85 comments</a>
+	</div>
+</div>    <div class="post" id="1t4nr7v">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 05 2026, 18:19:02 UTC">May 05 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1t4nr7v/reddit_looked_old_the_day_it_was_born_i_joined_my/">Reddit looked old the day it was born. I joined my friend D. Scott Phoenix on the Progress podcast to discuss communities, AI, and what makes the internet feel human.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="62">
+    
+    62
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p><a href="/link/1t4nr7v/video/v3crs8lt1dzg1/player">https://reddit.com/link/1t4nr7v/video/v3crs8lt1dzg1/player</a></p>
+
+<p>Watch the full episode here: <a href="https://youtu.be/eAu9gTilxA0">https://youtu.be/eAu9gTilxA0</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1t4nr7v/reddit_looked_old_the_day_it_was_born_i_joined_my/" class="post_comments" title="45 comments">45 comments</a>
+	</div>
+</div>    <div class="post" id="1t07i8q">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 30 2026, 20:10:14 UTC">Apr 30 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1t07i8q/another_solid_quarter_and_great_start_to_the_year/">Another solid quarter and great start to the year for Reddit. Ask your questions for me, Jen, and Drew in r/RDDT.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/RDDT/comments/1t07fra/reddit_announces_q126_earnings_plus_ama/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:96px;">
+			<svg width="140px" height="96px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/pre/7s1kufxfcdyg1.png?width=140&#38;height=96&#38;auto=webp&#38;s=27a4c398a293a64462b0f840f2b96500a003b708"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/pre/7s1kufxfcdyg1.png?width=140&#38;height=96&#38;auto=webp&#38;s=27a4c398a293a64462b0f840f2b96500a003b708"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="208">
+    
+    208
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1t07i8q/another_solid_quarter_and_great_start_to_the_year/" class="post_comments" title="62 comments">62 comments</a>
+	</div>
+</div>    <div class="post" id="1s3ezrc">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Mar 25 2026, 16:06:12 UTC">Mar 25 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/">Humans welcome (bots must wear name tags)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="781">
+    
+    781
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p><strong>TL;DR:</strong></p>
+
+<ul>
+<li>Reddit is for people</li>
+<li>“Good bots” will be labeled as [App]</li>
+<li>We’ll continue to remove spam and bad bot activity</li>
+<li>Automated or suspicious accounts may be asked to verify that there’s a human behind it</li>
+<li>We are not doing sitewide human verification</li>
+<li>We don’t need or want your identity</li>
+</ul>
+
+<p>Hi everyone,</p>
+
+<p>The internet feels different lately. It’s getting harder to tell who—or what—you’re interacting with. But Reddit’s purpose is for people to talk to people. And we want it to stay that way.</p>
+
+<p>Our product has always been human conversation: messy, opinionated, sometimes great, sometimes not, but always real (or at least, really creative writing). As AI becomes a bigger part of the internet, we want to make sure that when you’re on Reddit, you know when you’re talking to a person and when you’re not.</p>
+
+<p>So we’re making a few changes.</p>
+
+<p>Our strategy here is to go from the bottom up (i.e., deal with the bots), because on Reddit, you should assume that anyone you’re talking to is a human unless otherwise labeled. A few of the principles behind how we’re approaching this:</p>
+
+<ul>
+<li>Verifying someone is human is not the same as knowing who they are</li>
+<li>We don’t have or want your real-world identity</li>
+<li>Automated use of Reddit can be useful in some cases (i.e., “good bots”), but we have to be careful</li>
+</ul>
+
+<h1>What’s happening</h1>
+
+<p><strong>1. Clear labeling for non-human accounts</strong></p>
+
+<p>At the end of last year, we launched verified profiles for brands, publishers, and creators. For professional accounts, being clearly labeled increases transparency and helps their content be accepted in relevant communities.</p>
+
+<p>Next, we’re standardizing how automation shows up on Reddit. Accounts that use automation in allowed ways (what many call “good bots”) will be labeled as [App]. If you see that label, you know you’re interacting with a machine, not a person.</p>
+
+<p>Developers can register their apps to receive this label (there will be more about this in <a href="/r/redditdev">r/redditdev</a>).</p>
+
+<p><strong>2. Continued removal of nefarious bots and spam</strong></p>
+
+<p>We hate it as much as you do and already remove the vast majority of it (an average of 100K accounts per day), often before anyone sees it. We’ll continue to remove nefarious bot content, including spam. </p>
+
+<p><strong>3. Human verification for automated or otherwise fishy behavior</strong></p>
+
+<p>If something suggests an account isn’t human, including automation (hi, web agents), we may ask it to confirm there’s a person behind it. This will be rare and will not apply to most users. Accounts that can’t pass may be restricted. </p>
+
+<p>To be clear, <strong>this is not sitewide human verification</strong>, let alone sitewide ID verification.</p>
+
+<p><strong>4. Reporting suspected automation</strong></p>
+
+<p>Redditors have long been the best bullshit detectors, and increasingly great Turing testers. We’ll make reporting easier and more flexible (these days, we can infer most issues from a report without a lot of context). I’d also like to include comments from other users pointing something out (e.g., “nice post, bot, now fuck off”), since that’s most users’ preferred reporting method.</p>
+
+<h1>Privacy</h1>
+
+<p>Both due to AI reshaping the internet and increasing regulation around the world requiring various forms of identity or age verification, we are exploring ways to confirm humanness and comply with these regulations without compromising user privacy. The best long-term solutions will be decentralized, individualized, private, and ideally not require an ID at all.</p>
+
+<p>If we need to verify an account is human, we’ll do it in a privacy-first way. Our aim is to confirm there is a person behind the account, not who that person is. The goal is to increase transparency of what is what on Reddit while preserving the anonymity that makes Reddit unique. You shouldn’t have to sacrifice one for the other.</p>
+
+<p>When confirming that there is a human behind an account, we prefer third-party tools that keep a distance between verification and Reddit itself. Any system we use will not expose your real-world identity to Reddit nor your Reddit username or activity to any third party. There are a handful of ways to do this, and I’m sure there will be more. Each have their tradeoffs:</p>
+
+<ul>
+<li><strong>Passkeys</strong> (which are well supported by Apple, Google, YubiKey, and various password managers) - These are lightweight, require a human to do something, and don’t require your ID. The tradeoff is that there is no proof of individuality or anything other than “a human probably did something.” Nevertheless, it’s a great starting point.</li>
+<li><strong>Third-party biometric services</strong> - For example, World ID (yes, the Orb company, though they have non-Orb solutions as well). This technology unlocks proof-of-individual without requiring your name, government ID, or a centralized database. I think the internet needs verification solutions like this, where your account information, usage data, and identity never mix.</li>
+<li><strong>Third-party government ID services</strong> - In some countries, such as the UK and Australia, governments require us to use these. These are the least secure, least private, and least preferred. When we are forced to do this, we design the integrations so that we never actually see your ID information, so your Reddit data cannot be tied to you.</li>
+</ul>
+
+<h1>What about AI-generated content?</h1>
+
+<p>There is, of course, the gray area of humans using AI to write. We see it too and agree that it can feel off, but we’re not going to overcorrect on that now, at least at a sitewide level. We’ll monitor its usage and see what happens as we crack down even more on automated accounts. As always, communities can set their own standards if they want. </p>
+
+<p>For better or worse, using AI to write is part of how people will communicate in the future (albeit annoying), so our current focus is to ensure there is a real, live human behind the accounts you’re seeing. Before there was AI slop, there was slop. It’s not a new problem, and it’s one that Reddit, with its voting and moderation system, is better than most at dealing with.</p>
+
+<p>Things are changing quickly, and we’ll adapt as best we can. We welcome any thoughts and criticism.</p>
+
+<p>Thanks,</p>
+
+<p><a href="/u/spez">u/spez</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/" class="post_comments" title="499 comments">499 comments</a>
+	</div>
+</div>    <div class="post" id="1s3f2fe">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Mar 25 2026, 16:08:53 UTC">Mar 25 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1s3f2fe/humans_welcome_bots_must_wear_name_tags/">Humans welcome (bots must wear name tags)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/u_spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="220">
+    
+    220
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1s3f2fe/humans_welcome_bots_must_wear_name_tags/" class="post_comments" title="89 comments">89 comments</a>
+	</div>
+</div>    <div class="post" id="1qwxst2">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 05 2026, 21:11:57 UTC">Feb 05 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1qwxst2/tldr_solid_end_to_a_strong_year_for_reddit_ask/">TL;DR: Solid end to a strong year for Reddit. Ask your questions for me, Jen, and Drew in r/RDDT.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/RDDT/comments/1qwxntg/reddit_announces_q425_and_full_year_2025_earnings/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:99px;">
+			<svg width="140px" height="99px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/thumb/b/0NdADK2KxswfDk_Su4SSFXPDoyb_hOFg6Hn0kIFtSSU.jpg"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/thumb/b/0NdADK2KxswfDk_Su4SSFXPDoyb_hOFg6Hn0kIFtSSU.jpg"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="205">
+    
+    205
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1qwxst2/tldr_solid_end_to_a_strong_year_for_reddit_ask/" class="post_comments" title="109 comments">109 comments</a>
+	</div>
+</div>    <div class="post" id="1pdb5dc">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Dec 03 2025, 17:50:42 UTC">Dec 03 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1pdb5dc/beyond_the_front_page_of_the_internet/">Beyond the Front Page of the Internet</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="506">
+    
+    506
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi everyone,</p>
+
+<p>The end of the year is as good a time as any for reflection, and lately, I’ve been thinking a lot about what makes Reddit special.</p>
+
+<p>When we started this site 20 years ago (AKA Very, Very Old Reddit), the goal was pretty simple: create a space where people could talk about interesting things they found on the internet. What began as an alternative to traditional media came into its own as an alternative to social media, and now that AI is everywhere, our aim is to keep Reddit the most human place on the internet. No matter what platforms or technology are trending, we’ve always strived to be a more authentic antidote.</p>
+
+<p>Over the years, Reddit’s been stereotyped in all sorts of ways: shaving-challenged basement dwellers, keyboard warriors with too much time on their hands, or—more accurately—the funniest, most interesting, and helpful people on the internet. Take your pick. I’ve never liked the idea of a Reddit hivemind or archetype because Reddit’s not one thing. It never has been. Though I admit it’s always had a certain <em>vibe</em>, today even that is entirely dependent on which subreddits you hang out in.</p>
+
+<p>For a long while, we were known as the “front page of the internet,” but we’ve outgrown a singular front page for everyone. You have different interests than I do, and your Reddit should look different from mine. And from your neighbor’s, or your coworker’s, or your best friend’s. Whether you’re in a community of fellow <a href="/R/NEWPARENTS">first-time parents</a>, aspiring <a href="/r/solotravel/">solo travelers</a>, fans of your favorite <a href="/r/BravoRealHousewives/">reality show</a>, or people who run <a href="/r/Ultramarathon/">ultra-marathons</a>, Reddit is home to all of it. </p>
+
+<p>Which brings us to <a href="/r/popular">r/popular</a>, the default feed for new users. In theory, it’s what’s most popular on Reddit, but it’s actually what is <em>liked</em> by the most active users on Reddit—which is not the same thing. Having it as a default feed gives the false impression of a singular Reddit culture, one that is neither representative of Reddit nor appealing to new users (or anyone at all, IMO). Which is why, in the near future, we&#39;ll stop showing it to new users, and unless you read it regularly, we’ll remove it from the core group of feeds in the app. </p>
+
+<p>Said more directly: <a href="/r/popular">r/popular</a> sucks, and we’re moving away from it, and towards better, more relevant and personalized feeds.</p>
+
+<p>We’re one platform, yes, but with many minds (at least more than one). One of my favorite aspects of Reddit is that every community has its own culture, rules, and sense (<a href="/r/funny/">or lack</a>) of humor. We are a constantly evolving ecosystem where anyone, anywhere, can connect on almost any topic or belief. And if your perspective isn’t represented, you can create the community you want to see. The freedom to build your own corner of the internet is what makes Reddit, Reddit.</p>
+
+<p>On Reddit, no strongly held worldview exists unchallenged. For every earnest subreddit, there is a vibrant and more funny circlejerk counterpart lurking in the shadows. That balance—and sometimes tension—reflects how the world actually is.</p>
+
+<figure><a href="/preview/pre/0jnmifl1115g1.png?width=777&amp;format=png&amp;auto=webp&amp;s=e89273418b59025a2a992a5ca10129942204b32d"><img loading="lazy" src="/preview/pre/0jnmifl1115g1.png?width=777&amp;format=png&amp;auto=webp&amp;s=e89273418b59025a2a992a5ca10129942204b32d"></a></figure>
+
+<figure><a href="/preview/pre/3vv3euy2115g1.png?width=777&amp;format=png&amp;auto=webp&amp;s=03045b64d446446703c0aee042abbfdf444edc83"><img loading="lazy" src="/preview/pre/3vv3euy2115g1.png?width=777&amp;format=png&amp;auto=webp&amp;s=03045b64d446446703c0aee042abbfdf444edc83"></a></figure>
+
+<p>More people are visiting Reddit than ever before—116 million every day. And when I look at the top-visited communities, it’s not surprising to see that they are (mostly) coming here to laugh, ask questions, judge, and generally be entertained.  </p>
+
+<table><thead>
+<tr>
+<th align="left">Subreddit</th>
+<th align="left">Weekly Visitors</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">AskReddit</td>
+<td align="left">15,460,341</td>
+</tr>
+<tr>
+<td align="left">whatisit</td>
+<td align="left">10,950,600</td>
+</tr>
+<tr>
+<td align="left">mildlyinfuriating</td>
+<td align="left">10,230,061</td>
+</tr>
+<tr>
+<td align="left">interestingasfuck</td>
+<td align="left">9,526,443</td>
+</tr>
+<tr>
+<td align="left">NoStupidQuestions</td>
+<td align="left">8,232,847</td>
+</tr>
+<tr>
+<td align="left">pics</td>
+<td align="left">6,833,698</td>
+</tr>
+<tr>
+<td align="left">PeterExplainsTheJoke</td>
+<td align="left">6,827,023</td>
+</tr>
+<tr>
+<td align="left">mildlyinteresting</td>
+<td align="left">6,658,098</td>
+</tr>
+<tr>
+<td align="left">AmIOverreacting</td>
+<td align="left">6,537,219</td>
+</tr>
+<tr>
+<td align="left">TikTokCringe</td>
+<td align="left">6,300,278</td>
+</tr>
+<tr>
+<td align="left">CringeTikToks</td>
+<td align="left">6,282,550</td>
+</tr>
+<tr>
+<td align="left">popculturechat</td>
+<td align="left">6,006,960</td>
+</tr>
+<tr>
+<td align="left">nextfuckinglevel</td>
+<td align="left">5,880,113</td>
+</tr>
+<tr>
+<td align="left">explainitpeter</td>
+<td align="left">5,740,741</td>
+</tr>
+<tr>
+<td align="left">Damnthatsinteresting</td>
+<td align="left">5,572,937</td>
+</tr>
+<tr>
+<td align="left">movies</td>
+<td align="left">5,352,666</td>
+</tr>
+<tr>
+<td align="left">todayilearned</td>
+<td align="left">5,007,263</td>
+</tr>
+<tr>
+<td align="left">MadeMeSmile</td>
+<td align="left">5,007,046</td>
+</tr>
+<tr>
+<td align="left">LivestreamFail</td>
+<td align="left">4,807,041</td>
+</tr>
+<tr>
+<td align="left">news</td>
+<td align="left">4,724,411</td>
+</tr>
+</tbody></table>
+
+<p><em>Top 20 SFW subreddits by weekly active visitors, as of November 20, 2025.</em></p>
+
+<p>Reddit thrives when its communities are unique. That’s why we empower them to make their own rules (on top of <a href="https://redditinc.com/policies/reddit-rules">ours</a>) and grow the way they want to. But distinct communities require distinct leaders. A situation where someone moderates an unlimited number of massive communities is not that, which is why we’re making a few changes.</p>
+
+<p>Namely, we’re <a href="/r/modnews/comments/1pbkqbu/an_update_on_limits_for_hightraffic_communities/">limiting</a> the number of high-traffic communities any single person can moderate. This is a major shift with a lot of nuance, so we&#39;re not rushing. We’re focused on helping all affected mods and communities through the transition, which you can read about in detail <a href="/r/modnews/comments/1ncn0go/evolving_moderation_on_reddit_reshaping_boundaries/">here</a>.</p>
+
+<p>Relatedly, you may have noticed that we updated how we display community size. We switched from Subscribers—which was really just a measure of age—to Weekly Visitors to reflect actual activity. (And if you really miss subscribers, you can add them back with <a href="https://developers.reddit.com/apps/subscriber-count">this</a> devvit app.)</p>
+
+<p>These changes are all part of the same goal: making Reddit more conducive to how people actually use it today.</p>
+
+<p>Reddit is for everyone because it’s built by everyone. We’re a vibrant city of coffee shops, nightclubs, arenas, and yes, a few weird basements (neckbeard not required). Sure, you can come here to argue, but like in real life, most people come here to connect. We want to help you do more of that.</p>
+
+<p>Thank you to all of you who make Reddit what it is and what it can be next.</p>
+
+<p>See you next year,</p>
+
+<p><a href="/u/spez">u/spez</a></p>
+
+<p>edit: table editor needs some work.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1pdb5dc/beyond_the_front_page_of_the_internet/" class="post_comments" title="382 comments">382 comments</a>
+	</div>
+</div>    <div class="post" id="1okagaf">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditstock">r/redditstock</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 30 2025, 20:16:18 UTC">Oct 30 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditstock/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#007bff;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/redditstock/comments/1okagaf/tldr_q3_was_solid_ask_your_questions_for_me_jen/">TLDR: Q3 was solid. Ask your questions for me, Jen, and Drew in r/RDDT (I know you have good ones).</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/RDDT/comments/1okacdq/reddit_announces_q325_earnings_plus_ama/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:90px;">
+			<svg width="140px" height="90px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/thumb/b/itVy59NFGU9SmbMsB0NvA2CNL6_Kii75z2ZTEAF4dto.jpg"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/thumb/b/itVy59NFGU9SmbMsB0NvA2CNL6_Kii75z2ZTEAF4dto.jpg"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="267">
+    
+    267
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditstock/comments/1okagaf/tldr_q3_was_solid_ask_your_questions_for_me_jen/" class="post_comments" title="86 comments">86 comments</a>
+	</div>
+</div>    <div class="post" id="1lq0zjs">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/Snoo">r/Snoo</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 02 2025, 16:52:41 UTC">Jul 02 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/Snoo/search?q=flair_name%3A%22Contest submission%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#00e2b7;"
+				dir="ltr"><span>Contest submission</span></a>
+		
+		<a href="/r/Snoo/comments/1lq0zjs/best_snoo_i_could_do/">Best Snoo I could do.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="713">
+    
+    713
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><figure><a href="/preview/pre/j2bbssltqhaf1.png?width=936&amp;format=png&amp;auto=webp&amp;s=1f1e853b0d2e257a84a2798dcde2d7a27c85e70d"><img loading="lazy" src="/preview/pre/j2bbssltqhaf1.png?width=936&amp;format=png&amp;auto=webp&amp;s=1f1e853b0d2e257a84a2798dcde2d7a27c85e70d"></a><figcaption>I forgot its ears again.</figcaption></figure>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/Snoo/comments/1lq0zjs/best_snoo_i_could_do/" class="post_comments" title="211 comments">211 comments</a>
+	</div>
+</div>    <div class="post" id="1kfciml">
+	<p class="post_header">
+		<a class="post_subreddit" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 05 2025, 14:08:03 UTC">May 05 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/user/spez/comments/1kfciml/reddits_next_chapter_smarter_easier_still_human/">Reddit’s next chapter: smarter, easier, still human</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="708">
+    
+    708
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi everyone,</p>
+
+<p>I haven’t posted in a while—and let’s be honest, when I do show up, it usually means something’s gone sideways (and if it’s not gone sideways, it’s probably about to). But I’d like to communicate with you more regularly and directly about what we’re thinking and building. Many of these ideas come from our conversations with mods and users who participate in programs like Mod Council, Partner Communities, and the User Feedback Collective. </p>
+
+<p>We recently shared our <a href="/r/RDDT/comments/1kcibvm/reddit_announces_q125_earnings_plus_ama/">Q1 earnings results</a> (TL;DR: Solid quarter). Beyond the numbers, I wanted to highlight a few moments from the start of the year:</p>
+
+<ul>
+<li>In March, we <a href="/r/reddit/comments/1j4z42x/making_contributing_easier_on_reddit_new_tools/">released a set of tools</a>, including post suggestions, insights, and rule checking, to help users participate successfully in conversations and let mods focus more on leading their communities. Reddit should feel easier to contribute to, especially for first-timers, and these are some of the ways we’re working towards that.</li>
+<li><a href="/answers">Reddit Answers</a>—our AI-powered search tool—is live in nine countries, including the US, UK, and India with support in English and more countries and languages on the way. It’s being used for everything from “what’s the best espresso machine” to “last night’s episode of The Last of Us.” Still early, but the vision is simple: make Reddit’s seemingly infinite human knowledge easier to access. Most of the conversations on Reddit happen on posts less than a day old. Reddit Answers unlocks the other 20 years. Reddit Answers doesn’t replace conversations—it’s a quicker path towards them.</li>
+<li>In the first quarter, “reddit” was the 6th most Googled word in the U.S. (and sandwiched between “news” and “trump,” which is, I think, Chaotic Neutral on the internet alignment chart), proving that 1) people want what Reddit has and 2) Reddit search isn’t there quite yet, but <a href="/r/announcements/comments/59k22p/comment/d992fwq/?context=1">we’re right on schedule</a>. </li>
+<li>2.2 million players joined our April Fools’ Day event, <a href="/r/Field/">r/field</a> (with roughly half in my honor*), and it’s an early proof of what’s possible for <a href="/r/GamesOnReddit/">games on Reddit</a>. It’s really special to see people creating their own interactive experiences on our <a href="https://developers.reddit.com/">Developer Platform</a>, and I trust whatever our users come up with will be far more interesting than anything we build ourselves.</li>
+</ul>
+
+<figure><a href="/preview/pre/84rkh6lyzyye1.png?width=1209&amp;format=png&amp;auto=webp&amp;s=c6a2085fa65a9e807116fa75c9f507a4f621d44d"><img loading="lazy" src="/preview/pre/84rkh6lyzyye1.png?width=1209&amp;format=png&amp;auto=webp&amp;s=c6a2085fa65a9e807116fa75c9f507a4f621d44d"></a><figcaption>*Mentions of “fuck spez” on Reddit</figcaption></figure>
+
+<p>Next month, Reddit turns 20. Honestly, it blows my mind. A lot has changed on Reddit over the years, and a lot has stayed the same. The core of Reddit’s identity hasn’t changed much—our model is still based on communities, voting, and (mostly) anonymous users, so our conversations remain some of the most real you can find online.</p>
+
+<p>Today, we see Reddit as having two superpowers: community and knowledge. At the end of last year, we updated our mission statement to reflect both: <strong>Empower communities, and make their knowledge accessible to everyone.</strong> This captures both our longstanding work in creating a platform for community and for using Reddit as a source for knowledge.</p>
+
+<p>Reddit is unlike any other platform, and that’s by design. While social media feeds you whatever content drives the most engagement, on Reddit, you decide what matters and make it popular through voting. We’re also one of the last major sites that doesn’t require you to sign in to access most features. We do this because we think it’s important, and we believe our open model helps fulfill the internet’s purpose: to bring individuals from all over the world together to discover, engage with, and exchange ideas that matter to them, without barriers and regardless of geography or language.</p>
+
+<p>And as we look ahead, we want to double down on these values. Our goal is to make Reddit the best version of itself by being faster, better, and easier to use. Here’s how we’re bringing that vision to life:</p>
+
+<p><strong>Core product improvements:</strong> Across the platform, we’ll be trying out a range of updates to make things better. We’ll be making it easier to create and read posts and find new subreddits, upgrading profile pages, evolving <a href="/r/popular">r/popular</a>, improving wikis, and <del>creating</del> fixing a lot of bugs. We will keep you updated with changes as we go. </p>
+
+<p><strong>Moderation:</strong> Moderators make communities, and by definition, without moderators, there are no communities. Moderating subreddits today can be time-consuming, too manual, and at times frustrating. It can be difficult to recruit new mods, and growing a community from scratch is way too hard. Often, a few folks end up carrying the weight, which isn’t fair or sustainable. Our vision is to shift the primary role of a moderator from policing to community cultivation. We’ll get there with better tools—especially more AI-driven automation—that moderators can choose to use in their communities. Focus groups, early product testing, and feedback loops shape how these systems evolve. <a href="/u/Go_JasonWaterfalls">u/Go_JasonWaterfalls</a> will share more with mods here soon. I want to sincerely thank the many mods who have joined our councils, groups, and feedback sessions over the last couple of years to help us in this journey.</p>
+
+<p><strong>Search:</strong> We believe search being great on Reddit will make the whole product better. Increasingly, people come to Reddit with a specific question that likely has been answered a hundred different ways. And whether you’re a first-time visitor or an old.reddit diehard, search should help you get to where you’re going faster. I’m the first to admit, finding what you’re looking for on Reddit hasn’t always (ever) been easy. We’ve made a lot of progress in the last few years and have many more improvements coming this year, including expanding Reddit Answers and integrating it directly into the core search experience. </p>
+
+<p><strong>AI + Humans:</strong> An increasing amount of the content you see online is generated by machines—so how does AI fit into the most human place on the internet? First, AI can be incredibly useful for things like summarization, safety, translation, and moderation. That includes filters that reduce the burden on mods by automatically removing spam, hateful, or violent content. And it powers things like <a href="https://support.reddithelp.com/hc/en-us/articles/17625458521748-Automations-Post-Comment-Guidance-Set-Up">post guidance</a>, which can tell a user whether their post violates a subreddit rule before they submit it—this helps new users learn the rules and also saves mods lots of time. Reddit’s strength is in its people, and we want AI tools that help you do what you’re already doing.</p>
+
+<p>That said, unwelcome AI in communities is a serious concern. It is the worry I hear most often these days from users and mods alike. <strong>Reddit works because it’s human</strong>. It’s one of the few places online where real people share real opinions. That authenticity is what gives Reddit its value. If we lose trust in that, we lose what makes Reddit…Reddit. Our focus is, and always will be, on keeping Reddit a trusted place for human conversation. </p>
+
+<p>At the same time, anonymity is essential to Reddit. People come here to share experiences they wouldn’t post anywhere else because they know they are safe to do so. To make this possible, historically, Reddit has required practically no information to create an account. We have been—and will continue to be—extremely protective of your personal information, and will continue to push back against excessive or unreasonable demands from public or private authorities. If you want to know more about how we respond to  legal requests from governments, law enforcement, and private parties, check out our biannual <a href="https://redditinc.com/policies/transparency-report-july-to-december-2024">Transparency Report</a>.</p>
+
+<p>To keep Reddit human and to meet evolving regulatory requirements, we are going to need a little more information. Specifically, we will need to know whether you are a human, and in some locations, if you are an adult. But <strong>we never</strong> want to know your name or who you are. The way we will do this is by working with various third-party services that can provide us with the essential information and nothing else. No solution is perfect—including the status quo—but we will do our best to preserve both the humanness and anonymity of Reddit. We will share more as we go.</p>
+
+<p><strong>Premium content:</strong> You might’ve seen some headlines about “paid subreddits.” Perhaps those articles were behind paywalls. Let me clarify: we’re not putting Reddit behind a paywall. We are thinking about how to empower communities to monetize through premium experiences and exclusive spaces. One way to do that is by enabling communities to offer a separate space for their most leaned-in members (back in the day, the most loved feature of Reddit Gold was access to <a href="/r/lounge">r/lounge</a>, and we’d like to reimagine this). This would be an optional feature for communities that <a href="https://docs.google.com/forms/d/e/1FAIpQLSezA2xdhjMYEHkPRdIs4pVXyTB2vtqcPMZ4pQt679Yv1Ef05w/viewform">want it</a>.</p>
+
+<p><strong>Sunsetting old.reddit:</strong> old.reddit is the version of Reddit that we built back in the mid-2000s. It doesn’t scale, it’s impossible to develop on, and it’s ugly af. We will be shutting it down at the end of the month.</p>
+
+<p>Just kidding. I don’t know why I say stuff like this. We’ll figure out how to work around it and keep it online as long as people are using it.</p>
+
+<figure><a href="/preview/pre/prh1c0ewzyye1.png?width=1080&amp;format=png&amp;auto=webp&amp;s=3c1fac3e0438d234b04dc5ec2443e7e6962a988d"><img loading="lazy" src="/preview/pre/prh1c0ewzyye1.png?width=1080&amp;format=png&amp;auto=webp&amp;s=3c1fac3e0438d234b04dc5ec2443e7e6962a988d"></a></figure>
+
+<p>Thank you all for being a part of this. Reddit works because you contribute, upvote, downvote, moderate, and create spaces where real conversations happen. The internet is changing rapidly, and human perspectives have never been more important. More than ever, it’s essential that we share information, express our viewpoints, and find connection. </p>
+
+<p>The last 20 years have proven how powerful online communities can be—and as we look ahead, I’m even more excited for what the next 20 will bring.</p>
+
+<p>Thank you,</p>
+
+<p>Steve aka spez</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/user/spez/comments/1kfciml/reddits_next_chapter_smarter_easier_still_human/" class="post_comments" title="387 comments">387 comments</a>
+	</div>
+</div>    <div class="post" id="ipiung">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/modnews">r/modnews</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Sep 09 2020, 16:07:24 UTC">Sep 09 &#39;20</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/modnews/comments/ipiung/today_were_testing_a_new_way_to_discuss_political/">Today we’re testing a new way to discuss political ads (and announcements)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/announcements/comments/ipitt0/today_were_testing_a_new_way_to_discuss_political/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>reddit.com</span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/modnews/comments/ipiung/today_were_testing_a_new_way_to_discuss_political/" class="post_comments" title="1415 comments">1.4k comments</a>
+	</div>
+</div>    <div class="post" id="6auyq9">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/modnews">r/modnews</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 13 2017, 00:11:09 UTC">May 13 &#39;17</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/modnews/comments/6auyq9/reddit_is_procss/">Reddit is ProCSS</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="9110">
+    
+    9.1k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi Mods,</p>
+
+<p>I wanted to follow up on the <a href="/r/modnews/comments/66q4is/the_web_redesign_css_and_mod_tools/">CSS and redesign post</a> from a few weeks back and provide some more information as well as clarify some questions that have emerged.</p>
+
+<p>Based on your feedback, we will allow you to continue to use CSS on top of the new structured styles. This will be the last part of the customization tool we build as we want to make sure the structured options we are offering are rock solid. Also, please keep in mind that if you do choose to use the advanced option, we will no longer be treading as carefully as we have done in the past about breaking styles applied through CSS<sup>1.</sup></p>
+
+<p>To give you a sense of our approach, we’re starting with a handful of highly-customized communities (e.g. <a href="/r/overwatch">r/overwatch</a> and <a href="/r/gameofthrones">r/gameofthrones</a>) and seeing how close we can get to their existing appearance using the new system. Logos, images, colors, spoilers, menus, flairs (all kinds), and lots more will be supported. I know you’d like to see a list of everything, but we think the best approach will be to show instead of tell, which we’re racing to as quickly as possible.</p>
+
+<p>The widget system I mentioned in the last post isn’t directly related. Many communities have added complex functionality over the years (calendars, scoreboards, etc). A widget system will elevate these features to first-class status on Reddit, with the aim of making them both more powerful and reuseable. Yes, we’re evaluating how we would accept user-created widgets.  We intend for widgets to be able to be updated via the API, so you’ll still be able to create dynamically updating content in your subreddit sidebar.</p>
+
+<p>This change, and the redesign in general, is going to happen slowly.  We will will not be abruptly cutting everyone over to the new site at once.  We know it won’t be perfect at first (unlike the current site), and plan to include plenty of time to solicit feedback and make iterations.  Sharing our plans for subreddit customization this far advance with you is part of this process.</p>
+
+<p>We’ll start with a small alpha group and create a subreddit to solicit feedback.  As we continue to add features, we’ll expand the testing group to an opt-in beta.  If you’d like to participate in the alpha please add a reply to <a href="/r/modnews/comments/6auyq9/reddit_is_procss/dhhmebb/">this comment</a>.  Please note, signing up does not guarantee a spot in the alpha.  We want to be able to be responsive to the alpha testers, and keeping the initial group small has proved to be effective in the past.</p>
+
+<p>I’d like thank everyone who has provided feedback on this topic.  There have been some very <a href="/r/ModSupport/comments/677rba/some_brainstorming_about_potential_widgets_in_the">constructive</a> <a href="/r/ModSupport/comments/66rdiy/crowdsourcing_new_subreddit_widgets/">threads</a>.  I’d also like to take a moment to appreciate how civil the feedback has been.  This is a topic many of you feel passionate about.  Thank you for keeping things constructive.</p>
+
+<p>Cool?</p>
+
+<p>Cool.</p>
+
+<p>&nbsp;</p>
+
+<p><sup>1</sup> No snark allowed.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/modnews/comments/6auyq9/reddit_is_procss/" class="post_comments" title="2078 comments">2.1k comments</a>
+	</div>
+</div>    <div class="post" id="693zcq">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ModSupport">r/ModSupport</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 03 2017, 23:23:45 UTC">May 03 &#39;17</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/ModSupport/comments/693zcq/i_hear_the_feedback_on_css_styles_im_traveling/">I hear the feedback on CSS / styles. I’m traveling, but will be back next week to chat more.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="309">
+    
+    309
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hey All,</p>
+
+<p>I just wanted to leave a quick note and say we’re listening to all the feedback around CSS / customization. The quietness on my end is because I’m traveling and won’t have a couple hours to chat until next week, and I want to make sure I have time to answer questions. I appreciate all the feedback so far (and the fact that it’s been overwhelmingly polite!).</p>
+
+<p>Cheers,</p>
+
+<p>Steve</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ModSupport/comments/693zcq/i_hear_the_feedback_on_css_styles_im_traveling/" class="post_comments" title="296 comments">296 comments</a>
+	</div>
+</div>    <div class="post" id="66q4is">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/modnews">r/modnews</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 21 2017, 16:04:29 UTC">Apr 21 &#39;17</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/modnews/comments/66q4is/the_web_redesign_css_and_mod_tools/">The web redesign, CSS, and mod tools</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="1502">
+    
+    1.5k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi Mods,</p>
+
+<p>You may recall from my <a href="/r/announcements/comments/5q4qmg/out_with_2016_in_with_2017/">announcement post</a> earlier this year that I mentioned we’re currently working on a full redesign of the site, which brings me to the two topics I wanted to talk to you about today: Custom Styles and Mod Tools.</p>
+
+<h2><strong>Custom Styles</strong></h2>
+
+<p>Custom community styles are a key component in allowing communities to express their identity, and we want to preserve this in the site redesign. For a long time, we’ve used CSS as the mechanism for subreddit customization, but we’ll be deprecating CSS during the redesign in favor of a new system over the coming months. While CSS has provided a wonderful creative canvas to many communities, it is not without flaws:</p>
+
+<ul>
+<li>It’s web-only. Increasing users are viewing Reddit on mobile (over 50%), where CSS is not supported. We’d love for you to be able to bring your spice to phones as well.</li>
+<li>CSS is a pain in the ass: it’s difficult to learn; it’s error-prone; and it’s time consuming.</li>
+<li>Some changes cause confusion (such as changing the subscription numbers).</li>
+<li>CSS causes us to move slow. We’d like to make changes more quickly. You’ve asked us to improve things, and one of the things that slows us down is the risk of breaking subreddit CSS (and third-party mod tools).</li>
+</ul>
+
+<p>We’re designing a new set of tools to address the challenges with CSS but continue to allow communities to express their identities. These tools will allow moderators to select customization options for key areas of their subreddit across platforms. For example, header images and flair colors will be rendered correctly on desktop and mobile.</p>
+
+<p>We know great things happen when we give users as much flexibility as possible. The menu of options we’ll provide for customization is still being determined. Our starting point is to replicate as many of the existing uses that already exist, and to expand beyond as we evolve.</p>
+
+<p>We will also natively supporting a lot of the functionality that subreddits currently build into the sidebar via a widget system. For instance, a calendar widget will allow subreddits to easily display upcoming events. We’d like this feature and many like it to be accessible to all communities.</p>
+
+<p>How are we going to get there? We’ll be working closely with as many of you as possible to design these features. The process will span the next few months. We have a lot of ideas already and are hoping you’ll help us add and refine even more. The transition isn’t going to be easy for everyone, so we’ll assist communities that want help (i.e. we’ll do it for you). <a href="/u/powerlanguage">u/powerlanguage</a> will be reaching out for alpha testers.</p>
+
+<h2><strong>Mod Tools</strong></h2>
+
+<p>Mod tools have evolved over time to be some of the most complex parts of Reddit, both in terms of user experience and the underlying code.  We know that these tools are crucial for the maintaining the health of your communities, and  we know many of you who moderate very large subreddits depend on third-party tools for your work. Not breaking these tools is constantly on our mind (for better or worse).</p>
+
+<p>We’re in contact with the devs of Toolbox, and would like to work together to port it to the redesign. Once that is complete, we’ll begin work on updating these tools, including supporting natively the most requested features from Toolbox.</p>
+
+<p>The existing site and the redesigned site will run in parallel while we make these changes. That is, we don’t have plans for turning off the current site anytime soon. If you depend on functionality that has not yet been transferred to the redesign, you will still have a way to perform those actions.</p>
+
+<p>While we have your attention… we’re also growing our internal team that handles spam and bad-actors. Our current focus is on report abuse. We’ve caught a lot of bad behavior. We hope you notice the difference, and we’ll keep at it regardless.</p>
+
+<h2><strong>Moving Forward</strong></h2>
+
+<p>We know moderation can feel janitorial–thankless and repetitive. Thank you for all that you do. Our goal is to take care much of that burden so you can focus on helping your communities thrive.</p>
+
+<p>Big changes are ahead. These are fundamental, core issues that we’ll be grappling with together–changes to how communities are managed and express identity are not taken lightly. We’ll be giving you further details as we move forward, but wanted to give you a heads up early.</p>
+
+<p>Thanks for reading.</p>
+
+<p>update: now that I&#39;ve cherry-picked all the easy questions, I&#39;m going to take off and leave the hard ones for <a href="/u/powerlanguage">u/powerlanguage</a>. I&#39;ll be back in a couple hours.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/modnews/comments/66q4is/the_web_redesign_css_and_mod_tools/" class="post_comments" title="3203 comments">3.2k comments</a>
+	</div>
+</div>    <div class="post" id="57iq2z">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/modnews">r/modnews</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 14 2016, 21:05:12 UTC">Oct 14 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/modnews/comments/57iq2z/goodbye_chad/">Goodbye, Chad!</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="3567">
+    
+    3.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I am sad to share that <a href="/u/deimorz">u/deimorz</a> is leaving Reddit (just the company, not the site, hopefully). Chad joined us back in 2013 when the company was only about ten people. He is the author of AutoModerator, which enabled Reddit to grow to its current size, and he is the creator of <a href="/r/SubredditSimulator">r/SubredditSimulator</a>, which will ensure our survival after you are all gone. If you have spent any time in <a href="/r/bugs">r/bugs</a>, <a href="/r/help">r/help</a>, <a href="/r/ModSupport">r/ModSupport</a>, <a href="/r/AutoModerator">r/AutoModerator</a>, <a href="/r/modhelp">r/modhelp</a>, <a href="/r/redditdev">r/redditdev</a>, <a href="/r/Games">r/Games</a>, <a href="/r/TheoryOfReddit">r/TheoryOfReddit</a>, and many others, you have probably met Chad and have likely been helped by him.</p>
+
+<p>Chad, Reddit would not be what it is today without you, and we will miss you dearly. Best of luck out there!</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/modnews/comments/57iq2z/goodbye_chad/" class="post_comments" title="752 comments">752 comments</a>
+	</div>
+</div>    <div class="post" id="4iwobz">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ModSupport">r/ModSupport</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 11 2016, 19:34:06 UTC">May 11 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/ModSupport/comments/4iwobz/a_new_challenger_appears/">A New Challenger Appears!</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="124">
+    
+    124
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Today we are excited to announce that <a href="/u/AchievementUnlockd">Philippe Beaudette</a> has joined us to lead our Community team. He comes from Wikipedia by way of Wikia. At the Wikimedia Foundation (which hosts and supports Wikipedia, among other sites) he was responsible for the team that did community management, user trust and safety, and strategic change management, guiding the community through a time of immense growth and maturation. He spent almost 7 years there, as one of their first community hires, and managed to have his fingers on a huge number of projects, from fundraising (raising money from nearly every country in the world and accepting Wikipedia’s first donation from Antarctica) to community governance and their international elections processes–while dealing with communities working in almost 200 different languages.  He’s particularly proud to have led their community interactions around a worldwide <a href="http://www.huffingtonpost.com/2012/01/17/wikipedia-blackout_n_1212096.html?slideshow=true">24 hour site shut-down</a> to drive awareness of the SOPA bill two years ago, an effort that Reddit also joined.</p>
+
+<p>After leaving Wikipedia, Philippe joined Wikia and ran the Community Support and Engagement team there, supporting Wikia’s 350,000 fan-created communities. We are honored to have him on our team. Please welcome Philippe!</p>
+
+<p>In addition to Philippe, we have brought on an additional five members to the Community and Trust and Safety teams this week. See if you can collect them all!</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ModSupport/comments/4iwobz/a_new_challenger_appears/" class="post_comments" title="257 comments">257 comments</a>
+	</div>
+</div>    <div class="post" id="4hwe15">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ModSupport">r/ModSupport</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 04 2016, 20:13:07 UTC">May 04 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/ModSupport/comments/4hwe15/admin_released_from_captivity_reintroduced_to/">Admin released from captivity, reintroduced to Reddit community</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="230">
+    
+    230
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I am sad to share that <a href="/u/krispykrackers">u/krispykrackers</a> is leaving Reddit. Over the past five years, she has done an incredible amount of work for us and the Reddit community. She has been the face of our Community team at Reddit; helped us write many of our policies and was indispensable working through countless tricky situations; and she lead our efforts in support of Extra Life, raising hundreds of thousands of dollars for Children’s Miracle Network Hospitals. She has been a friend to me and many others here. While we are sad to see her go, we wish her the best going forward.</p>
+
+<p>Actually replacing Kristine is impossible, but next Monday, four (maybe five!) new members of our Community and Trust and Safety teams will be starting, which will give the team even more horsepower.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ModSupport/comments/4hwe15/admin_released_from_captivity_reintroduced_to/" class="post_comments" title="332 comments">332 comments</a>
+	</div>
+</div>    <div class="post" id="4gh3yy">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ModSupport">r/ModSupport</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 26 2016, 03:47:51 UTC">Apr 26 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/ModSupport/comments/4gh3yy/a_few_updates_on_what_has_been_keeping_us_busy/">A few updates on what has been keeping us busy</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="147">
+    
+    147
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi All,</p>
+
+<p>I want to give you all an update with the things that are keeping us busy, and hopefully as a result, making you less busy:</p>
+
+<ul>
+<li><p><strong>Spam</strong>: Last quarter we saw a huge increase in spam, including a handful of heavy attacks. We diverted resources to combat this, and we have made quite a bit of progress, lowering user reported spam by over 60% from its high point last quarter. We still have plenty of work to do, but we are making steady progress. Removing as spam or reporting as such are still the most effective ways to help.</p></li>
+<li><p><strong>Account Take-Overs</strong> (ATOs): In response to our improved spam-fighting measures, the bad-guys have been targeting existing accounts, compromising them for the purpose of spamming and vote cheating. We are fighting ATOs on the engineering side, but ATOs also create a burden on our community team to notify affected users, send password reset emails, etc. We are working on automating the notification and recovery processes to free up our community managers. The root cause of the issue is poor passwords. Please use strong and unique passwords.</p></li>
+<li><p><strong>Support Backlog</strong>: Because of the aforementioned issues, our community team is swamped with support tickets. We are doing a good job keeping up with the incoming flow, but we do have a backlog that is taking time to work through. We are sorry for any delays. The good news is we have a number of new people joining the team over the next few weeks that will help.</p></li>
+<li><p><strong>Modmail</strong>: I am happy to report that we finally have a team dedicated to working on a new system for moderator mail. To this point, we have tried a number of approaches and have had a handful of false starts, but we have not made the sort of progress we would like. The current system is a series of hacks built on an old code base, and because of this, we have decided to build modmail as a new, separate system. This will allow us to develop it without disrupting your current workflows. We know this is where you spend a lot of your time, and we are working hard to make it more effective.</p></li>
+</ul>
+
+<p>We appreciate all you do for Reddit as moderators, and we appreciate seeing the questions you ask in this community. We are particularly thankful for those of you who jump in and help the other moderators here and elsewhere.</p>
+
+<p>– The Reddit Team</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ModSupport/comments/4gh3yy/a_few_updates_on_what_has_been_keeping_us_busy/" class="post_comments" title="133 comments">133 comments</a>
+	</div>
+</div>    <div class="post" id="3xdf11">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/redditdev">r/redditdev</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Dec 18 2015, 18:18:39 UTC">Dec 18 &#39;15</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/redditdev/search?q=flair_name%3A%22Reddit API%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:;"
+				dir="ltr"><span>Reddit API</span></a>
+		
+		<a href="/r/redditdev/comments/3xdf11/introducing_new_api_terms/">Introducing new API terms</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="69">
+    
+    69
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Today we are introducing standardized <a href="/wiki/api">API Terms of Use</a>. You, our community of developers, are important to us, and have been instrumental to the success of the Reddit platform. First and foremost, we want to reaffirm our commitment to providing (and improving!) a public API.</p>
+
+<p>There are a couple of notable changes to the API terms that I’d like to highlight. The first is that we are requesting all users of the API to register with us. This provides a point of contact for when we have important updates to share; provides a point of contact for when things go wrong; and helps us prevent abuse.</p>
+
+<p>We are also no longer requiring a special licensing agreement to use our API for commercial purposes. We do request that you seek approval for your monetization model in the registration process.</p>
+
+<p>We have added clarity about the types of things that the API is not intended for–namely applications that promote illegal activity, disrupt core Reddit functionality, or introduce security risks. But you weren’t doing any of these things anyway.</p>
+
+<p>We still require users of our API to comply with our User Agreement, Privacy Policy, API Usage Limits, and any other applicable laws or regulations. We will continue to require the use of OAuth2.  We understand moving to OAuth2 can take time, so we are giving developers until March 17th to make this change.</p>
+
+<p>We look forward to working with you more to create great experiences for our communities. There are many wonderful projects built on our API, and we would love to see even more. Thank you for all that you do.</p>
+
+<p>You can contact the <a href="mailto:api@reddit.com">api@reddit.com</a> alias to ask questions about the API service.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/redditdev/comments/3xdf11/introducing_new_api_terms/" class="post_comments" title="118 comments">118 comments</a>
+	</div>
+</div>    <div class="post" id="3cxedn">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/IAmA">r/IAmA</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author admin" href="/u/spez">u/spez</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 11 2015, 17:02:59 UTC">Jul 11 &#39;15</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/IAmA/search?q=flair_name%3A%22Business%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:;"
+				dir="ltr"><span>Business</span></a>
+		
+		<a href="/r/IAmA/comments/3cxedn/i_am_steve_huffman_the_new_ceo_of_reddit_ama/">I am Steve Huffman, the new CEO of reddit. AMA.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="41372">
+    
+    41.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hey Everyone, I&#39;m Steve, aka spez, the new CEO around here. For those of you who don&#39;t know me, I founded reddit ten years ago with my college roommate Alexis, aka kn0thing. Since then, reddit has grown far larger than my wildest dreams. I&#39;m so proud of what it&#39;s become, and I&#39;m very excited to be back.</p>
+
+<p>I know we have a lot of work to do. One of my first priorities is to re-establish a relationship with the community. This is the first of what I expect will be many AMAs (I&#39;m thinking I&#39;ll do these weekly).</p>
+
+<p>My proof: it&#39;s me!</p>
+
+<p>edit: I&#39;m done for now. Time to get back to work. Thanks for all the questions!</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/IAmA/comments/3cxedn/i_am_steve_huffman_the_new_ceo_of_reddit_ama/" class="post_comments" title="12527 comments">12.5k comments</a>
+	</div>
+</div>   
+            <script src="/hls.min.js"></script>
+            <script src="/playHLSVideo.js"></script>
+            
+        </div>
+        
+
+        <footer>
+             
+        </footer>
+    </div>
+    
+    <aside>
+        
+        <div class="panel" id="user">
+            <img
+                loading="lazy"
+                id="user_icon"
+                src="/style/t5_3k30p/styles/profileIcon_uj015iwx9s7g1.png?width=256&#38;height=256&#38;crop=256:256,smart&#38;s=aa819b0964f6e3019e769d1cc8ede7318c3869a3"
+                alt="User icon"
+            />
+            <h1 id="user_title">spez</h1>
+            <p id="user_name">u/spez</p>
+            <div id="user_description">Reddit CEO</div>
+            <div id="user_details">
+                <label>Karma</label>
+                <label>Created</label>
+                <div>940207</div>
+                <div>Jun 06 &#39;05</div>
+            </div>
+            <div id="user_actions">
+                
+                <div id="user_subscription">
+                    
+                    <form
+                        action="/r/u_spez/subscribe?redirect=user/spez/submitted"
+                        method="POST"
+                    >
+                        <button class="subscribe">Follow</button>
+                    </form>
+                    
+                </div>
+                <div id="user_filter">
+                    
+                    <form
+                        action="/r/u_spez/filter?redirect=user/spez/submitted"
+                        method="POST"
+                    >
+                        <button class="filter">Filter</button>
+                    </form>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </aside>
+</main>
+
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

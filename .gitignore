@@ -32,3 +32,6 @@ eggshell/
 
 # OS
 Thumbs.db
+
+# Hermes agent plans/state
+.hermes/

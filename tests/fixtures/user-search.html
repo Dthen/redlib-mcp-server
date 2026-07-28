@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Redlib: search results - test</title></head>
+<body>
+  <main>
+    <div id="column_one">
+      <div id="search_subreddits">
+        <a href="/r/test/" class="search_subreddit">
+          <div class="search_subreddit_left"></div>
+          <div class="search_subreddit_right">
+            <p class="search_subreddit_header">
+              <span class="search_subreddit_name">r/test</span>
+              <span class="dot">&bull;</span>
+              <span class="search_subreddit_members" title="48067 Members">48.1k Members</span>
+            </p>
+            <p class="search_subreddit_description">The test subreddit</p>
+          </div>
+        </a>
+        <a href="?q=test&sort=relevance&t=&type=sr_user" class="search_subreddit" id="more_subreddits">More subreddit results &rarr;</a>
+      </div>
+
+      <!-- User search results appear as comment divs when post title is empty -->
+      <div class="comment">
+        <div class="comment_left">
+          <p class="comment_score" title="12345">12.3k</p>
+          <div class="line"></div>
+        </div>
+        <details class="comment_right" open>
+          <summary class="comment_data">
+            <a class="comment_link" href="/user/testuser1">COMMENT</a>
+            <span class="created" title="Jan 01 2020, 00:00:00 UTC">Jan 01 '20</span>
+          </summary>
+          <p class="comment_body">Just a test user who loves testing things.</p>
+        </details>
+      </div>
+
+      <div class="comment">
+        <div class="comment_left">
+          <p class="comment_score" title="5678">5.7k</p>
+          <div class="line"></div>
+        </div>
+        <details class="comment_right" open>
+          <summary class="comment_data">
+            <a class="comment_link" href="/user/test_dev">COMMENT</a>
+            <span class="created" title="Mar 15 2019, 12:30:00 UTC">Mar 15 '19</span>
+          </summary>
+          <p class="comment_body">Software developer | Open source contributor | Coffee addict</p>
+        </details>
+      </div>
+
+      <div class="comment">
+        <div class="comment_left">
+          <p class="comment_score" title="42">42</p>
+          <div class="line"></div>
+        </div>
+        <details class="comment_right" open>
+          <summary class="comment_data">
+            <a class="comment_link" href="/user/TestBot42">COMMENT</a>
+            <span class="created" title="Apr 01 2023, 00:00:00 UTC">Apr 01 '23</span>
+          </summary>
+          <p class="comment_body"></p>
+        </details>
+      </div>
+
+      <div class="comment">
+        <div class="comment_left">
+          <p class="comment_score" title="999">999</p>
+          <div class="line"></div>
+        </div>
+        <details class="comment_right" open>
+          <summary class="comment_data">
+            <a class="comment_link" href="/user/TestingTheTester">COMMENT</a>
+            <span class="created" title="Jul 04 2021, 18:00:00 UTC">Jul 04 '21</span>
+          </summary>
+          <p class="comment_body">Full-stack engineer. Building things on the internet since 2010.
+Love working with Rust, TypeScript, and Python.
+ 
+Open to collaborations!</p>
+        </details>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

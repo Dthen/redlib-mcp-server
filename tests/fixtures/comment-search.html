@@ -1,0 +1,1538 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>Redlib: search results - test</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/search?q=test&#38;type=comment</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/search?q=test&#38;type=comment" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+		<main>
+			
+	<div id="column_one">
+		<form id="search_sort">
+			<div class="search_widget_divider_box">
+				<input id="search" type="text" name="q" placeholder="Search" value="test" title="Search redlib">
+				<div class="search_widget_divider_box">
+					
+					
+					<select id="sort_options" name="sort" title="Sort results by">
+						
+		<option value="relevance" selected>
+			Relevance
+		</option>
+	
+		<option value="hot" >
+			Hot
+		</option>
+	
+		<option value="top" >
+			Top
+		</option>
+	
+		<option value="new" >
+			New
+		</option>
+	
+		<option value="comments" >
+			Comments
+		</option>
+	
+					</select>
+					
+					<select id="timeframe" name="t" title="Timeframe"> 
+						
+		<option value="hour" >
+			Hour
+		</option>
+	
+		<option value="day" >
+			Day
+		</option>
+	
+		<option value="week" >
+			Week
+		</option>
+	
+		<option value="month" >
+			Month
+		</option>
+	
+		<option value="year" >
+			Year
+		</option>
+	
+		<option value="all" selected>
+			All
+		</option>
+	
+					</select>
+					
+				</div>
+			</div>
+
+			<button id="sort_submit" class="submit">
+				<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+					<path d="M20 50 H100" />
+					<path d="M75 15 L100 50 L75 85" />
+					&rarr;
+				</svg>
+			</button>
+ 		</form>
+
+		
+		
+		<div id="search_subreddits">
+			
+			
+			<a href="/r/test/" class="search_subreddit">
+				<div class="search_subreddit_left"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/test</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="48113 Members">48.1k Members</span>
+					</p>
+					<p class="search_subreddit_description"></p>
+				</div>
+			</a>
+			
+			<a href="/r/TestFlight/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_32104/styles/communityIcon_0hdfx2nq67df1.png?width=256&amp;s=c3f27d0746ee1ca67bdb9c38becea1c09e3f19a1" alt="r/TestFlight icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/TestFlight</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="26836 Members">26.8k Members</span>
+					</p>
+					<p class="search_subreddit_description">Where developers and testers meet for App Store betas.</p>
+				</div>
+			</a>
+			
+			<a href="/r/TestMyApp/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_37hmj/styles/communityIcon_22j5hexmopx31.png?width=256&amp;s=12393554cdd6ed8585b05734a52b52bcdbfc62a0" alt="r/TestMyApp icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/TestMyApp</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="27712 Members">27.7k Members</span>
+					</p>
+					<p class="search_subreddit_description">Helping developers since 2015 
+TMA Discord: https://discord.gg/9wGENxCZrN
+
+Donate to my coffee fund if you found this sub useful :) 
+Only if you can afford it!! Link:
+https://cash.app/$CrabOfTheSea
+
+Showcase Apps Here!
+In this subreddit, we proudly help developers to showcase their hard work on any app platform they please! This subreddit is here to help get the news out on new projects. Enjoy!</p>
+				</div>
+			</a>
+			
+			
+			<a href="?q=test&sort=relevance&t=&type=sr_user" class="search_subreddit" id="more_subreddits">More subreddit results →</a>
+			
+		</div>
+		
+		
+
+		
+
+		
+
+		
+			
+				
+					<div class="post" id="1o92zjz">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/interestingasfuck">r/interestingasfuck</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/HumbleMVP">u/HumbleMVP</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 17 2025, 14:34:42 UTC">Oct 17 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/interestingasfuck/comments/1o92zjz/blind_cigarette_taste_test/">Blind cigarette taste test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="720" height="1280" poster="/preview/external-pre/cXk0cnNib3Nub3ZmMQsBnOIrvcwmIHxtAGor051usy2fheuoSqSBwBdO8NaG.png?format=pjpg&#38;auto=webp&#38;s=507824751590b7b34b4ff35cdab8295192b2e950" controls preload="none">
+			<source src="/hls/d9kajrtsnovf1/HLSPlaylist.m3u8?a=1787801917%2CZjQxNTg5OTdiOTMzMTU3ZDQ5NmNmNTVkZjkxZTdlNTI4MzcyZjFmMjkwYTA5NDk0MjJlZjE2OTRkNmJkYmU4MA%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="/vid/d9kajrtsnovf1/720.mp4" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="94194">
+    
+    94.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/interestingasfuck/comments/1o92zjz/blind_cigarette_taste_test/" class="post_comments" title="3144 comments">3.1k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1ttosew">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/StandUpComedy">r/StandUpComedy</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/DanielMuggleton">u/DanielMuggleton</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 01 2026, 11:03:21 UTC">Jun 01 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/StandUpComedy/search?q=flair_name%3A%22Comedian is OP%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#dadada;"
+				dir="ltr"><span>Comedian is OP</span></a>
+		
+		<a href="/r/StandUpComedy/comments/1ttosew/a_fertility_test_is_every_mans_favourite_ever_test/">A fertility test is every man&#39;s favourite ever test.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="1080" height="1920" poster="/preview/external-pre/M2JsaHI3ZnpqbjRoMbDNAY-KXJ4OOlc7T-ot2fCUmYC-d2RUmmRPPHEIsJdx.png?format=pjpg&#38;auto=webp&#38;s=2b2e455d1f093d444119c4e7f774a3004ae81555" controls preload="none">
+			<source src="/hls/jzt81sezjn4h1/HLSPlaylist.m3u8?a=1787801917%2CODQ1ZTBiM2VjZTQwYTQ1NzI1NWE4YzY1NjA5ZTEwZjUwZjg1MWJmNWUzYzc4ZGRlOGUyZjRiMzVjYWY2MTE0Ng%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="3132">
+    
+    3.1k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>If you enjoyed this joke get around my sub <a href="/r/danielmuggleton">r/danielmuggleton</a> or my <a href="https://www.youtube.com/@DanielMuggleton">YouTube</a> as there&#39;s more on there. Cheers. </p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/StandUpComedy/comments/1ttosew/a_fertility_test_is_every_mans_favourite_ever_test/" class="post_comments" title="33 comments">33 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1uxfntt">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/news">r/news</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/EscapeFromIowa">u/EscapeFromIowa</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 15 2026, 19:19:20 UTC">12d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/news/comments/1uxfntt/hegseth_announces_new_policy_to_test_troops_for/">Hegseth announces new policy to test troops for low testosterone</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://apnews.com/article/hegseth-pentagon-testosterone-testing-troops-47333bbf3af9e4cac432722332ff1383?utm_source=copy&#38;utm_medium=share" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>apnews.com</span>
+	</a>
+	
+	<div class="post_score" title="19467">
+    
+    19.5k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/news/comments/1uxfntt/hegseth_announces_new_policy_to_test_troops_for/" class="post_comments" title="2678 comments">2.7k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1t94d24">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/interestingasfuck">r/interestingasfuck</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/S30econdstoMars">u/S30econdstoMars</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 10 2026, 11:26:55 UTC">May 10 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/interestingasfuck/comments/1t94d24/testing_a_bulletproof_mask/">Testing a bulletproof mask.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="360" height="640" poster="/preview/external-pre/cm1wMWg5MDZwYTBoMXuJnzCG3jNwIpe7C51xnJu7D4TN3BWxB5fqnwXcBuh-.png?format=pjpg&#38;auto=webp&#38;s=2b09ca622b35dad4e7472e23ad17c382e189e2eb" controls preload="none">
+			<source src="/hls/s641yg46pa0h1/HLSPlaylist.m3u8?a=1787801917%2CY2EzNjY1ZTIxMzdlN2QzM2U0YzgyNDZlZjQ5NGJmYjE0MTdlYjAzZTNmZDBlNjRhNjdhZmVlMDAxMzc4ZGJhZA%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="37479">
+    
+    37.5k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/interestingasfuck/comments/1t94d24/testing_a_bulletproof_mask/" class="post_comments" title="1656 comments">1.7k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1td9r5q">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/comics">r/comics</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/adamtots_remastered">u/adamtots_remastered</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 14 2026, 20:10:00 UTC">May 14 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/comics/comments/1td9r5q/test_results_oc/">Test Results [OC]</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/ud5i95l4u51h1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1080px"
+				height="1440px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/ud5i95l4u51h1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/ud5i95l4u51h1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="55458">
+    
+    55.5k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/comics/comments/1td9r5q/test_results_oc/" class="post_comments" title="743 comments">743 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1v1gi8e">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/nextfuckinglevel">r/nextfuckinglevel</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/TangelaFan">u/TangelaFan</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 20 2026, 09:22:59 UTC">7d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/nextfuckinglevel/comments/1v1gi8e/traction_test_of_the_byd_yangwang_u8_ev_in_china/">Traction test of the BYD Yangwang U8 EV in China</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="405" height="720" poster="/preview/external-pre/amYwOWVna2xyY2VoMQTDk57ygpQIs7z1qPN9WSo5Yvq40ZR39-xatx9wWPFQ.png?format=pjpg&#38;auto=webp&#38;s=b4fd34364d3b144b55a0ff228caa57b8df9c9c97" controls preload="none">
+			<source src="/hls/3qkhplanrceh1/HLSPlaylist.m3u8?a=1787801917%2CNjlhYTRkM2RmOGExNGQ1ZWQ4MGRjOTY1OTkyNzEzNWU0MTNmMDdlZTkyMjA3ZjFhNWYwNjhjOTk0YmI0ZDFkYw%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="9721">
+    
+    9.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/nextfuckinglevel/comments/1v1gi8e/traction_test_of_the_byd_yangwang_u8_ev_in_china/" class="post_comments" title="494 comments">494 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1s9jvjl">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/comics">r/comics</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/cymorg121">u/cymorg121</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 01 2026, 13:00:46 UTC">Apr 01 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/comics/comments/1s9jvjl/rorschach_test_oc/">Rorschach Test [OC]</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/upvb4a8duksg1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="4840px"
+				height="4959px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/upvb4a8duksg1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/upvb4a8duksg1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="22793">
+    
+    22.8k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/comics/comments/1s9jvjl/rorschach_test_oc/" class="post_comments" title="850 comments">850 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1tplg7f">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/MurderedByWords">r/MurderedByWords</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Extreme-Slice-1010">u/Extreme-Slice-1010</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 27 2026, 22:53:20 UTC">May 27 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/MurderedByWords/comments/1tplg7f/he_needs_another_test/">He needs another test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/uaa715s4fr3h1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1220px"
+				height="1562px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/uaa715s4fr3h1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/uaa715s4fr3h1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="23718">
+    
+    23.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/MurderedByWords/comments/1tplg7f/he_needs_another_test/" class="post_comments" title="467 comments">467 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1s7qml2">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/Funnymemes">r/Funnymemes</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/ekk_one">u/ekk_one</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Mar 30 2026, 13:29:45 UTC">Mar 30 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/Funnymemes/comments/1s7qml2/cant_fake_this_test/">Can&#39;t fake this Test 😂......</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/i1mnczqpp6sg1.png" class="post_media_image short" >
+			
+			<svg
+				width="720px"
+				height="1085px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/i1mnczqpp6sg1.png"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/i1mnczqpp6sg1.png"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="16295">
+    
+    16.3k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/Funnymemes/comments/1s7qml2/cant_fake_this_test/" class="post_comments" title="843 comments">843 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1rrz8ls">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/TopCharacterTropes">r/TopCharacterTropes</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/PizzaDragon64">u/PizzaDragon64</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Mar 12 2026, 18:42:14 UTC">Mar 12 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/TopCharacterTropes/search?q=flair_name%3A%22Lore%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#014980;"
+				dir="ltr"><span>Lore</span></a>
+		
+		<a href="/r/TopCharacterTropes/comments/1rrz8ls/loved_trope_the_real_test_isnt_even_the_test/">(Loved Trope) The Real Test isn&#39;t even the test itself</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/TopCharacterTropes/comments/1rrz8ls/loved_trope_the_real_test_isnt_even_the_test/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:78px;">
+			<svg width="140px" height="78px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/pre/e11dqv0rpnog1.jpg?width=140&#38;height=78&#38;auto=webp&#38;s=aab9c836ac679cb4d241dbc66d0c208a0853665e"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/pre/e11dqv0rpnog1.jpg?width=140&#38;height=78&#38;auto=webp&#38;s=aab9c836ac679cb4d241dbc66d0c208a0853665e"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>gallery</span>
+	</a>
+	
+	<div class="post_score" title="11389">
+    
+    11.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Men in Black: The exam to become an agent consists of a written test and a shooting range. But what the recruiters are actually searching for is someone who can think outside the box and be unconventional. Agent J proves to be this when he drags a table over to do his test, while everyone else never thought to do so and were struggling to write. And during the shooting range, he opts to shoot the little girl over the aliens since she seemed the most suspicious and out of place.</p>
+
+<p>The Odyssey: In order to buy time for Odysseus to arrive, and fend off the suitors trying to marry her, Penelope issues a challenge to them. Whoever can string her husband&#39;s old bow, and shoot through twelve axes cleanly will be the new king, and sit down at the throne, and rule with her as his queen. The trick is, the hardest part isn&#39;t even the actual archery challenge, it&#39;s stringing the bow itself. Since Odysseus had a very unique kind of bow (to the people of Ithaca at least) that requires both the knowledge of how to string it and the strength. (art by Reagan Weisburg)  </p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/TopCharacterTropes/comments/1rrz8ls/loved_trope_the_real_test_isnt_even_the_test/" class="post_comments" title="1184 comments">1.2k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1sskc3a">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ComedyHell">r/ComedyHell</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Leothegamedev">u/Leothegamedev</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 22 2026, 12:40:43 UTC">Apr 22 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/ComedyHell/comments/1sskc3a/autism_test/">autism test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/n2g8hgjxlqwg1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1080px"
+				height="971px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/n2g8hgjxlqwg1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/n2g8hgjxlqwg1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="22237">
+    
+    22.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ComedyHell/comments/1sskc3a/autism_test/" class="post_comments" title="529 comments">529 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1uwqg4c">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/mildlyinteresting">r/mildlyinteresting</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/roffelmau">u/roffelmau</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 15 2026, 00:31:23 UTC">13d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/mildlyinteresting/comments/1uwqg4c/1950_20_bill_fails_the_pen_test/">1950 $20 bill fails the pen test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/1ymkogodgadh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1920px"
+				height="2560px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/1ymkogodgadh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/1ymkogodgadh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="7380">
+    
+    7.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/mildlyinteresting/comments/1uwqg4c/1950_20_bill_fails_the_pen_test/" class="post_comments" title="426 comments">426 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1rgy6lt">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/Unexpected">r/Unexpected</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Yewatod">u/Yewatod</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 28 2026, 09:18:25 UTC">Feb 28 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/Unexpected/comments/1rgy6lt/rooster_testing_its_limits/">Rooster testing its limits</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="538" height="719" poster="/preview/external-pre/ZzVsMTJrc2lkN21nMcnX6sk6kA2hSReGeeyKe7Me2Lu9RAr_JzHqVpko-ZO3.png?format=pjpg&#38;auto=webp&#38;s=3804fb35a4e77bbbfb9da60b22511c6fb9be2750" controls preload="none">
+			<source src="/hls/pu8bswrid7mg1/HLSPlaylist.m3u8?a=1787801917%2CMzU4ZTdlMjU3MDIyY2VjNWU5ZjZlOGE3ZGY3ZWZhYWExY2UxMjNkZDExOTQ1MjZiNjFhNGZmM2MyNGJhMDMzMA%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="27613">
+    
+    27.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/Unexpected/comments/1rgy6lt/rooster_testing_its_limits/" class="post_comments" title="621 comments">621 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1unyozx">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/HunterXHunter">r/HunterXHunter</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Mansur754">u/Mansur754</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 05 2026, 10:24:01 UTC">22d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/HunterXHunter/search?q=flair_name%3A%22Discussion%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#94e044;"
+				dir="ltr"><span>Discussion</span></a>
+		
+		<a href="/r/HunterXHunter/comments/1unyozx/a_test_of_the_readers_morality/">A test of the readers morality</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/bu7tg6wz0ebh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="640px"
+				height="609px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/bu7tg6wz0ebh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/bu7tg6wz0ebh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="5653">
+    
+    5.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Kurapika and chrollo&#39;s story isn&#39;t just evil vs good or about vengeance, their characters represent your moral compass depending on who you&#39;d prefer or side with  The phantom troupe slaughtered all 128 villagers, mutilated and tortured them to force their eyes to turn Scarlet, and ripped the eyes out of their corpses to sell on the black market. Children had to be mutilated in front of their loved ones so they experienced the deepest despair and sadness just so their eyes could turn scarlet, intensifying their emotions by hurting those most precious to them so they experience the same pain as they did when they were children and disregarded, a city made into a junk yard, orphans thrown there as nothing more than junk with no documents or official identities to humanize them, treated as toys for the rich and evil to commit their crimes, forced to see their own friend dismembered as children. Some might say the phantom troupes evil crimes can be justified, hurting the evil and corrupt just the way they did them-actions fueled by their own past forced upon them where one could say they don&#39;t know any better other than to give what they received. As for kurapika having vengeance put on his shoulder and burdened with grief, forced into hatred and the desire for revenge his entire life goal and nen ability is purely based on the phantom troupe, no way to live if justice hasn&#39;t been served to his people. Collecting their eyes and killing those who made them suffer is the only thing he&#39;s willing to live for and also willing to risk his own life span to have enough power to kill them </p>
+
+<p>to choose one side is hard because you&#39;d be disregarding one of them and have their life worth more than the other, ones story deeper and more painful even though both are forced to walk a path they didn&#39;t choose </p>
+
+<p><strong>EDIT</strong>: Maybe I didn&#39;t make myself clear enough in the post but my point was, kurapika has seen better, experienced better and received better so he can give those positive emotions back to others because he understands them and feels them, he&#39;s also experienced the bad side of the world and he knows how to give it back, but because he&#39;s had better he knows better, knowing better is to throw his rage at those who killed his people not others. And for the PT i was implying that they&#39;ve never had the better of the world, they didn&#39;t receive kindness, forgiveness, love, acknowledgement and ect, the only thing they&#39;ve ever had is torture, dehumanization, evil and so on, they don&#39;t know how to be like kurapika because they never had what kurapika did, both kurapika and the phantom troupe are giving the world what they received and what they experienced</p>
+
+<p>( sorry for not making myself more clear in the original post but i never meant to justify their wrong actions and who&#39;s right or wrong, i just simply meant you can empathize with both of them and choosing one side while fully hating the other is not right )</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/HunterXHunter/comments/1unyozx/a_test_of_the_readers_morality/" class="post_comments" title="509 comments">509 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1oavld6">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/funny">r/funny</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Lordwarrior_">u/Lordwarrior_</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 19 2025, 17:30:10 UTC">Oct 19 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/funny/comments/1oavld6/smell_test_what/">Smell test?! What !</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/sjflhtjxs3wf1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="961px"
+				height="1232px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/sjflhtjxs3wf1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/sjflhtjxs3wf1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="39394">
+    
+    39.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/funny/comments/1oavld6/smell_test_what/" class="post_comments" title="1828 comments">1.8k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1tpmh3e">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/ProgrammerHumor">r/ProgrammerHumor</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Dilutant">u/Dilutant</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 27 2026, 23:35:55 UTC">May 27 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/ProgrammerHumor/search?q=flair_name%3A%22Meme%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#373c3f;"
+				dir="ltr"><span>Meme</span></a>
+		
+		<a href="/r/ProgrammerHumor/comments/1tpmh3e/betterteststhanleetcode/">betterTestsThanLeetcode</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/3wfu79dqmr3h1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1206px"
+				height="889px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/3wfu79dqmr3h1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/3wfu79dqmr3h1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="13905">
+    
+    13.9k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/ProgrammerHumor/comments/1tpmh3e/betterteststhanleetcode/" class="post_comments" title="362 comments">362 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1mwz3a8">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/Damnthatsinteresting">r/Damnthatsinteresting</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Eros_Incident_Denier">u/Eros_Incident_Denier</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Aug 22 2025, 06:32:37 UTC">Aug 22 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/Damnthatsinteresting/search?q=flair_name%3A%22Video%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:;"
+				dir="ltr"><span>Video</span></a>
+		
+		<a href="/r/Damnthatsinteresting/comments/1mwz3a8/color_vision_test/">color vision test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="663" height="1179" poster="/preview/external-pre/eHpoaHg2ZXFtaWtmMdptDxAMSteTSG4aa-TPuG1B47i9uuvYAHHtNtI7vApR.png?format=pjpg&#38;auto=webp&#38;s=bd0e73e68f32907f0c88027744477dfda661d8eb" controls preload="none">
+			<source src="/hls/xpw56ccqmikf1/HLSPlaylist.m3u8?a=1787801917%2CNzlkNzM2MDFjMTkxMjAwNDhkZTcwNWNhMDg5MmRiMzNkNTgyY2I2NjViZDI0ZDUwZTc5YWNkYjAyOTVjMjhjYg%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="/vid/xpw56ccqmikf1/480.mp4" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="48994">
+    
+    49.0k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/Damnthatsinteresting/comments/1mwz3a8/color_vision_test/" class="post_comments" title="3472 comments">3.5k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1v3gktg">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/starterpacks">r/starterpacks</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/LoveEquivalent9146">u/LoveEquivalent9146</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 22 2026, 13:43:29 UTC">5d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/starterpacks/comments/1v3gktg/taking_a_pregnancy_test_as_a_teenager_starterpack/">taking a pregnancy test as a teenager starterpack</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/bd5xm29ibseh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1920px"
+				height="1080px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/bd5xm29ibseh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/bd5xm29ibseh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="4177">
+    
+    4.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/starterpacks/comments/1v3gktg/taking_a_pregnancy_test_as_a_teenager_starterpack/" class="post_comments" title="486 comments">486 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1urszn0">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/formula1">r/formula1</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/ThisWay_DatWay">u/ThisWay_DatWay</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 09 2026, 15:08:01 UTC">18d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/formula1/search?q=flair_name%3A%22:post-photo: Photo%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ecf1f5;"
+				dir="ltr"><span class="emoji" style="background-image:url('/emoji/18cnwihxqz6b1_t5_2qimj/post-photo');"></span><span> Photo</span></a>
+		
+		<a href="/r/formula1/comments/1urszn0/kimi_antonelli_with_ferrari_test_team_engineers/">Kimi Antonelli with Ferrari test team engineers at Goodwood</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/8485znfwy7ch1.png" class="post_media_image short" >
+			
+			<svg
+				width="2880px"
+				height="1800px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/8485znfwy7ch1.png"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/8485znfwy7ch1.png"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="9161">
+    
+    9.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/formula1/comments/1urszn0/kimi_antonelli_with_ferrari_test_team_engineers/" class="post_comments" title="301 comments">301 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1p68yp2">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/neabscocreeck">r/neabscocreeck</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Ice-Zone2024">u/Ice-Zone2024</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Nov 25 2025, 10:21:23 UTC">Nov 25 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/neabscocreeck/comments/1p68yp2/hold_your_breath_test/">Hold your breath test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="970" height="1723" poster="/preview/external-pre/cnRuZjV2dzVxZDNnMdNkJcTIURf-BiigfWIZD8fM7FwlgND7B7stCUS2rQIS.png?format=pjpg&#38;auto=webp&#38;s=5435bbe1a64af316ed5adab0a0a362e2e0fe449f" controls preload="none">
+			<source src="/hls/0azcq5t5qd3g1/HLSPlaylist.m3u8?a=1787801917%2CMWQ4ODQ4NjVmZGI1NjgyNTA1MjUwNGE3N2IwYTE5M2U4YTcxNzNkMGU5ZWQyY2NlZDc4NTY3MzRjNGM2YTBlYw%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="11220">
+    
+    11.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/neabscocreeck/comments/1p68yp2/hold_your_breath_test/" class="post_comments" title="2186 comments">2.2k comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1op8hwb">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/comics">r/comics</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Pizzacakecomic">u/Pizzacakecomic</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Nov 05 2025, 17:04:05 UTC">Nov 05 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/comics/search?q=flair_name%3A%22Comics Community%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#46d160;"
+				dir="ltr"><span>Comics Community</span></a>
+		
+		<a href="/r/comics/comments/1op8hwb/rigorous_testing/">Rigorous Testing</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/comics/comments/1op8hwb/rigorous_testing/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:140px;">
+			<svg width="140px" height="140px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/thumb/b/dSPnd4pCjbaTJvAk5kDzu1OnE2orTTGRvP9qgxAw8ec.jpg"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/thumb/b/dSPnd4pCjbaTJvAk5kDzu1OnE2orTTGRvP9qgxAw8ec.jpg"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>gallery</span>
+	</a>
+	
+	<div class="post_score" title="55362">
+    
+    55.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/comics/comments/1op8hwb/rigorous_testing/" class="post_comments" title="915 comments">915 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1uyjsnp">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/wallstreetbets">r/wallstreetbets</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/BjergBetterThanFaker">u/BjergBetterThanFaker</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 17 2026, 00:03:32 UTC">11d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/wallstreetbets/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#eb7c14;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/wallstreetbets/comments/1uyjsnp/spacex_shares_fall_after_company_aborts_starship/">SpaceX Shares Fall After Company Aborts Starship Test Launch</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-07-16-2026/card/spacex-shares-fall-after-company-aborts-starship-test-launch-7W9AZVBPXQO8SCw419cl" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>wsj.com</span>
+	</a>
+	
+	<div class="post_score" title="4284">
+    
+    4.3k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/wallstreetbets/comments/1uyjsnp/spacex_shares_fall_after_company_aborts_starship/" class="post_comments" title="434 comments">434 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1sy5et9">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/CarsIndia">r/CarsIndia</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Babygotback_acne">u/Babygotback_acne</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 28 2026, 15:53:54 UTC">Apr 28 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/CarsIndia/search?q=flair_name%3A%22#Miscellaneous 📃%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#7193ff;"
+				dir="ltr"><span>#Miscellaneous 📃</span></a>
+		
+		<a href="/r/CarsIndia/comments/1sy5et9/after_a_year_of_test_driving_waiting_test_driving/">After a year of test driving, waiting, test driving and overthinking, OP finally bought her first car</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/1bwc5d2vdyxg1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1125px"
+				height="983px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/1bwc5d2vdyxg1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/1bwc5d2vdyxg1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="4910">
+    
+    4.9k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Bought the Skoda Kushaq Prestige 1.5 TSI facelift. Saved up for two years. No loans. </p>
+
+<p>My budget was 25L, I test drove: </p>
+
+<p>1.Slavia (my absolute favourite but parents are old and dad had difficulty getting into a car that low)</p>
+
+<p>2.Honda City and Elevate (too noisy and engine didn’t feel as smooth). </p>
+
+<p>3.Seltos (new one, great features but the ride wasn’t smooth. Suspension was a bummer. I could have compromised but I also don’t like the new look) </p>
+
+<p>4.Duster (I pre-booked this one on the day of the launch. I knew I wanted this car. I went for a test drive, the interiors felt a bit cheap, parents didn’t have a lot of leg space in the back seat though we are a fam of shorties. But I was just set on this one, it felt like it had all the main features Seltos offers with better suspension) </p>
+
+<p>5.Kushaq: </p>
+
+<p>The showroom was right next to the Renault showroom. I thought I’ll just test drive, though I was set on Duster. The moment I started driving the car, I was blown away. It is receptive, smooth, interiors are better than Duster for sure. It just felt right. </p>
+
+<p>I am an old school driver. I drove my parents’ old cars - Santro without a power steering for 5 years, then i10, which didn’t have a mirror on the left because back then it wasn’t a thing, now I had been driving i20, it doesn’t have anything, no screens, no reverse camera or Bluetooth, just  a beep for reverse.</p>
+
+<p>I love driving so it is more instinctive for me, never needed 360 camera or even reverse camera. Kushaq driving experience to me was worth giving up feature loaded cars. It would have been great if the car had at least some basic stuff like Duster, but I know I don’t use all that anyway. </p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/CarsIndia/comments/1sy5et9/after_a_year_of_test_driving_waiting_test_driving/" class="post_comments" title="632 comments">632 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1rf9h9a">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/CuratedTumblr">r/CuratedTumblr</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Justthisdudeyaknow">u/Justthisdudeyaknow</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 26 2026, 12:58:34 UTC">Feb 26 &#39;26</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/CuratedTumblr/search?q=flair_name%3A%22Shitposting%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#dadada;"
+				dir="ltr"><span>Shitposting</span></a>
+		
+		<a href="/r/CuratedTumblr/comments/1rf9h9a/we_will_test_out_your_metaphor/">We will test out your metaphor!</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/uew1uycz6ulg1.jpeg" class="post_media_image " >
+			
+			<svg
+				width="968px"
+				height="2049px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/uew1uycz6ulg1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/uew1uycz6ulg1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="20576">
+    
+    20.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"></div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/CuratedTumblr/comments/1rf9h9a/we_will_test_out_your_metaphor/" class="post_comments" title="393 comments">393 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1v0po18">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/evilautism">r/evilautism</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Sad_Camel_476">u/Sad_Camel_476</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 19 2026, 12:45:12 UTC">8d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/evilautism/search?q=flair_name%3A%22Autism Bewareness 🔫🗡💣%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ea0027;"
+				dir="ltr"><span>Autism Bewareness 🔫🗡💣</span></a>
+		
+		<a href="/r/evilautism/comments/1v0po18/autism_test/">autism test</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/2wi3oo4ym6eh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="491px"
+				height="458px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/2wi3oo4ym6eh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/2wi3oo4ym6eh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="2262">
+    
+    2.3k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>reply and i will diagnose you. this is a 100% real and legitimate diagnosis and you can and should use it as proof of your autism</p>
+
+<p>EDIT: due to high demand, autism diagnosis now costs 100g of beads. please send them to my address of residence if you want to receive your diagnosis </p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/evilautism/comments/1v0po18/autism_test/" class="post_comments" title="867 comments">867 comments</a>
+	</div>
+</div>
+				
+			
+		
+		
+		<script src="/hls.min.js"></script>
+		<script src="/playHLSVideo.js"></script>
+		
+
+		
+		<footer>
+			
+
+			
+			<a href="?q=test&restrict_sr=
+				&sort=relevance&t=
+				&after=t3_1v0po18" accesskey="N">NEXT</a>
+			
+		</footer>
+		
+	</div>
+
+		</main>
+		
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

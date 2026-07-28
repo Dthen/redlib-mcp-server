@@ -48,7 +48,7 @@ https://github.com/user-attachments/assets/66eec084-e911-4eed-a51f-be303e86f1a7
 ##  Features
 
 -  **Privacy-First** - Uses your self-hosted Redlib, no tracking or API keys
--  **3 Powerful Tools** - Search posts, get hot posts, fetch full post details with comments
+-  **9 Powerful Tools** - Search posts, subreddits, users; browse front page, user profiles, wiki pages; fetch posts with comments
 -  **Docker Ready** - Both simple and hardened Docker images available
 -  **Easy Setup** - Works with Claude Desktop, Cursor, VS Code, Codex, ForgeCode, KiloCode and any MCP-compatible client
 -  **Structured Output** - Returns clean JSON instead of raw HTML
@@ -188,58 +188,221 @@ cp .env.example .env
 
 ##  Available Tools
 
-### 1. `search_reddit`
-Search Reddit posts using your private Redlib instance.
+### 1. `search_posts`
+Search Reddit posts using your private Redlib instance. Supports sort order, time filter, and subreddit scoping.
 
 **Parameters:**
 - `query` (required) - Search query string
-- `subreddit` (optional) - Limit search to specific subreddit
+- `subreddit` (optional) - Limit search to a specific subreddit
+- `sort` (optional) - Sort order: `relevance`, `hot`, `top`, `new`, `comments` (default: `relevance`)
+- `t` (optional) - Time filter: `hour`, `day`, `week`, `month`, `year`, `all` (only applies when sort is `relevance` or `comments`)
+- `limit` (optional) - Maximum results (default: 25)
 
-**Example:**
+**Example — global search:**
 ```json
 {
   "query": "rust programming",
-  "subreddit": "rust"
-}
-```
-
-**Returns:** JSON with post IDs, titles, authors, scores, and comment counts.
-
----
-
-### 2. `get_subreddit_hot`
-Get hot posts from a specific subreddit.
-
-**Parameters:**
-- `subreddit` (required) - Subreddit name (without r/)
-- `limit` (optional) - Number of posts (default: 25)
-
-**Example:**
-```json
-{
-  "subreddit": "rust",
+  "sort": "top",
+  "t": "month",
   "limit": 10
 }
 ```
 
+**Example — scoped to a subreddit:**
+```json
+{
+  "query": "async patterns",
+  "subreddit": "rust",
+  "sort": "relevance",
+  "limit": 15
+}
+```
+
+**Returns:** JSON with query, sort, result count, and posts (IDs, titles, authors, scores, comment counts).
+
 ---
 
-### 3. `get_post`
-Get a specific post with its comments.
+### 2. `get_posts`
+Get posts from a specific subreddit. Supports all sort modes (hot, new, top, rising, controversial) and time filters for top/controversial.
 
 **Parameters:**
-- `subreddit` (required) - Subreddit name
-- `postId` (required) - Reddit post ID (from search results)
+- `subreddit` (required) - Subreddit name (without r/)
+- `sort` (optional) - Sort mode: `hot`, `new`, `top`, `rising`, `controversial` (default: `hot`)
+- `t` (optional) - Time filter: `hour`, `day`, `week`, `month`, `year`, `all` (only applies when sort is `top` or `controversial`)
+- `limit` (optional) - Maximum posts (default: 25)
 
 **Example:**
 ```json
 {
   "subreddit": "rust",
-  "postId": "abc123"
+  "sort": "top",
+  "t": "week",
+  "limit": 10
 }
 ```
 
-**Returns:** Full post body, score, and up to 10 top comments.
+**Returns:** JSON with subreddit, sort, time filter, result count, and posts.
+
+---
+
+### 3. `get_post`
+Get a specific Reddit post and its comments. Use post ID from search or hot post results.
+
+**Parameters:**
+- `subreddit` (required) - Subreddit name
+- `postId` (required) - Reddit post ID (from search/hot results)
+- `comment_sort` (optional) - Comment sort order: `confidence`, `top`, `new`, `controversial`, `old` (Redlib default is confidence)
+- `comment_limit` (optional) - Maximum comments to return (default: 10)
+
+**Example:**
+```json
+{
+  "subreddit": "rust",
+  "postId": "1abc234",
+  "comment_sort": "top",
+  "comment_limit": 20
+}
+```
+
+**Returns:** Full post body (selftext), title, author, score, upvote ratio, post URL, and comments sorted as requested.
+
+---
+
+### 4. `search_subreddits`
+Search for subreddits on Reddit via Redlib. Returns subreddit names, subscriber counts, and descriptions.
+
+**Parameters:**
+- `query` (required) - Search query for subreddits
+- `limit` (optional) - Maximum results (default: 25)
+
+**Example:**
+```json
+{
+  "query": "machine learning",
+  "limit": 10
+}
+```
+
+**Returns:** JSON with query, result count, and subreddits (name, subscriber count, description).
+
+---
+
+### 5. `search_users`
+Search for Reddit users via Redlib. Returns usernames and optional profile descriptions.
+
+**Parameters:**
+- `query` (required) - Search query for users
+- `limit` (optional) - Maximum results (default: 25)
+
+**Example:**
+```json
+{
+  "query": "rustacean developer",
+  "limit": 10
+}
+```
+
+**Returns:** JSON with query, result count, and users (username, optional description).
+
+---
+
+### 6. `get_subreddit_info`
+Get detailed information about a subreddit (description, rules, subscriber count, etc.) from the Redlib sidebar page.
+
+**Parameters:**
+- `subreddit` (required) - Subreddit name (without r/)
+
+**Example:**
+```json
+{
+  "subreddit": "rust"
+}
+```
+
+**Returns:** JSON with subreddit name, title, description, subscriber count, active users, creation date, and rules (if any).
+
+---
+
+### 7. `get_user`
+Get a Reddit user's profile information, posts, and comments via Redlib. Supports listing type, sort, and time filters.
+
+**Parameters:**
+- `username` (required) - Reddit username (without u/)
+- `listing` (optional) - Content listing type: `overview`, `submitted`, `comments` (default: `overview`)
+- `sort` (optional) - Sort order: `hot`, `new`, `top`, `controversial`
+- `t` (optional) - Time filter: `hour`, `day`, `week`, `month`, `year`, `all` (only applies when sort is `top` or `controversial`)
+- `limit` (optional) - Maximum posts/comments to return (default: 25)
+
+**Example:**
+```json
+{
+  "username": "burntsushi",
+  "listing": "submitted",
+  "sort": "top",
+  "t": "year",
+  "limit": 10
+}
+```
+
+**Returns:** JSON with username, karma, cake day, description, post/comment counts, posts array, and comments array.
+
+---
+
+### 8. `get_front_page`
+Get posts from the Reddit front page — either the popular feed or r/all. Supports sort modes and time filters.
+
+**Parameters:**
+- `feed` (optional) - Feed type: `popular` (default Reddit front page) or `all` (r/all) (default: `popular`)
+- `sort` (optional) - Sort mode: `hot`, `new`, `top`, `rising`, `controversial` (default: `hot`)
+- `t` (optional) - Time filter: `hour`, `day`, `week`, `month`, `year`, `all` (only applies when sort is `top` or `controversial`)
+- `limit` (optional) - Maximum posts (default: 25)
+
+**Example — popular front page:**
+```json
+{
+  "feed": "popular",
+  "sort": "hot",
+  "limit": 25
+}
+```
+
+**Example — r/all top of the day:**
+```json
+{
+  "feed": "all",
+  "sort": "top",
+  "t": "day",
+  "limit": 15
+}
+```
+
+**Returns:** JSON with feed, sort, time filter (if applicable), result count, and posts.
+
+---
+
+### 9. `get_wiki_page`
+Get the contents of a subreddit's wiki page via Redlib.
+
+**Parameters:**
+- `subreddit` (required) - Subreddit name (without r/)
+- `page` (optional) - Wiki page name (default: `index`)
+
+**Example — subreddit wiki index:**
+```json
+{
+  "subreddit": "rust"
+}
+```
+
+**Example — specific wiki page:**
+```json
+{
+  "subreddit": "rust",
+  "page": "books"
+}
+```
+
+**Returns:** JSON with the wiki page title and full wiki content.
 
 ---
 
@@ -516,7 +679,7 @@ Once connected to your AI client (e.g., Claude), you can:
 ```
 User: "Search Reddit for 'home lab setup' and summarize the top results"
 
-AI uses search_reddit tool →
+AI uses search_posts tool →
 Returns structured JSON with posts →
 AI summarizes the findings for you
 ```

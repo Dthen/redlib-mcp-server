@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>
+	index - personalfinance
+	
+</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+	<form action="/r/personalfinance/search" id="searchbox">
+	<input id="search" type="text" name="q" placeholder="Search" title="Search redlib" value="">
+	
+	<div id="inside">
+		<input type="checkbox" name="restrict_sr" id="restrict_sr" checked>
+		<label for="restrict_sr" class="search_label" title="Restrict search to this subreddit">in /r/personalfinance</label>
+	</div>
+	
+	<button class="submit">
+		<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+			<path d="M20 50 H100" />
+			<path d="M75 15 L100 50 L75 85" />
+			&rarr;
+		</svg>
+	</button>
+</form>
+
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/r/personalfinance/wiki/index</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/r/personalfinance/wiki/index" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+	<main>
+		<div class="panel" id="column_one">
+			<div id="top">
+				<a href="/r/personalfinance">Posts</a>
+				<div>Wiki</div>
+			</div>
+			<div id="wiki">
+				<!-- SC_OFF --><div class="md wiki"><div class="toc"><ul><li class="wiki_welcome_to_the_pf_wiki"><a href="#wiki_welcome_to_the_pf_wiki">Welcome to the PF Wiki</a></li><li class="toc_child"><ul><li class="wiki_please_read_this_basic_financial_advice_everyone_should_follow."><a href="#wiki_please_read_this_basic_financial_advice_everyone_should_follow.">Please read this basic financial advice everyone should follow.</a></li><li class="toc_child"><ul><li class="wiki_prime_directive.3A_how_to_handle_.24"><a href="#wiki_prime_directive.3A_how_to_handle_.24">Prime Directive: How to Handle $</a></li><li class="wiki_new_user_orientation"><a href="#wiki_new_user_orientation">New User Orientation</a></li></ul></li><li class="wiki_advice_and_tips_for_different_age-ranges"><a href="#wiki_advice_and_tips_for_different_age-ranges">Advice and Tips for Different Age-Ranges</a></li><li class="toc_child"><ul><li class="wiki_high_school_students_and_teenagers_.2815-20.29"><a href="#wiki_high_school_students_and_teenagers_.2815-20.29">High School Students and Teenagers (15-20)</a></li><li class="wiki_young_adults_.2818-25.29"><a href="#wiki_young_adults_.2818-25.29">Young Adults (18-25)</a></li><li class="wiki_older_young_adults_.2825-35.29"><a href="#wiki_older_young_adults_.2825-35.29">Older Young Adults (25-35)</a></li><li class="wiki_mid-career_adults_.2835-45.29"><a href="#wiki_mid-career_adults_.2835-45.29">Mid-Career Adults (35-45)</a></li><li class="wiki_middle-aged_adults_.2845-65.29"><a href="#wiki_middle-aged_adults_.2845-65.29">Middle-Aged Adults (45-65)</a></li></ul></li><li class="wiki_regional_subreddits"><a href="#wiki_regional_subreddits">Regional Subreddits</a></li><li class="wiki_specific_topics"><a href="#wiki_specific_topics">Specific Topics</a></li><li class="toc_child"><ul><li class="wiki_auto"><a href="#wiki_auto">Auto</a></li><li class="wiki_banks_and_credit_unions"><a href="#wiki_banks_and_credit_unions">Banks and Credit Unions</a></li><li class="wiki_budgeting"><a href="#wiki_budgeting">Budgeting</a></li><li class="wiki_charity.2C_donations.2C_and_giving"><a href="#wiki_charity.2C_donations.2C_and_giving">Charity, Donations, and Giving</a></li><li class="wiki_collections"><a href="#wiki_collections">Collections</a></li><li class="wiki_credit"><a href="#wiki_credit">Credit</a></li><li class="wiki_cryptocurrency"><a href="#wiki_cryptocurrency">Cryptocurrency</a></li><li class="wiki_debt"><a href="#wiki_debt">Debt</a></li><li class="wiki_emergency_funds"><a href="#wiki_emergency_funds">Emergency Funds</a></li><li class="wiki_employment"><a href="#wiki_employment">Employment</a></li><li class="wiki_estate"><a href="#wiki_estate">Estate</a></li><li class="wiki_financial_advisors"><a href="#wiki_financial_advisors">Financial Advisors</a></li><li class="wiki_financial_institutions"><a href="#wiki_financial_institutions">Financial Institutions</a></li><li class="wiki_housing"><a href="#wiki_housing">Housing</a></li><li class="wiki_independence"><a href="#wiki_independence">Independence</a></li><li class="wiki_inheritance"><a href="#wiki_inheritance">Inheritance</a></li><li class="wiki_insurance"><a href="#wiki_insurance">Insurance</a></li><li class="wiki_investing"><a href="#wiki_investing">Investing</a></li><li class="wiki_lending_and_co-signing_loans"><a href="#wiki_lending_and_co-signing_loans">Lending and Co-Signing Loans</a></li><li class="wiki_mortgages"><a href="#wiki_mortgages">Mortgages</a></li><li class="wiki_psychology"><a href="#wiki_psychology">Psychology</a></li><li class="wiki_relationships"><a href="#wiki_relationships">Relationships</a></li><li class="wiki_retirement"><a href="#wiki_retirement">Retirement</a></li><li class="wiki_scams_and_fraud"><a href="#wiki_scams_and_fraud">Scams and Fraud</a></li><li class="wiki_side_income"><a href="#wiki_side_income">Side Income</a></li><li class="wiki_student_loans"><a href="#wiki_student_loans">Student Loans</a></li><li class="wiki_taxes"><a href="#wiki_taxes">Taxes</a></li><li class="wiki_teenagers"><a href="#wiki_teenagers">Teenagers</a></li><li class="wiki_tools"><a href="#wiki_tools">Tools</a></li><li class="wiki_windfall"><a href="#wiki_windfall">Windfall</a></li></ul></li><li class="wiki_miscellaneous_topics"><a href="#wiki_miscellaneous_topics">Miscellaneous Topics</a></li><li class="toc_child"><ul><li class="wiki_30-day_challenges"><a href="#wiki_30-day_challenges">30-Day Challenges</a></li><li class="wiki_reading_list"><a href="#wiki_reading_list">Reading List</a></li><li class="wiki_past_discussions"><a href="#wiki_past_discussions">Past Discussions</a></li></ul></li><li class="wiki_pages_about_.2Fr.2Fpersonalfinance"><a href="#wiki_pages_about_.2Fr.2Fpersonalfinance">Pages about /r/personalfinance</a></li><li class="toc_child"><ul><li class="wiki_new_user_orientation2"><a href="#wiki_new_user_orientation2">New User Orientation</a></li><li class="wiki_subreddit_rules"><a href="#wiki_subreddit_rules">Subreddit Rules</a></li><li class="wiki_disclaimer"><a href="#wiki_disclaimer">Disclaimer</a></li><li class="wiki_flair"><a href="#wiki_flair">Flair</a></li><li class="wiki_unofficial_irc_channel"><a href="#wiki_unofficial_irc_channel">Unofficial IRC Channel</a></li></ul></li><li class="wiki_acknowledgements"><a href="#wiki_acknowledgements">Acknowledgements</a></li></ul></li></ul></div><h1 id="wiki_welcome_to_the_pf_wiki">Welcome to the PF Wiki</h1>
+<h2 id="wiki_please_read_this_basic_financial_advice_everyone_should_follow."><a href="/r/personalfinance/wiki/commontopics" rel="nofollow">Please read this basic financial advice everyone should follow.</a></h2>
+<h3 id="wiki_prime_directive.3A_how_to_handle_.24"><a href="/r/personalfinance/wiki/commontopics" rel="nofollow">Prime Directive: How to Handle $</a></h3>
+<h3 id="wiki_new_user_orientation"><a href="/r/personalfinance/wiki/newuser" rel="nofollow">New User Orientation</a></h3>
+<h2 id="wiki_advice_and_tips_for_different_age-ranges">Advice and Tips for Different Age-Ranges</h2>
+<h3 id="wiki_high_school_students_and_teenagers_.2815-20.29"><a href="/r/personalfinance/wiki/teachme" rel="nofollow">High School Students and Teenagers (15-20)</a></h3>
+<h3 id="wiki_young_adults_.2818-25.29"><a href="/r/personalfinance/wiki/young_adult" rel="nofollow">Young Adults (18-25)</a></h3>
+<h3 id="wiki_older_young_adults_.2825-35.29"><a href="/r/personalfinance/wiki/early_career" rel="nofollow">Older Young Adults (25-35)</a></h3>
+<h3 id="wiki_mid-career_adults_.2835-45.29"><a href="/r/personalfinance/wiki/mid_career" rel="nofollow">Mid-Career Adults (35-45)</a></h3>
+<h3 id="wiki_middle-aged_adults_.2845-65.29"><a href="/r/personalfinance/wiki/middle_aged" rel="nofollow">Middle-Aged Adults (45-65)</a></h3>
+<h2 id="wiki_regional_subreddits">Regional Subreddits</h2>
+<p><a href="/r/personalfinance" rel="nofollow">/r/personalfinance</a> is not dedicated to any one country, but the wiki is somewhat focused on the US.</p>
+<p><a href="/r/personalfinance/wiki/country_index" rel="nofollow">We have an index of subreddits focused on other countries and regions including Australia, Austria, Belgium, Brazil, Canada, Denmark, the European Union, Finland, France, Germany, India, Indonesia, Ireland, Italy, Malaysia, the Netherlands, New Zealand, the Philippines, Portugal, Singapore, South Africa, Sweden, and the United Kingdom</a>.</p>
+<h2 id="wiki_specific_topics">Specific Topics</h2>
+<h3 id="wiki_auto">Auto</h3>
+<p>(Applies to any automobile: cars, trucks, SUVs, motorcycles, minivans, vans, and other vehicles.)</p>
+<ul>
+<li><a href="/r/personalfinance/wiki/vehicles" rel="nofollow">Vehicles</a></li>
+<li><a href="/r/personalfinance/wiki/carinsurance" rel="nofollow">Auto Insurance</a></li>
+</ul>
+<h3 id="wiki_banks_and_credit_unions"><a href="/r/personalfinance/wiki/banks_and_credit_unions" rel="nofollow">Banks and Credit Unions</a></h3>
+<h3 id="wiki_budgeting"><a href="/r/personalfinance/wiki/budgeting" rel="nofollow">Budgeting</a></h3>
+<h3 id="wiki_charity.2C_donations.2C_and_giving"><a href="/r/personalfinance/wiki/charity" rel="nofollow">Charity, Donations, and Giving</a></h3>
+<h3 id="wiki_collections"><a href="/r/personalfinance/wiki/collections" rel="nofollow">Collections</a></h3>
+<h3 id="wiki_credit">Credit</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/collections" rel="nofollow">Collections</a></li>
+<li><a href="/r/personalfinance/wiki/creditcards" rel="nofollow">Credit Cards</a></li>
+<li><a href="/r/personalfinance/wiki/credit_reports" rel="nofollow">Credit Reports</a></li>
+<li><a href="/r/personalfinance/wiki/fico" rel="nofollow">FICO Scores and Credit Monitoring</a></li>
+<li><a href="/r/personalfinance/wiki/identity_theft" rel="nofollow">Identity Theft</a></li>
+<li><a href="/r/personalfinance/wiki/credit_building" rel="nofollow">Credit Building</a> (bad credit or no credit)</li>
+</ul>
+<h3 id="wiki_cryptocurrency"><a href="/r/personalfinance/wiki/cryptocurrency" rel="nofollow">Cryptocurrency</a></h3>
+<h3 id="wiki_debt"><a href="/r/personalfinance/wiki/debt" rel="nofollow">Debt</a></h3>
+<h3 id="wiki_emergency_funds"><a href="/r/personalfinance/wiki/emergencyfunds" rel="nofollow">Emergency Funds</a></h3>
+<h3 id="wiki_employment">Employment</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/employment" rel="nofollow">Employment</a></li>
+<li><a href="/r/personalfinance/wiki/leaving_job" rel="nofollow">Leaving a Job</a> (resigning, quitting, fired, laid off, etc.)</li>
+<li><a href="/r/personalfinance/wiki/self_employment" rel="nofollow">Self-Employment</a></li>
+</ul>
+<h3 id="wiki_estate">Estate</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/end_of_life_planning" rel="nofollow">End-of-Life Planning</a></li>
+<li><a href="/r/personalfinance/wiki/death_of_loved_one" rel="nofollow">Death of a Loved One</a></li>
+</ul>
+<h3 id="wiki_financial_advisors"><a href="/r/personalfinance/wiki/financialadvisors" rel="nofollow">Financial Advisors</a></h3>
+<h3 id="wiki_financial_institutions"><a href="/r/personalfinance/wiki/financialinstitutions" rel="nofollow">Financial Institutions</a></h3>
+<h3 id="wiki_housing">Housing</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/housing" rel="nofollow">Housing</a></li>
+<li><a href="/r/personalfinance/wiki/home_destroyed" rel="nofollow">Home Destroyed in Disaster or Fire</a></li>
+<li><a href="/r/personalfinance/wiki/homeowners_insurance" rel="nofollow">Homeowners Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/housing/renting" rel="nofollow">Renting</a></li>
+<li><a href="/r/personalfinance/wiki/timeshares" rel="nofollow">Timeshares</a></li>
+</ul>
+<h3 id="wiki_independence"><a href="/r/personalfinance/wiki/independence" rel="nofollow">Independence</a></h3>
+<h3 id="wiki_inheritance">Inheritance</h3>
+<p>First read <a href="/r/personalfinance/wiki/commontopics" rel="nofollow">&quot;I Have $[X]... What Do I Do With It?!&quot;</a> and then read <a href="/r/personalfinance/wiki/windfall" rel="nofollow">Windfall</a>.</p>
+<h3 id="wiki_insurance">Insurance</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/carinsurance" rel="nofollow">Auto Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/health_insurance" rel="nofollow">Health Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/homeowners_insurance" rel="nofollow">Homeowners Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/umbrella_insurance" rel="nofollow">Umbrella Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/insurance" rel="nofollow">Life Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/ltc_and_disability_insurance" rel="nofollow">Long-Term Care and Disability Insurance</a></li>
+<li><a href="/r/personalfinance/wiki/end_of_life_planning" rel="nofollow">End-of-Life Planning</a></li>
+</ul>
+<h3 id="wiki_investing">Investing</h3>
+<ul>
+<li><p><a href="/r/personalfinance/wiki/investing" rel="nofollow">Investing</a></p></li>
+<li><p><a href="/r/personalfinance/wiki/savingsbonds" rel="nofollow">Savings Bonds</a></p></li>
+<li><p><a href="/r/personalfinance/wiki/401k_funds" rel="nofollow">401(k) Fund Selection Guide</a></p></li>
+</ul>
+<h3 id="wiki_lending_and_co-signing_loans"><a href="/r/personalfinance/wiki/lending" rel="nofollow">Lending and Co-Signing Loans</a></h3>
+<h3 id="wiki_mortgages"><a href="/r/personalfinance/wiki/housing" rel="nofollow">Mortgages</a></h3>
+<h3 id="wiki_psychology"><a href="/r/personalfinance/wiki/psychology" rel="nofollow">Psychology</a></h3>
+<h3 id="wiki_relationships">Relationships</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/dating" rel="nofollow">Dating</a></li>
+<li><a href="/r/personalfinance/wiki/divorce" rel="nofollow">Divorce</a></li>
+<li><a href="/r/personalfinance/wiki/engagement" rel="nofollow">Engagement</a></li>
+<li><a href="/r/personalfinance/wiki/end_of_life_planning" rel="nofollow">End-of-Life Planning</a></li>
+<li><a href="/r/personalfinance/wiki/jointfinances" rel="nofollow">Joint Finances</a></li>
+<li><a href="/r/personalfinance/wiki/roommates" rel="nofollow">Roommates</a></li>
+<li><a href="/r/personalfinance/wiki/weddings" rel="nofollow">Weddings</a></li>
+</ul>
+<h3 id="wiki_retirement">Retirement</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/401k" rel="nofollow">401(k) FAQs</a></li>
+<li><a href="/r/personalfinance/wiki/401k_funds" rel="nofollow">401(k) Fund Selection Guide</a></li>
+<li><a href="/r/personalfinance/wiki/investing" rel="nofollow">Investing</a></li>
+<li><a href="/r/personalfinance/wiki/iras" rel="nofollow">IRAs</a></li>
+<li><a href="/r/personalfinance/wiki/portfolioquestions" rel="nofollow">Portfolio Questions</a></li>
+<li><a href="/r/personalfinance/wiki/retirement_predicaments" rel="nofollow">Retirement Predicaments</a></li>
+<li><a href="/r/personalfinance/wiki/retirementaccounts/rollovers" rel="nofollow">Rollovers</a></li>
+<li><a href="/r/personalfinance/wiki/rothortraditional" rel="nofollow">Roth or Traditional?</a></li>
+<li><a href="/r/personalfinance/wiki/socialsecurity" rel="nofollow">Social Security</a></li>
+<li><a href="/r/personalfinance/wiki/tsp" rel="nofollow">Thrift Savings Plan</a></li>
+</ul>
+<h3 id="wiki_scams_and_fraud">Scams and Fraud</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/identity_theft" rel="nofollow">Identity Theft</a></li>
+<li><a href="/r/personalfinance/wiki/scams" rel="nofollow">Scams and Fraud</a></li>
+<li><a href="/r/personalfinance/wiki/timeshares" rel="nofollow">Timeshares</a></li>
+</ul>
+<h3 id="wiki_side_income"><a href="/r/personalfinance/wiki/sideincome" rel="nofollow">Side Income</a></h3>
+<h3 id="wiki_student_loans"><a href="/r/personalfinance/wiki/studentloans" rel="nofollow">Student Loans</a></h3>
+<h3 id="wiki_taxes">Taxes</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/taxes" rel="nofollow">Taxes</a></li>
+<li><a href="/r/personalfinance/wiki/gifts" rel="nofollow">Gifts</a></li>
+<li><a href="/r/personalfinance/wiki/self_employment" rel="nofollow">Self-Employment</a></li>
+</ul>
+<h3 id="wiki_teenagers">Teenagers</h3>
+<ul>
+<li><a href="/r/personalfinance/wiki/teachme" rel="nofollow">High School Students and Teenagers (15-20)</a></li>
+<li><a href="/r/personalfinance/wiki/young_adult" rel="nofollow">Young Adults (18-25)</a></li>
+<li><a href="/r/personalfinance/wiki/kicked_out" rel="nofollow">What to Do If You’ve Been Kicked Out of Your Family Home as a Young Person</a></li>
+</ul>
+<h3 id="wiki_tools"><a href="/r/personalfinance/wiki/tools" rel="nofollow">Tools</a></h3>
+<h3 id="wiki_windfall"><a href="/r/personalfinance/wiki/windfall" rel="nofollow">Windfall</a></h3>
+<h2 id="wiki_miscellaneous_topics">Miscellaneous Topics</h2>
+<h3 id="wiki_30-day_challenges"><a href="/r/personalfinance/wiki/30daychallenges" rel="nofollow">30-Day Challenges</a></h3>
+<h3 id="wiki_reading_list"><a href="/r/personalfinance/wiki/readinglist" rel="nofollow">Reading List</a></h3>
+<h3 id="wiki_past_discussions"><a href="/r/personalfinance/wiki/pastdiscussions" rel="nofollow">Past Discussions</a></h3>
+<h2 id="wiki_pages_about_.2Fr.2Fpersonalfinance">Pages about <a href="/r/personalfinance" rel="nofollow">/r/personalfinance</a></h2>
+<h3 id="wiki_new_user_orientation2"><a href="/r/personalfinance/wiki/newuser" rel="nofollow">New User Orientation</a></h3>
+<h3 id="wiki_subreddit_rules">Subreddit Rules</h3>
+<ul>
+<li><a href="/r/personalfinance/about/rules" rel="nofollow">Subreddit Rules</a></li>
+<li><a href="/r/personalfinance/wiki/rules" rel="nofollow">Notes, Additional Rules, and Best Practices</a></li>
+</ul>
+<h3 id="wiki_disclaimer"><a href="/r/personalfinance/wiki/disclaimer" rel="nofollow">Disclaimer</a></h3>
+<h3 id="wiki_flair"><a href="/r/personalfinance/wiki/flair" rel="nofollow">Flair</a></h3>
+<h3 id="wiki_unofficial_irc_channel"><a href="/r/personalfinance/wiki/snoonet" rel="nofollow">Unofficial IRC Channel</a></h3>
+<h2 id="wiki_acknowledgements">Acknowledgements</h2>
+<p>Creating the subreddit: <a href="/u/gen3ric" rel="nofollow">/u/gen3ric</a></p>
+<p>Numerous wiki contributions: <a href="/u/aBoglehead" rel="nofollow">/u/aBoglehead</a></p>
+<p>The <a href="/r/personalfinance" rel="nofollow">/r/personalfinance</a> logo: <a href="/u/groktookia" rel="nofollow">/u/groktookia</a></p>
+</div><!-- SC_ON -->
+			</div>
+		</div>
+	</main>
+
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

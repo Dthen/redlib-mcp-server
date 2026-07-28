@@ -1,0 +1,99 @@
+<html>
+<body>
+<main>
+  <div class="post">
+    <h1 class="post_title"><a href="/r/testsub/comments/abc123/test_post/">Test Post With Nested Comments</a></h1>
+    <a class="post_author" href="/user/poster">u/poster</a>
+    <span class="post_subreddit">r/testsub</span>
+    <div class="post_score" title="150">150</div>
+    <div class="post_body"><div class="md"><p>This is the post body.</p></div></div>
+    <div class="post_header"><span class="created" title="Jul 01 2026, 12:00:00 UTC">Jul 01 '26</span></div>
+  </div>
+
+  <div id="comments">
+    <!-- Top-level comment 1: by OP -->
+    <div id="c001" class="comment">
+      <div class="comment_left">
+        <p class="comment_score" title="42">42</p>
+        <div class="line"></div>
+      </div>
+      <details class="comment_right" open>
+        <summary class="comment_data">
+          <a class="comment_author op" href="/user/poster">u/poster</a>
+          <a href="/r/testsub/comments/abc123/test_post/c001/?context=3#c001" class="created" title="Jul 01 2026, 12:05:00 UTC">5h ago</a>
+        </summary>
+        <div class="comment_body"><div class="md"><p>Top level comment by OP with full text that is not truncated at all.</p></div></div>
+        <blockquote class="replies">
+          <!-- Reply 1.1: not OP -->
+          <div id="c002" class="comment">
+            <div class="comment_left">
+              <p class="comment_score" title="10">10</p>
+              <div class="line"></div>
+            </div>
+            <details class="comment_right" open>
+              <summary class="comment_data">
+                <a class="comment_author" href="/user/replier1">u/replier1</a>
+                <a href="/r/testsub/comments/abc123/test_post/c002/?context=3#c002" class="created" title="Jul 01 2026, 12:10:00 UTC">4h ago</a>
+              </summary>
+              <div class="comment_body"><div class="md"><p>First reply to OP comment.</p></div></div>
+              <blockquote class="replies">
+                <!-- Reply 1.1.1: deep nested, by OP -->
+                <div id="c003" class="comment">
+                  <div class="comment_left">
+                    <p class="comment_score" title="5">5</p>
+                    <div class="line"></div>
+                  </div>
+                  <details class="comment_right" open>
+                    <summary class="comment_data">
+                      <a class="comment_author op" href="/user/poster">u/poster</a>
+                      <a href="/r/testsub/comments/abc123/test_post/c003/?context=3#c003" class="created" title="Jul 01 2026, 12:15:00 UTC">4h ago</a>
+                    </summary>
+                    <div class="comment_body"><div class="md"><p>Deep nested reply by OP.</p></div></div>
+                    <blockquote class="replies">
+                    </blockquote>
+                  </details>
+                </div>
+              </blockquote>
+            </details>
+          </div>
+        </blockquote>
+      </details>
+    </div>
+
+    <!-- Top-level comment 2: not OP -->
+    <div id="c004" class="comment">
+      <div class="comment_left">
+        <p class="comment_score" title="7">7</p>
+        <div class="line"></div>
+      </div>
+      <details class="comment_right" open>
+        <summary class="comment_data">
+          <a class="comment_author" href="/user/another">u/another</a>
+          <a href="/r/testsub/comments/abc123/test_post/c004/?context=3#c004" class="created" title="Jul 01 2026, 13:00:00 UTC">3h ago</a>
+        </summary>
+        <div class="comment_body"><div class="md"><p>Second top-level comment.</p></div></div>
+        <blockquote class="replies">
+        </blockquote>
+      </details>
+    </div>
+
+    <!-- Top-level comment 3 -->
+    <div id="c005" class="comment">
+      <div class="comment_left">
+        <p class="comment_score" title="1,234">1,234</p>
+        <div class="line"></div>
+      </div>
+      <details class="comment_right" open>
+        <summary class="comment_data">
+          <a class="comment_author" href="/user/third">u/third</a>
+          <a href="/r/testsub/comments/abc123/test_post/c005/?context=3#c005" class="created" title="Jul 01 2026, 14:00:00 UTC">2h ago</a>
+        </summary>
+        <div class="comment_body"><div class="md"><p>Third top-level comment with comma score.</p></div></div>
+        <blockquote class="replies">
+        </blockquote>
+      </details>
+    </div>
+  </div>
+</main>
+</body>
+</html>

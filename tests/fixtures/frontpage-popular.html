@@ -1,0 +1,1461 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>
+	popular
+	
+</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+	<form action="/r/popular/search" id="searchbox">
+	<input id="search" type="text" name="q" placeholder="Search" title="Search redlib" value="">
+	
+	<div id="inside">
+		<input type="checkbox" name="restrict_sr" id="restrict_sr" checked>
+		<label for="restrict_sr" class="search_label" title="Restrict search to this subreddit">in /r/popular</label>
+	</div>
+	
+	<button class="submit">
+		<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+			<path d="M20 50 H100" />
+			<path d="M75 15 L100 50 L75 85" />
+			&rarr;
+		</svg>
+	</button>
+</form>
+
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+	<main>
+		
+		<div id="column_one">
+			<form id="sort">
+				<div id="sort_options">
+					
+						
+		<a class="selected" href="/r/popular/hot">
+			Hot
+		</a>
+	
+		<a  href="/r/popular/new">
+			New
+		</a>
+	
+		<a  href="/r/popular/top">
+			Top
+		</a>
+	
+		<a  href="/r/popular/rising">
+			Rising
+		</a>
+	
+		<a  href="/r/popular/controversial">
+			Controversial
+		</a>
+	
+					
+				</div>
+				
+			</form>
+
+			
+
+			
+
+			
+
+			
+			<div id="posts">
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v81pht">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/mildlyinfuriating">r/mildlyinfuriating</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/menotsorrythrowaway">u/menotsorrythrowaway</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 14:17:18 UTC">9h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/mildlyinfuriating/search?q=flair_name%3A%22wet socks%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:transparent;"
+				dir="ltr"><span>wet socks</span></a>
+		
+		<a href="/r/mildlyinfuriating/comments/1v81pht/my_wife_said_that_the_house_is_in_shambles_and/">My wife said that the house is in shambles and she&#39;ll be cleaning all day. This is what our house looks like in shambles.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/mildlyinfuriating/comments/1v81pht/my_wife_said_that_the_house_is_in_shambles_and/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:105px;">
+			<svg width="140px" height="105px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/pre/9nk4zj8n6sfh1.jpg?width=140&#38;height=105&#38;auto=webp&#38;s=26c9148bf5760380e7a84845199523ff94ebc397"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/pre/9nk4zj8n6sfh1.jpg?width=140&#38;height=105&#38;auto=webp&#38;s=26c9148bf5760380e7a84845199523ff94ebc397"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>gallery</span>
+	</a>
+	
+	<div class="post_score" title="68604">
+    
+    68.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/mildlyinfuriating/comments/1v81pht/my_wife_said_that_the_house_is_in_shambles_and/" class="post_comments" title="15335 comments">15.3k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8g414">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/MadeMeSmile">r/MadeMeSmile</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Creams0da">u/Creams0da</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 22:55:44 UTC">1h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/MadeMeSmile/search?q=flair_name%3A%22:snoo_putback: Good Vibes :snoo_tongue:%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#edeff1;"
+				dir="ltr"><span class="emoji" style="background-image:url('/emoji/8228r6bhaezz_t5_3nqvj/snoo_putback');"></span><span> Good Vibes </span><span class="emoji" style="background-image:url('/emoji/pgm55sg3aezz_t5_3nqvj/snoo_tongue');"></span></a>
+		
+		<a href="/r/MadeMeSmile/comments/1v8g414/took_the_unfortunate_event_like_a_champ/">Took the unfortunate event like a champ</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="405" height="720" poster="/preview/external-pre/ZDBib3dqeDVydWZoMdST0u3NnRTleZKBmLYz11sdjqrIFW6Fj9tPR7I6zEKB.png?format=pjpg&#38;auto=webp&#38;s=c3b70cd12e17bc08d83101242a7910efb82306bb" controls preload="none">
+			<source src="/hls/y66aogz5rufh1/HLSPlaylist.m3u8?a=1787789257%2CMzQyNmUwYWJiZTFlMTU4YTEyYTJhZTE2NzhiYjgxNGE2YmE3MzJiNDIxNjU0MTFkZjQ3N2NhNzQwMGMxZTc1Yw%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/MadeMeSmile/comments/1v8g414/took_the_unfortunate_event_like_a_champ/" class="post_comments" title="152 comments">152 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8cch5">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/mildlyinfuriating">r/mildlyinfuriating</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/PrinceBert">u/PrinceBert</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 20:32:59 UTC">3h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/mildlyinfuriating/search?q=flair_name%3A%22My mom said I could post%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:transparent;"
+				dir="ltr"><span>My mom said I could post</span></a>
+		
+		<a href="/r/mildlyinfuriating/comments/1v8cch5/they_made_the_shower_gel_bottles_slimmer_and/">They made the shower gel bottles slimmer and taller and now they don&#39;t fit my cupboard anymore</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/0tftov0p1ufh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="4080px"
+				height="3072px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/0tftov0p1ufh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/0tftov0p1ufh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="22224">
+    
+    22.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/mildlyinfuriating/comments/1v8cch5/they_made_the_shower_gel_bottles_slimmer_and/" class="post_comments" title="355 comments">355 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7z1m7">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/AskReddit">r/AskReddit</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Funny-Counter8762">u/Funny-Counter8762</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 12:31:36 UTC">11h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/AskReddit/comments/1v7z1m7/what_industry_is_secretly_on_the_verge_of/">What industry is secretly on the verge of collapsing, but people outside of it haven’t noticed yet?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="9991">
+    
+    10.0k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/AskReddit/comments/1v7z1m7/what_industry_is_secretly_on_the_verge_of/" class="post_comments" title="7171 comments">7.2k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8a8ds">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/meirl">r/meirl</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/danielminds">u/danielminds</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 19:17:52 UTC">4h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/meirl/comments/1v8a8ds/meirl/">meirl</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/phu4ihpaotfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1000px"
+				height="1000px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/phu4ihpaotfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/phu4ihpaotfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="40289">
+    
+    40.3k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/meirl/comments/1v8a8ds/meirl/" class="post_comments" title="1411 comments">1.4k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8dm6x">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/technology">r/technology</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/marketrent">u/marketrent</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 21:19:28 UTC">2h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/technology/search?q=flair_name%3A%22Artificial Intelligence%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:;"
+				dir="ltr"><span>Artificial Intelligence</span></a>
+		
+		<a href="/r/technology/comments/1v8dm6x/high_school_teacher_arrested_for_clapping_in/">High school teacher arrested for clapping in support of anti-data center activists</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="https://www.yahoo.com/news/us/articles/high-school-teacher-arrested-clapping-194922184.html" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:93px;">
+			<svg width="140px" height="93px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/external-pre/idGLgC1yeeZyi7KGomMjIuEPWHyJm5k5xlB2eY2QYXs.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=fe2a5b13f27614acd7b6d1b98e7c698326b4c825"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/external-pre/idGLgC1yeeZyi7KGomMjIuEPWHyJm5k5xlB2eY2QYXs.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=fe2a5b13f27614acd7b6d1b98e7c698326b4c825"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>yahoo.com</span>
+	</a>
+	
+	<div class="post_score" title="11348">
+    
+    11.3k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/technology/comments/1v8dm6x/high_school_teacher_arrested_for_clapping_in/" class="post_comments" title="477 comments">477 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post stickied" id="1v8bw52">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/tmobile">r/tmobile</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/JoJo-Grey">u/JoJo-Grey</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 20:16:34 UTC">3h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/tmobile/search?q=flair_name%3A%22PSA%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ffd635;"
+				dir="ltr"><span>PSA</span></a>
+		
+		<a href="/r/tmobile/comments/1v8bw52/t_mobile_outage/">T Mobile outage?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="2175">
+    
+    2.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>My service has been completely dead for like ten minutes, is anyone else experiencing this? Down Detector seems to be getting reports.</p>
+
+<p>Edit: Calling the customer service number and power cycling the device seems to fix it.</p>
+
+<p>Edit 2: Fix was only temporary.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/tmobile/comments/1v8bw52/t_mobile_outage/" class="post_comments" title="7010 comments">7.0k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8cb8m">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/theydidthemath">r/theydidthemath</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/mischief_managed934">u/mischief_managed934</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 20:31:42 UTC">3h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/theydidthemath/comments/1v8cb8m/request_is_this_dollar_amount_actually_accurate/">[Request] Is this dollar amount actually accurate?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/r6hhlszg1ufh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1080px"
+				height="1090px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/r6hhlszg1ufh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/r6hhlszg1ufh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="15031">
+    
+    15.0k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/theydidthemath/comments/1v8cb8m/request_is_this_dollar_amount_actually_accurate/" class="post_comments" title="976 comments">976 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v85ulg">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/SipsTea">r/SipsTea</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Gurugod123">u/Gurugod123</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:46:46 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/SipsTea/search?q=flair_name%3A%22Chugging tea :KermitSlowerSip_APNG:%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#46d160;"
+				dir="ltr"><span>Chugging tea </span><span class="emoji" style="background-image:url('/emoji/kdsupoiik7ug1_t5_5tdqj0/KermitSlowerSip_APNG');"></span></a>
+		
+		<a href="/r/SipsTea/comments/1v85ulg/mayor_mamdani_just_announced_that_he_will_be/">Mayor Mamdani just announced that he will be opening 5 city-run, tax-funded grocery stores: &#34;Prices set at 30% below retail prices&#34;</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="1266" height="720" poster="/preview/external-pre/NnlxZG5xMGJ4c2ZoMQd6Ncmd4EKSxAN-AZa9O6MCrTCD_5sfVtT0gtGrAG0m.png?format=pjpg&#38;auto=webp&#38;s=61b1f0101486914f720eee871ca8de62634c9f25" controls preload="none">
+			<source src="/hls/gpzucl0bxsfh1/HLSPlaylist.m3u8?a=1787789257%2CNDQ0N2IyZjdjOGY5MDZmYTY4ZmMyNGQwODZhZTViYTBiMTExM2ZhZDkzZGYwNjdhNjdjNWQ4OWIyNzgzOWFkMQ%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="40219">
+    
+    40.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/SipsTea/comments/1v85ulg/mayor_mamdani_just_announced_that_he_will_be/" class="post_comments" title="6674 comments">6.7k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8605l">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/nextfuckinglevel">r/nextfuckinglevel</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Additional_Chard3680">u/Additional_Chard3680</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:52:16 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/nextfuckinglevel/comments/1v8605l/the_precision_required_to_perform_a_total_knee/">The precision required to perform a total knee replacement is incredible</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="405" height="720" poster="/preview/external-pre/Ym1hZmR6aGF5c2ZoMbkUXgveHy6PiEJ-mgr8dUCLoMMa07C1uLXwbpmmdMcw.png?format=pjpg&#38;auto=webp&#38;s=be15b99a7223b9a4263ab015f53a758cc193eb3c" controls preload="none">
+			<source src="/hls/oms9phpaysfh1/HLSPlaylist.m3u8?a=1787789257%2CYzgxMzhhNWUzYmI1MjhkZWFhMTBjNmJjNzM5ZjlhYjgzN2VmODA0OTI1YmRmZTE4YWE5ODA4ODY5YjM3NWJlZA%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="22706">
+    
+    22.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/nextfuckinglevel/comments/1v8605l/the_precision_required_to_perform_a_total_knee/" class="post_comments" title="4516 comments">4.5k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8080p">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/technology">r/technology</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/AdSpecialist6598">u/AdSpecialist6598</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 13:19:55 UTC">10h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/technology/search?q=flair_name%3A%22Society%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:;"
+				dir="ltr"><span>Society</span></a>
+		
+		<a href="/r/technology/comments/1v8080p/professors_invisible_prompt_trap_catches_32/">Professor&#39;s invisible prompt trap catches 32 students cheating on their midterm with AI</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="https://www.techspot.com/news/113243-professor-invisible-prompt-trap-catches-32-students-cheating.html" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:93px;">
+			<svg width="140px" height="93px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/external-pre/sJPNFBlHmBwyfnYD-lXpz1md66rMLMoyD4RErMVNWKU.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=5cc55d2025f4c00a273442d1698528a4a996484f"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/external-pre/sJPNFBlHmBwyfnYD-lXpz1md66rMLMoyD4RErMVNWKU.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=5cc55d2025f4c00a273442d1698528a4a996484f"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>techspot.com</span>
+	</a>
+	
+	<div class="post_score" title="25956">
+    
+    26.0k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/technology/comments/1v8080p/professors_invisible_prompt_trap_catches_32/" class="post_comments" title="3686 comments">3.7k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8953r">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/mildlyinteresting">r/mildlyinteresting</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/RiverVassi">u/RiverVassi</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:39:44 UTC">5h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/mildlyinteresting/comments/1v8953r/the_headphones_i_was_given_at_my_mri_appointment/">The headphones I was given at my MRI appointment dont use wires and have zero metal</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/r14np4shhtfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1920px"
+				height="2560px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/r14np4shhtfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/r14np4shhtfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="26931">
+    
+    26.9k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/mildlyinteresting/comments/1v8953r/the_headphones_i_was_given_at_my_mri_appointment/" class="post_comments" title="1706 comments">1.7k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8di7s">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/PoursTea">r/PoursTea</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Timbucktwo1230">u/Timbucktwo1230</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 21:15:28 UTC">2h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/PoursTea/search?q=flair_name%3A%22American Dream 🇺🇸 %22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#1660e9;"
+				dir="ltr"><span>American Dream 🇺🇸 </span></a>
+		
+		<a href="/r/PoursTea/comments/1v8di7s/reminiscing/">Reminiscing</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/79i3le1a9ufh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="960px"
+				height="1170px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/79i3le1a9ufh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/79i3le1a9ufh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="8497">
+    
+    8.5k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/PoursTea/comments/1v8di7s/reminiscing/" class="post_comments" title="60 comments">60 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8dqj9">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/BeAmazed">r/BeAmazed</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/GlitteringHotel8383">u/GlitteringHotel8383</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 21:23:54 UTC">2h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/BeAmazed/search?q=flair_name%3A%22Miscellaneous / Others%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#0266b3;"
+				dir="ltr"><span>Miscellaneous / Others</span></a>
+		
+		<a href="/r/BeAmazed/comments/1v8dqj9/when_a_best_friend_becomes_your_brother/">When a best friend becomes your brother.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/rg6mvw3saufh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1170px"
+				height="1560px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/rg6mvw3saufh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/rg6mvw3saufh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="7777">
+    
+    7.8k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/BeAmazed/comments/1v8dqj9/when_a_best_friend_becomes_your_brother/" class="post_comments" title="66 comments">66 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8ax63">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/SipsTea">r/SipsTea</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Separate_Finance_183">u/Separate_Finance_183</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 19:42:09 UTC">4h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/SipsTea/search?q=flair_name%3A%22Chugging tea :KermitSlowerSip_APNG:%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#46d160;"
+				dir="ltr"><span>Chugging tea </span><span class="emoji" style="background-image:url('/emoji/kdsupoiik7ug1_t5_5tdqj0/KermitSlowerSip_APNG');"></span></a>
+		
+		<a href="/r/SipsTea/comments/1v8ax63/that_explains_a_lot/">That explains a lot</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/f3t1fl8kstfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1440px"
+				height="1800px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/f3t1fl8kstfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/f3t1fl8kstfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="11597">
+    
+    11.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/SipsTea/comments/1v8ax63/that_explains_a_lot/" class="post_comments" title="426 comments">426 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v803fv">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/interesting">r/interesting</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/WarwickReider">u/WarwickReider</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 13:14:41 UTC">10h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/interesting/search?q=flair_name%3A%22SOCIETY%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ffd635;"
+				dir="ltr"><span>SOCIETY</span></a>
+		
+		<a href="/r/interesting/comments/1v803fv/professional_chefs_weighing_in_on_whether_you/">Professional chefs weighing in on whether you should wash your chicken</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="360" height="640" poster="/preview/external-pre/cXo4dmM0eTl2cmZoMY74ShlILw5bo8c8XfBWEf99CbD5QRnGNtQidXJxqjB9.png?format=pjpg&#38;auto=webp&#38;s=683508c278e273a9592b704a2751559be881271a" controls preload="none">
+			<source src="/hls/0xzvn0y9vrfh1/HLSPlaylist.m3u8?a=1787789257%2CY2QxYTY2YTUxZTAzZGNlMjlmMTRjMzczNjk3MDVhNmFhMDY4ODNiZTU1ZGYzZmVlZTc3MThlYjE3NjIxZWY0Yg%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="3643">
+    
+    3.6k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/interesting/comments/1v803fv/professional_chefs_weighing_in_on_whether_you/" class="post_comments" title="3084 comments">3.1k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v867jz">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/politics">r/politics</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Ok-Employer-2026">u/Ok-Employer-2026</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:59:33 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/politics/search?q=flair_name%3A%22Possible Paywall%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#ffee00;"
+				dir="ltr"><span>Possible Paywall</span></a>
+		
+		<a href="/r/politics/comments/1v867jz/sen_mark_kelly_im_going_to_always_stand_by_israel/">Sen. Mark Kelly: ‘I’m going to always stand by Israel as a nation’</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="https://jewishinsider.com/2026/07/mark-kelly-israel-support-netanyahu-mamdani-iran-war/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:93px;">
+			<svg width="140px" height="93px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/external-pre/h9NHQn3e1MXjJ_4NJpPBv8xEbslCFkyFDdE1EkAVfkM.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=28f1067a8d71af4af62efac828538199486c4eb1"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/external-pre/h9NHQn3e1MXjJ_4NJpPBv8xEbslCFkyFDdE1EkAVfkM.jpeg?width=140&#38;height=93&#38;auto=webp&#38;s=28f1067a8d71af4af62efac828538199486c4eb1"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>jewishinsider.com</span>
+	</a>
+	
+	<div class="post_score" title="4157">
+    
+    4.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/politics/comments/1v867jz/sen_mark_kelly_im_going_to_always_stand_by_israel/" class="post_comments" title="2600 comments">2.6k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v85i50">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/AskBrits">r/AskBrits</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/PuzzleheadedCarob921">u/PuzzleheadedCarob921</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:34:22 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/AskBrits/search?q=flair_name%3A%22People%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#94e044;"
+				dir="ltr"><span>People</span></a>
+		
+		<a href="/r/AskBrits/comments/1v85i50/do_you_feel_sorry_for_property_rich_people_who/">Do you feel sorry for property rich people who will likely end up paying more council tax?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/3r3a84k4vsfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1179px"
+				height="667px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/3r3a84k4vsfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/3r3a84k4vsfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="2652">
+    
+    2.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I just saw this on Twitter. Personally.. I don’t feel sorry for someone who is sat in a £2m house that they paid £125k for. I regard them as being extremely lucky, and rich. If it was me, I’d sell up, buy a beaut of a property for £500-800k.. and live the rest of my life extremely comfortable.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/AskBrits/comments/1v85i50/do_you_feel_sorry_for_property_rich_people_who/" class="post_comments" title="1842 comments">1.8k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8g4lb">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/PeterExplainsTheJoke">r/PeterExplainsTheJoke</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/SculpinIPAlcoholic">u/SculpinIPAlcoholic</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 22:56:21 UTC">1h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/PeterExplainsTheJoke/search?q=flair_name%3A%22Meme needing explanation%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#dadada;"
+				dir="ltr"><span>Meme needing explanation</span></a>
+		
+		<a href="/r/PeterExplainsTheJoke/comments/1v8g4lb/i_studied_medicine_under_dr_hartman_so_i_dont_know/">I studied medicine under Dr Hartman so I don’t know.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/l5r4h30arufh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1206px"
+				height="1470px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/l5r4h30arufh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/l5r4h30arufh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/PeterExplainsTheJoke/comments/1v8g4lb/i_studied_medicine_under_dr_hartman_so_i_dont_know/" class="post_comments" title="255 comments">255 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7saim">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/gaming">r/gaming</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Original-Drink-6178">u/Original-Drink-6178</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 06:27:27 UTC">17h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/gaming/comments/1v7saim/sonys_physical_media_backlash_escalates_as_fans/">Sony&#39;s Physical Media Backlash Escalates as Fans Plan PS5 Blackout</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="https://www.pushsquare.com/news/2026/07/angry-playstation-fans-propose-ps5-blackout-in-protest-of-sonys-disc-decision?__cf_chl_tk=qhWnTlyWv94ljXN2w_ix0XJ4fN_HxHxaZjtNP8ngXIg-1785094591-1.0.1.1-thygmuQBCYHm7Xz9SaoZbE0c00KNAQBggaBs89lAmNA" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:78px;">
+			<svg width="140px" height="78px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/external-pre/PRldciuuK5ojsNDlXzciF7rwfzF_PzFrc-0shmagOfE.jpeg?width=140&#38;height=78&#38;auto=webp&#38;s=f7de87b00d40e30f2e5dd66c558361ef006d4c45"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/external-pre/PRldciuuK5ojsNDlXzciF7rwfzF_PzFrc-0shmagOfE.jpeg?width=140&#38;height=78&#38;auto=webp&#38;s=f7de87b00d40e30f2e5dd66c558361ef006d4c45"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span>pushsquare.com</span>
+	</a>
+	
+	<div class="post_score" title="15233">
+    
+    15.2k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>The backlash against Sony&#39;s physical media plans is entering a new phase. Rather than limiting their frustration to social media, some PlayStation fans are calling for a coordinated week-long PSBlackout, encouraging players to participate from August 23 to August 30 in the hope that a visible drop in player activity will highlight growing concerns over the future of physical game ownership.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/gaming/comments/1v7saim/sonys_physical_media_backlash_escalates_as_fans/" class="post_comments" title="1805 comments">1.8k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v85vzp">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/PoursTea">r/PoursTea</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Gurugod123">u/Gurugod123</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:48:09 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/PoursTea/search?q=flair_name%3A%22PoliticalTea 🗳️%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#c13e63;"
+				dir="ltr"><span>PoliticalTea 🗳️</span></a>
+		
+		<a href="/r/PoursTea/comments/1v85vzp/mayor_mamdani_just_announced_that_he_will_be/">Mayor Mamdani just announced that he will be opening 5 city-run, tax-funded grocery stores: &#34;Prices set at 30% below retail prices&#34;</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="1266" height="720" poster="/preview/external-pre/MnQwM3RiOGl4c2ZoMQd6Ncmd4EKSxAN-AZa9O6MCrTCD_5sfVtT0gtGrAG0m.png?format=pjpg&#38;auto=webp&#38;s=42391f8acca746464985b9b3033a9f68ba9b8961" controls preload="none">
+			<source src="/hls/i7wbt48ixsfh1/HLSPlaylist.m3u8?a=1787789257%2CNjNmZjkzMGY3ZTQyOWNiZDRiMmVjZjhmY2JhZTQxY2JkY2UyMmM1MGFlNTM2ZTA2YThkZjRhMDU4NjcxZTcxZQ%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="14384">
+    
+    14.4k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/PoursTea/comments/1v85vzp/mayor_mamdani_just_announced_that_he_will_be/" class="post_comments" title="1565 comments">1.6k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8em1d">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/news">r/news</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/wasraelx">u/wasraelx</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 21:56:52 UTC">2h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/news/comments/1v8em1d/andrew_and_tristan_tate_to_remain_in_jail_until/">Andrew and Tristan Tate to remain in jail until next extradition hearing</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://www.theguardian.com/news/2026/jul/27/andrew-tristan-tate-jail-next-extradition-hearing?CMP=Share_iOSApp_Other" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>theguardian.com</span>
+	</a>
+	
+	<div class="post_score" title="5851">
+    
+    5.9k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/news/comments/1v8em1d/andrew_and_tristan_tate_to_remain_in_jail_until/" class="post_comments" title="231 comments">231 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v89c8u">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/formula1">r/formula1</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Luffy710j">u/Luffy710j</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:46:53 UTC">5h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/formula1/search?q=flair_name%3A%22:post-photo: Photo%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ecf1f5;"
+				dir="ltr"><span class="emoji" style="background-image:url('/emoji/18cnwihxqz6b1_t5_2qimj/post-photo');"></span><span> Photo</span></a>
+		
+		<a href="/r/formula1/comments/1v89c8u/photo_of_sophieshis_press_officer_reaction_to/">Photo of Sophie&#39;s(his press officer) reaction to Oscar saying “that was the dumbest move he’s ever seen on a race track”</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/wbn4hrpritfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1248px"
+				height="832px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/wbn4hrpritfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/wbn4hrpritfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="11970">
+    
+    12.0k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/formula1/comments/1v89c8u/photo_of_sophieshis_press_officer_reaction_to/" class="post_comments" title="317 comments">317 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7xstj">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/humor">r/humor</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Lonely-Ordinary1478">u/Lonely-Ordinary1478</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 11:35:23 UTC">12h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/humor/comments/1v7xstj/the_internets_double_standards/">The Internet’s Double Standards?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/spfssm6sdrfh1.jpeg" class="post_media_image short" >
+			
+			<svg
+				width="1179px"
+				height="1460px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/spfssm6sdrfh1.jpeg"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/spfssm6sdrfh1.jpeg"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="59721">
+    
+    59.7k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/humor/comments/1v7xstj/the_internets_double_standards/" class="post_comments" title="1527 comments">1.5k comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v88fk4">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/Unexpected">r/Unexpected</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/min_dynasty">u/min_dynasty</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:14:59 UTC">5h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/Unexpected/comments/1v88fk4/my_favorite_thing_to_do_after_my_wife_leaves/">My favorite thing to do after my wife leaves</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	
+	<div class="post_media_content">
+        <video class="post_media_video short" width="405" height="720" poster="/preview/external-pre/MTY4NDMxZjJkdGZoMdMVwjzjqsDGLJit3izGKoBvnGnE-uv2ASAVwnctGXM1.png?format=pjpg&#38;auto=webp&#38;s=5ddb833de7f8d237128a0b1bb9979d0745e7726f" controls preload="none">
+			<source src="/hls/thb302h2dtfh1/HLSPlaylist.m3u8?a=1787789257%2CODdjMTRjZTQ3NDAyMDlhYTMwNzZkOTBiYzkxMjJmNTIzNDk1YTA4YWU4ZWQ0MmQxZjMwYzcwNTU2MWExY2U3OQ%3D%3D&#38;v=1&#38;f=sd" type="application/vnd.apple.mpegurl" />
+			<source src="" type="video/mp4" />
+		</video>
+	</div>
+	
+	
+	<div class="post_score" title="18111">
+    
+    18.1k
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/Unexpected/comments/1v88fk4/my_favorite_thing_to_do_after_my_wife_leaves/" class="post_comments" title="187 comments">187 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<script src="/hls.min.js"></script>
+			<script src="/playHLSVideo.js"></script>
+			
+			</div>
+			
+
+			<footer>
+				
+
+				
+				<a href="?sort=hot&t=&after=t3_1v88fk4" accesskey="N">NEXT</a>
+				
+			</footer>
+		</div>
+		
+		
+	</main>
+
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

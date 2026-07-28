@@ -1,0 +1,1998 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>
+	The Rust Programming Language
+	
+</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+	<form action="/r/rust/search" id="searchbox">
+	<input id="search" type="text" name="q" placeholder="Search" title="Search redlib" value="">
+	
+	<div id="inside">
+		<input type="checkbox" name="restrict_sr" id="restrict_sr" checked>
+		<label for="restrict_sr" class="search_label" title="Restrict search to this subreddit">in /r/rust</label>
+	</div>
+	
+	<button class="submit">
+		<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+			<path d="M20 50 H100" />
+			<path d="M75 15 L100 50 L75 85" />
+			&rarr;
+		</svg>
+	</button>
+</form>
+
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/r/rust/hot</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/r/rust/hot" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+	<main>
+		
+		<div id="column_one">
+			<form id="sort">
+				<div id="sort_options">
+					
+						
+		<a class="selected" href="/r/rust/hot">
+			Hot
+		</a>
+	
+		<a  href="/r/rust/new">
+			New
+		</a>
+	
+		<a  href="/r/rust/top">
+			Top
+		</a>
+	
+		<a  href="/r/rust/rising">
+			Rising
+		</a>
+	
+		<a  href="/r/rust/controversial">
+			Controversial
+		</a>
+	
+					
+				</div>
+				
+			</form>
+
+			
+
+			
+
+			
+
+			
+			<div id="posts">
+			
+			
+			<hr class="sep" />
+			<div class="post stickied" id="1v7vism">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author moderator" href="/u/llogiq">u/llogiq</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 09:34:47 UTC">17h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🙋 questions megathread%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ede8ff;"
+				dir="ltr"><span>🙋 questions megathread</span></a>
+		
+		<a href="/r/rust/comments/1v7vism/hey_rustaceans_got_a_question_ask_here_312026/">Hey Rustaceans! Got a question? Ask here (31/2026)!</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="5">
+    
+    5
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Mystified about strings? Borrow checker has you in a headlock? Seek help here! There are no stupid questions, only docs that haven&#39;t been written yet. Please note that if you include code examples to e.g. show a compiler error or surprising result, linking a <a href="https://play.rust-lang.org/">playground</a> with the code will improve your chances of getting help quickly.</p>
+
+<p>If you have a <a href="http://stackoverflow.com/">StackOverflow</a> account, consider asking it there instead! StackOverflow shows up much higher in search results, so ahaving your question there also helps future Rust users (be sure to give it <a href="http://stackoverflow.com/questions/tagged/rust">the &quot;Rust&quot; tag</a> for maximum visibility). Note that this site is very interested in question quality. I&#39;ve been asked to read a RFC I authored once. If you want your code reviewed or review other&#39;s code, there&#39;s a <a href="https://codereview.stackexchange.com/questions/tagged/rust">codereview stackexchange</a>, too. If you need to test your code, maybe <a href="https://play.rust-lang.org">the Rust playground</a> is for you.</p>
+
+<p>Here are some other venues where help may be found:</p>
+
+<p><a href="/r/learnrust">/r/learnrust</a> is a subreddit to share your questions and epiphanies learning Rust programming.</p>
+
+<p>The official Rust user forums: <a href="https://users.rust-lang.org/">https://users.rust-lang.org/</a>.</p>
+
+<p>The unofficial Rust community Discord: <a href="https://bit.ly/rust-community">https://bit.ly/rust-community</a></p>
+
+<p>Also check out <a href="/r/rust/comments/1v1ex80/hey_rustaceans_got_an_easy_question_ask_here/">last week&#39;s thread</a> with many good questions and answers. And if you believe your question to be either very complex or worthy of larger dissemination, feel free to create a text post.</p>
+
+<p>Also if you want to be mentored by experienced Rustaceans, tell us the area of expertise that you seek. Finally, if you are looking for Rust jobs, the most recent thread is <a href="/r/rust/comments/1ttbtf5/official_rrust_whos_hiring_thread_for_jobseekers/">here</a>.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7vism/hey_rustaceans_got_a_question_ask_here_312026/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post stickied" id="1v7vjq3">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author moderator" href="/u/llogiq">u/llogiq</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 09:36:17 UTC">17h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🐝 activity megathread%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#ffe0ea;"
+				dir="ltr"><span>🐝 activity megathread</span></a>
+		
+		<a href="/r/rust/comments/1v7vjq3/whats_everyone_working_on_this_week_312026/">What&#39;s everyone working on this week (31/2026)?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="5">
+    
+    5
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>New week, new Rust! What are you folks up to? Answer here or over at <a href="https://users.rust-lang.org/t/whats-everyone-working-on-this-week-31-2026/141497?u=llogiq">rust-users</a>!</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7vjq3/whats_everyone_working_on_this_week_312026/" class="post_comments" title="16 comments">16 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v82qx7">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/YellowJalapa">u/YellowJalapa</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 14:55:56 UTC">12h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v82qx7/multicalc_scientific_computing_for_real_time/">multicalc: Scientific computing for real time embedded systems in no_std rust</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/atnij74jdsfh1.gif" class="post_media_image " >
+			
+			<!-- i.redd.it images speical case -->
+			<img width="100%" height="100%" loading="lazy" alt="Post image" src="/img/atnij74jdsfh1.gif"/>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="112">
+    
+    112
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hello!</p>
+
+<p><strong>multicalc</strong> is my rust crate aimed at scientific computing for real-time embedded systems, built from scratch in one integrated package. Estimation, control, kinematics, Lie groups, calculus, autodiff and linear algebra in stable no_std Rust with no heap, no panics and no unsafe.</p>
+
+<p><strong>What you&#39;re seeing:</strong> A 2D robot that starts up not knowing where it is, then localized itself using a 2,000-particle filter on a noisy lidar. Then, a 5-state Extended Kalman Filter fuses wheel odometry, an IMU, and GPS into a centimetre-level pose for continous state estimation. Finally, a Follow-the-Gap controller laps a course of obstacles. I run this control loop at a 1kHz rate, observing zero collisions over 600,000 ticks.</p>
+
+<p><strong>Highlights:</strong></p>
+
+<p>- 1 <strong>kHz loop rates:</strong> No heap, fixed-size types, bounded work per call. Results in a full robotics control loop at 1 kHz.</p>
+
+<p>- <strong>Tested on six embedded targets</strong>: Every commit is built and tested on `x86_64` and `aarch64` Linux hosts; and on four bare-metal ABIs (`thumbv7em` soft-float, `thumbv7em` hardware-FPU, `thumbv6m`, and `riscv32imc`). QEMU is used to test them in a `no_std`, no-alloc, and no-panic environment.</p>
+
+<p>- <strong>Measured</strong> <strong>against exteral references:</strong> Each module&#39;s results are verified against established libraries like `numpy`, `scipy`, and `filterpy` fixtures within ~1 ulp, thus validating the rust implementation. See the benchmarks attached in the repo.</p>
+
+<p>- Pure, safe and panic-free: `#![forbid(unsafe_code)]`, no C dependencies, and `unwrap`/`panic` denied on library paths. Types are fixed-size and stack-allocated, and iteration counts are bounded.</p>
+
+<p><strong>Community headline:</strong>  multicalc is now past a dozen contributors overall! Extremely thankful to the support so far.</p>
+
+<p>Where it&#39;s headed:  A quadcopter/drone with 15-state error-state EKF with IMU bias estimation, LQR and geometric attitude control, minimum-snap trajectories through a flying course, and notch filters for rotor vibration. multicalc is also aiming to support importing models directly from the MuJoCo Menagerie, so the physics is already inline with industrial standards.</p>
+
+<p><strong>Come build it!</strong> There are 50+ open good first issues right now, each small and self-contained, out of 85 open issues total. If you like numerical methods, autodiff, embedded Rust, or robotics, I&#39;d love the help!</p>
+
+<p>* craes.io: <a href="https://crates.io/crates/multicalc">https://crates.io/crates/multicalc</a></p>
+
+<p>* Repo: <a href="https://github.com/kmolan/multicalc-rust">https://github.com/kmolan/multicalc-rust</a></p>
+
+<p>* Good first issues: <a href="https://github.com/kmolan/multicalc-rust/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">https://github.com/kmolan/multicalc-rust/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v82qx7/multicalc_scientific_computing_for_real_time/" class="post_comments" title="8 comments">8 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8557w">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/CackleRooster">u/CackleRooster</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:21:34 UTC">11h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🗞️ news%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🗞️ news</span></a>
+		
+		<a href="/r/rust/comments/1v8557w/kata_containers_40_is_less_a_new_feature_release/">Kata Containers 4.0 is less a new feature release than a platform reset to Rust</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://opensourcewatch.beehiiv.com/p/kata-containers-4-0-is-less-a-new-feature-release-than-a-platform-reset-to-rust" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>opensourcewatch.beehiiv.com</span>
+	</a>
+	
+	<div class="post_score" title="58">
+    
+    58
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8557w/kata_containers_40_is_less_a_new_feature_release/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v893u3">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/c410-f3r">u/c410-f3r</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:38:27 UTC">8h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🧠 educational%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🧠 educational</span></a>
+		
+		<a href="/r/rust/comments/1v893u3/work_stealing_vs_executorperthread_evaluating/">Work Stealing vs. Executor-Per-Thread: Evaluating different HTTP server workloads with Tokio, Smol and Glommio</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://c410-f3r.github.io/thoughts/work-stealing-vs-executor-per-thread-evaluating-different-http-server-workloads-with-tokio-smol-and-glommio/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>c410-f3r.github.io</span>
+	</a>
+	
+	<div class="post_score" title="38">
+    
+    38
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>90 workloads based on different balanced and unbalanced environments were tested against four runtimes to evaluate the difference between Executor-Per-Thread and Work-Stealing.</p>
+
+<ul>
+<li><code>tokio-ept</code>: Based on epoll via <a href="https://github.com/tokio-rs/mio">mio</a>, a <a href="https://docs.rs/tokio/latest/tokio/runtime/struct.LocalRuntime.html">LocalRuntime</a> is created on each thread.</li>
+<li><code>tokio-ws</code>: Based on epoll via <a href="https://github.com/tokio-rs/mio">mio</a>, a single multi-thread <a href="https://docs.rs/tokio/latest/tokio/runtime/struct.Runtime.html"><code>Runtime</code></a> is created in the main thread.</li>
+<li><code>glommio-ept</code>: Based on io_uring via built-in syscals, a <a href="https://docs.rs/glommio/latest/glommio/struct.LocalExecutor.html">LocalExecutor</a> is created on each thread.</li>
+<li><code>smol-ept</code>: Based on epoll via <a href="https://github.com/smol-rs/polling">polling</a>, a <a href="https://docs.rs/smol/latest/smol/struct.LocalExecutor.html">LocalExecutor&lt;&#39;static&gt;</a> is created on each thread.</li>
+</ul>
+
+<p>All runtime instances have an associated HTTP/2 server that share the same port through <code>SO_REUSEPORT</code>.</p>
+
+<p>For the measuring with the <a href="https://k6.io/">k6</a> load tester using <code>constant-arrival-rate</code>, 500, 4000 and 15000 connections over TLS maintained a ratio of 4000, 15000 and 45000 requests per second respectively.</p>
+
+<p>Unfortunately, the final results were not conclusive as most benchmarks performed very similarly. An odd thing was Tokio configured with multi-thread work stealing showing consistent anomalies despite my attempts to figure out what was going on. Neither the server nor k6 showed any errors in the logs so it is unknown whether the root cause was an accidental misconfiguration or Tokio itself.</p>
+
+<p>All files are available in the blog post. Feel free to indicate if there are misunderstandings.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v893u3/work_stealing_vs_executorperthread_evaluating/" class="post_comments" title="4 comments">4 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v805a6">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/isaacvando">u/isaacvando</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 13:16:45 UTC">14h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/rust/comments/1v805a6/the_unreasonable_effectiveness_of_constructive/">The Unreasonable Effectiveness of Constructive Data Modeling - Alexis King</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://youtu.be/0BXuYlNrUmE" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>youtu.be</span>
+	</a>
+	
+	<div class="post_score" title="103">
+    
+    103
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi folks, this is Alexis King&#39;s recent talk from SSW. She&#39;s the author of &quot;Parse, Don&#39;t Validate&quot;. There&#39;s a lot of great type-wisdom in here that I think Rust folks will enjoy. Cheers!</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v805a6/the_unreasonable_effectiveness_of_constructive/" class="post_comments" title="11 comments">11 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v80dtc">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/f311a">u/f311a</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 13:26:24 UTC">14h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/rust/comments/1v80dtc/writing_arenas_in_rust_from_scratch/">Writing arenas in Rust from scratch</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://rushter.com/blog/rust-memory-arenas/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>rushter.com</span>
+	</a>
+	
+	<div class="post_score" title="67">
+    
+    67
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v80dtc/writing_arenas_in_rust_from_scratch/" class="post_comments" title="3 comments">3 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v89kpn">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/bambamboo15">u/bambamboo15</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:55:04 UTC">8h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v89kpn/ive_made_a_simple_gpuaccelerated_mandelbrot/">I&#39;ve made a simple GPU-accelerated Mandelbrot explorer in Rust! :)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/wg062o25ktfh1.png" class="post_media_image " >
+			
+			<!-- i.redd.it images speical case -->
+			<img width="100%" height="100%" loading="lazy" alt="Post image" src="/img/wg062o25ktfh1.png"/>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="22">
+    
+    22
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hello everyone! I wanted to experiment with wgpu and WASM to make a simple fractal explorer for the browser :)</p>
+
+<p>The code is entirely hand-crafted (by me!!), although high-level algorithmic design and <code>wgpu</code> boilerplate were AI-assisted.</p>
+
+<p>The renderer is somewhat laggy, but it uses perturbation algorithms where I only calculate the center in full precision on CPU and the pixels are calculated using low-precision offsets around that on the GPU. Instead of using <code>f32</code> directly, which underflows after zooming a little, I thought of a custom <code>FloatExp</code> type which has <code>f32</code> precision but an <code>i32</code> exponent. This allows me to zoom as far as I want while still using the GPU!</p>
+
+<p>To be honest, this project still needs a lot of improvement, such as not blocking when the calculations take too long, and supporting better rendering. I had to scale down the resolution for performance, but I&#39;m happy with how it is for now!</p>
+
+<p>Along with the <code>wgpu</code> and <code>wasm-bindgen</code> APIs, I also appreciate <code>dashu</code> for providing easy CPU multiprecision calculations. I did catch a bug with base conversion in <code>dashu</code>, which was fixed quickly. It&#39;s manually pulled in the repository to keep the fix.</p>
+
+<p><strong>My code:</strong> <a href="https://github.com/bambamboo15/mandelbrot-website">github.com/bambamboo15/mandelbrot-website</a></p>
+
+<p><strong>Try it here:</strong> <a href="https://bamburac.com/mandelbrot">bamburac.com/mandelbrot</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v89kpn/ive_made_a_simple_gpuaccelerated_mandelbrot/" class="post_comments" title="14 comments">14 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v83fmx">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/joshlf_">u/joshlf_</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 15:20:25 UTC">12h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/rust/comments/1v83fmx/safety_in_an_unsafe_world_rustconf_2024_talk_blog/">Safety in an Unsafe World (RustConf 2024 talk, blog post version)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://joshlf.com/posts/safety-unsafe-world/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>joshlf.com</span>
+	</a>
+	
+	<div class="post_score" title="40">
+    
+    40
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Finally got around to turning my <a href="https://www.youtube.com/watch?v=qd3x5MCUrhw">RustConf 2024 talk</a> into a blog post! Only two years late 😛</p>
+
+<p>Update for those who remember the talk: Netstack3 is now in production, running on millions of devices. Immediately after deployment, the team observed a ~20x lower rate of crashes per million devices per day, and a 50% reduction in memory usage, compared to its predecessor, Netstack2.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v83fmx/safety_in_an_unsafe_world_rustconf_2024_talk_blog/" class="post_comments" title="9 comments">9 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7yo9p">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/WellMakeItSomehow">u/WellMakeItSomehow</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 12:15:13 UTC">15h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🗞️ news%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🗞️ news</span></a>
+		
+		<a href="/r/rust/comments/1v7yo9p/rustanalyzer_changelog_338/">rust-analyzer changelog #338</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://rust-analyzer.github.io/thisweek/2026/07/27/changelog-338.html" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>rust-analyzer.github.io</span>
+	</a>
+	
+	<div class="post_score" title="31">
+    
+    31
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7yo9p/rustanalyzer_changelog_338/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7h4bb">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/alihilal94">u/alihilal94</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 26 2026, 21:44:18 UTC">1d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🎙️ discussion%22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#f2f2f2;"
+				dir="ltr"><span>🎙️ discussion</span></a>
+		
+		<a href="/r/rust/comments/1v7h4bb/what_are_the_best_human_written_rust_codebases_to/">What are the best human written Rust codebases to learn from?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="405">
+    
+    405
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I’m looking for high quality Rust codebases that are genuinely worth studying and taking inspiration from like projects with clean idiomatic Rust and good architecture and preferably started before the LLM boom and have a long history of being developed by experienced Rust engineers</p>
+
+<p>most of what I came across was repositories filled with recently generated AI slop.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7h4bb/what_are_the_best_human_written_rust_codebases_to/" class="post_comments" title="93 comments">93 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v80fcx">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Any-Cartographer9406">u/Any-Cartographer9406</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 13:28:04 UTC">14h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🎙️ discussion%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🎙️ discussion</span></a>
+		
+		<a href="/r/rust/comments/1v80fcx/my_sensorevent_struct_is_52_bytes_and_i_cannot/">My SensorEvent struct is 52 bytes and I cannot stop checking it during live profiling</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="23">
+    
+    23
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I’ve been running a sensor event pipeline in production for about two months now. The producer serializes readings into a fixed-layout struct and drops them into a crossbeam channel while the consumer reads and dispatches on the other end, and the whole thing has been completely stable the entire time with no dropped events, no alignment panics, and no failed reads. The consumer processes every message and acks cleanly.</p>
+
+<p>#[repr(C)]<br/>
+pub struct SensorEvent {<br/>
+timestamp: u64,       // 8 bytes<br/>
+reading: [f32; 8],    // 32 bytes<br/>
+sensor_id: u32,       // 4 bytes<br/>
+checksum: u32,        // 4 bytes<br/>
+}                         // 52 bytes total</p>
+
+<p>const _: () = assert!(mem::size_of::() == 52);<br/>
+const _: () = assert!(mem::align_of::() == 8);</p>
+
+<p>The struct derives bytemuck::Pod and bytemuck::Zeroable without any issues, there are no padding bytes or uninitialized gaps, and offset_of! checks on every field come back exactly where they should be. The consumer casts the incoming bytes directly with bytemuck::from_bytes and never makes a copy, and it has never failed once.<br/>
+Here’s the part that keeps getting under my skin. A cache line on x86_64 is 64 bytes and my struct is 52, so it sits cleanly inside a single cache line without spanning two, which is exactly what you want if you’re trying to avoid false sharing between the producer and consumer threads. I know this. I’ve read the docs and the blog posts. But I still keep opening the type definition in the middle of live profiling sessions and just staring at that 12-byte gap. Crossbeam even ships CachePadded specifically for this kind of alignment worry, and I keep almost writing the thing:</p>
+
+<p>use crossbeam::utils::CachePadded;<br/>
+let padded: CachePadded = CachePadded::new(event);</p>
+
+<p>The problem is that CachePadded pads all the way to 128 bytes on modern hardware to deal with adjacent-line prefetching, which more than doubles the size of every message and cuts the channel density in half. The false-sharing problem it’s designed to solve isn’t even present here because the producer and consumer are never writing to the same cache line in the first place.</p>
+
+<p>I haven’t bothered running cargo-criterion on any of this. Instead I keep pulling up cargo-flamegraph while the pipeline is hot and somehow always end up back on that same struct definition, looking at twelve bytes of headroom that bytemuck, the compiler, and the consumer are all perfectly happy with. Using repr(align(64)) would close the gap, but it would also make every measurable thing worse and I already wrote that fact down so I wouldn’t forget it. I still check anyway.</p>
+
+<p>The consumer is happy, the pipeline is stable, and I just cannot stop calling offset_of! on a struct that has never once returned an unexpected value. Anyone else get stuck on this kind of thing? How do you finally let a working layout just be working?</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v80fcx/my_sensorevent_struct_is_52_bytes_and_i_cannot/" class="post_comments" title="2 comments">2 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8ci9l">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/takashialpha">u/takashialpha</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 20:38:47 UTC">6h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v8ci9l/audium_v200_a_terminal_music_app/">audium v2.0.0 - a terminal music app</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="6">
+    
+    6
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><figure><a href="/preview/pre/gw415e5eqtfh1.png?width=834&amp;format=png&amp;auto=webp&amp;s=9b42b895726d9eab3aafc0ae3af478ac0edc31f4"><img loading="lazy" src="/preview/pre/gw415e5eqtfh1.png?width=834&amp;format=png&amp;auto=webp&amp;s=9b42b895726d9eab3aafc0ae3af478ac0edc31f4"></a><figcaption>this is a screen capture of the github demo video</figcaption></figure>
+
+<p>[links]<br/>
+github <a href="http://github.com/takashialpha/audium">github.com/takashialpha/audium</a></p>
+
+<p>web page <a href="https://takashialpha.com/audium">takashialpha.co</a><a href="https://takashialpha.com/audium">m/audium</a> (under development, i&#39;d really like feedback! leptos-ssr (:  )</p>
+
+<p>aur <a href="https://aur.archlinux.org/packages/audium">https://aur.archlinux.org/packages/audium</a></p>
+
+<p>aur <a href="https://aur.archlinux.org/packages/audium-bin">https://aur.archlinux.org/packages/audium-bin</a> (bin)</p>
+
+<p>crates-io <a href="https://crates.io/crates/audium">https://crates.io/crates/audium</a></p>
+
+<p>---</p>
+
+<p>audium is a tui music app, you can create your audio library (plays all symphonia formats such as mp3, flac, wav, aac, m4a, aiff, ..), has a modern ui with multiple themes(15 truecolor+ 2 for linux console), runs on every terminal given enough area, including a linux tty.</p>
+
+<p>has playlists, lyrics (synced and unsynced), queue, seeking, resume playback, speed control, loop modes ..=all you&#39;d expect from a music app - take a look at the readme;</p>
+
+<p>it&#39;s pretty straightforward to use, keyboard only. bindings on [?].</p>
+
+<p>philosophies: unsafe is forbidden and strict lints are enforced, follows a ui convention almost everywhere appliable, your library is always yours.</p>
+
+<p>take a look at the github video demonstration, and then try it yourself! it&#39;s a single small binary (less than 5mb), add your sound files and that&#39;s it, simple. (for the best experience in a computer with any functional sound output configured)</p>
+
+<p>i don&#39;t always have as much time as I&#39;d like to maintain it, so contributions are appreciated.</p>
+
+<p>audium is published on the aur and <a href="http://crates.io">crates.io</a>, targets linux only; it COULD also target mac but i&#39;m too broke to get one so i won&#39;t support a crate for a platform I can&#39;t debug it on.</p>
+
+<p>License gplv3-or-later</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8ci9l/audium_v200_a_terminal_music_app/" class="post_comments" title="4 comments">4 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v81ddl">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/sasik520">u/sasik520</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 14:04:43 UTC">13h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/rust/comments/1v81ddl/when_the_size_hint_matters/">When the `size_hint` matters</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="17">
+    
+    17
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I just ran into a case where <code>size_hint</code> makes a surprisingly big difference.</p>
+
+<p>Simplifying a lot, I have a function that generates tuples of numbers. The number of tuples is not known as they come from a file. I then collect them into a set for further processing.</p>
+
+<p>For testability, I use <code>FnvHashSet</code> to get a stable order. I’ve relied on this in various places for years and it has never caused me any problems.</p>
+
+<p>Until today.</p>
+
+<p>The original code looked roughly like this:</p>
+
+<pre><code>let inputs: FnvHashSet&lt;_&gt; = generate_tuples().collect();
+for input in inputs {
+    println!(&quot;{input}&quot;); // simplification, of course
+}
+</code></pre>
+
+<p>For some specific, const input, the same code produced different output on Linux and macOS.</p>
+
+<p>This surprised me quite a bit, because until now the iteration order had always been stable across operating systems.</p>
+
+<p>After quite some time and nearly going crazy, I managed to reduce it to this:</p>
+
+<pre><code>use fnv::FnvHashSet;
+
+fn main() {
+    let no_size_hint: FnvHashSet&lt;_&gt; = generate().collect();
+    let known_size_hint: FnvHashSet&lt;_&gt; = generate_known_size().collect();
+    println!(&quot;{:?}&quot;, no_size_hint.into_iter().collect::&lt;Vec&lt;_&gt;&gt;());
+    println!(&quot;{:?}&quot;, known_size_hint.into_iter().collect::&lt;Vec&lt;_&gt;&gt;());
+}
+
+fn generate() -&gt; impl Iterator&lt;Item = (u8, u8, u8)&gt; {
+    r#&quot;4,4,0
+5,2,3
+5,3,2
+5,4,1&quot;#
+        .lines()
+        .map(|line| {
+            let parts: Vec&lt;_&gt; = line.split(&#39;,&#39;).collect();
+            (
+                parts[0].parse().unwrap(),
+                parts[1].parse().unwrap(),
+                parts[2].parse().unwrap(),
+            )
+        })
+}
+
+fn generate_known_size() -&gt; impl Iterator&lt;Item = (u8, u8, u8)&gt; {
+    generate().collect::&lt;Vec&lt;_&gt;&gt;().into_iter()
+}
+</code></pre>
+
+<p>On Linux and in the Rust Playground, both <code>println!</code>s print the same (thus I&#39;m not sharing a link). On macOS, they are different.</p>
+
+<p>I guess this comes down to the different capacity depending on the iterator’s <code>size_hint</code>, which then changes the internal layout and therefore the iteration order. I got similar results with <code>with_capacity_and_hasher</code> and different capacities.</p>
+
+<p>mind=blown</p>
+
+<p>Leaving it here as a curiosity.</p>
+
+<p>(and btw. the true &quot;root cause&quot; was a wrong algorithm that depended on the tuples order while it shouldn&#39;t. Still, an interesting case, I think)</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v81ddl/when_the_size_hint_matters/" class="post_comments" title="15 comments">15 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v88cf3">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/silianno">u/silianno</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 18:11:58 UTC">9h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v88cf3/my_first_rust_program_rash_a_small_hashing_utility/">My first rust program: Rash, a small hashing utility</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="8">
+    
+    8
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hi!</p>
+
+<p>I&#39;m not new to programming, but I&#39;m in the process of learning Rust because I&#39;m interested in system-level programming, and in order to put my self to the test, I have created a small hashing utility program: `rash`.</p>
+
+<p>`rash` is a small CLI program that at the moment supports:</p>
+
+<p>- Hash creation<br/>
+- Hash verification<br/>
+- Hash comparison</p>
+
+<p>Currently only the MD5 hashing algorithm is supported, which I have implemented it by reading the RFC 1321, but I plan on adding support for more algorithms. Additionally, I have also made sure to write tests to make sure that what I did was (at least partially) correct.</p>
+
+<p>There is nothing special about `rash`, there is probably hundreds of utilities like it, but I&#39;m the kind of person who needs to put what studies to practice in order to truly understand things.</p>
+
+<p>I was hoping you could give me some feedback and, why not, ideas on the next steps, design patterns and new features that leverage the best Rust has to offer and so on...</p>
+
+<p>I have used an LLM as a tutor and to find bugs, but almost all of the code in this repo was written by hand.</p>
+
+<p>Thank you for your help 😊</p>
+
+<p>Repository: <a href="https://github.com/silvioiannone/rash">https://github.com/silvioiannone/rash</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v88cf3/my_first_rust_program_rash_a_small_hashing_utility/" class="post_comments" title="3 comments">3 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v85u94">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Interesting-Yam5888">u/Interesting-Yam5888</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 16:46:26 UTC">10h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v85u94/pome_my_take_on_a_terminal_text_editor/">Pome, my take on a terminal text editor.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="9">
+    
+    9
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I&#39;m making this simple text editor as a learning project for the Rust programming language. It have a dumb rust core that expose text mutation, cursor movement and other low-level abilities. Lua then use it to compose a working editor. I got a vim-lite config in the repo rn.</p>
+
+<p>You can redefine what can normal mode do, or rename it into dungeater mode if you want. You can also make it completely mode-free editor like nano, which is pretty neat.</p>
+
+<p>here&#39;s the link: <a href="https://github.com/Hendisil-Morier/pome">https://github.com/Hendisil-Morier/pome</a></p>
+
+<p>why the name pome? im bad with naming stuff, and it&#39;s loosely connected to &#39;programmable editor&#39;.</p>
+
+<p>about ai. i did use ai to help around with things i have no idea how to do, but the rust codebase is entirely handwritten.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v85u94/pome_my_take_on_a_terminal_text_editor/" class="post_comments" title="8 comments">8 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8meek">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Civil-Performance484">u/Civil-Performance484</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 28 2026, 03:25:48 UTC">7m ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v8meek/introducing_fluxon_an_ainative_distributed_data/">Introducing Fluxon: An AI-Native Distributed Data Plane for High-Performance RPC, KV Cache, Message Queue, and File &#38; Object Acceleration</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>![Fluxon: one system for AI data movement](<a href="https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/post_en.png">https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/post_en.png</a>)</p>
+
+<p>Hi everyone,</p>
+
+<p>We&#39;re open-sourcing <a href="https://github.com/Tele-AI/Fluxon">Fluxon</a>, an AI-native distributed data plane built in Rust for high-performance RPC, KV-cache reuse, messaging, and file and object acceleration. Here, AI-native has a concrete meaning: Fluxon is designed around tensor and inference-cache reuse across processes and nodes, asynchronous handoff of large intermediate states, elastic training and inference workers, and movement of model and dataset files. It offers three interfaces on a shared substrate that combines storage and transport:</p>
+
+<ul>
+<li><strong>Fluxon KV/RPC</strong> for distributed key-value caching, inference cache reuse, state sharing, and service-to-service calls.</li>
+<li><strong>Fluxon MQ</strong> for asynchronous handoff of large intermediate objects between elastic producers and consumers.</li>
+<li><strong>Fluxon FS</strong> for <code>S3</code>-compatible file and object caching, remote access, and cross-cluster movement.</li>
+</ul>
+
+<p>The shared substrate is the point. All three interfaces use the same machinery for object lifecycles, caching, transport, leases, capacity management, and observability. A tensor, a message payload, and a file shard can all move through the same data plane.</p>
+
+<p>Fluxon is licensed under Apache 2.0. The repository includes the Rust core, Python interfaces, deployment tools, a test stack, a Docker quick start, and the benchmark configurations behind the public charts.</p>
+
+<h2>Why We Built It</h2>
+
+<p>One of the problems that led us to build Fluxon was moving data through a decoupled, heterogeneous <code>VAE</code> training pipeline. We wanted producers and consumers in different resource pools to scale independently and exchange intermediate payloads asynchronously.</p>
+
+<p>The communication requirements did not fit neatly into one existing category:</p>
+
+<ul>
+<li><code>NCCL</code> is a strong fit for synchronous collectives inside a fixed process group. Our handoff also needed dynamic membership, asynchronous delivery, backpressure, retention before consumption, and independent scaling across resource pools.</li>
+<li>General-purpose message brokers provide mature messaging semantics, but large tensor payloads often take a separate path through serialization, transport, and storage instead of reusing the inference cache path.</li>
+<li>Specialized systems such as <code>MooncakeStore</code> are valuable for <code>KV Cache</code> reuse. Cache eviction alone does not provide the queue rule we needed: retain a message until it is consumed or its lease expires.</li>
+</ul>
+
+<p>Each tool is designed for a different scope. We needed to preserve fast paths for local and remote objects while adding elastic membership, explicit lifetime management, transport fallback, and one place to observe the entire flow.</p>
+
+<p>The same fragmentation appeared elsewhere:</p>
+
+<ul>
+<li>Framework-level <code>L2</code> caches and external <code>L3</code> caches could occupy the same host memory while using separate indexes and eviction policies.</li>
+<li>Colocated workers could hand objects to each other through a network-oriented path instead of shared memory.</li>
+<li>When application processes also contributed capacity and held cross-node connections, restarting or scaling them could change the data-plane topology.</li>
+<li>Cache, messaging, and file layers each maintained their own references, leases, routing, reclamation, and metrics.</li>
+</ul>
+
+<p>Those constraints pointed to a shared data-plane substrate, which became Fluxon.</p>
+
+<h2>What Fluxon Provides</h2>
+
+<table><thead>
+<tr>
+<th>Interface</th>
+<th>Intended workloads</th>
+<th>How it uses the shared substrate</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>KV/RPC</code></td>
+<td>Inference caches, state sharing, tensor reuse, service-to-service calls</td>
+<td>Key-value operations and RPC share the same object representation, cache, routing, and transport</td>
+</tr>
+<tr>
+<td><code>MQ</code></td>
+<td>Heterogeneous training, data pipelines, cross-resource-pool producer/consumer handoff</td>
+<td>The control plane stores message metadata while large payloads move through the KV data path</td>
+</tr>
+<tr>
+<td><code>FS</code></td>
+<td>AI datasets, model files, checkpoints, remote objects, <code>S3</code> forwarding</td>
+<td>Files are split into key-value shards and use the same cache, transport, and capacity controls</td>
+</tr>
+</tbody></table>
+
+<p>Fluxon is most useful when the same physical resources serve several kinds of AI data. On each host, objects can live in a shared-memory pool under one lifecycle model, while data that crosses host or cluster boundaries uses the distributed transport path.</p>
+
+<h2>Architecture: Stable Capacity, Elastic Clients</h2>
+
+<p>Fluxon separates control-plane decisions, resident data-plane capacity, and elastic application processes into three roles:</p>
+
+<p><code>text
+                              Master
+                 placement · routing · leases · reclamation
+                         /                           \
+                        /                             \
+External Client -&gt; local Owner Client &lt;========&gt; remote Owner Client &lt;- External Client
+    elastic          resident capacity      P2P / relay            elastic
+                         |                           |
+                    shared memory               shared memory
+</code></p>
+
+<table><thead>
+<tr>
+<th>Role</th>
+<th>Responsibility</th>
+<th>Lifecycle</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>Master</code></td>
+<td>Controls allocation, placement, eviction, routing, and leases</td>
+<td>Control-plane service</td>
+</tr>
+<tr>
+<td><code>Owner Client</code></td>
+<td>Provides the shared-memory pool and handles transport between Owner Clients</td>
+<td>Resident data-plane process</td>
+</tr>
+<tr>
+<td><code>External Client</code></td>
+<td>Connects inference services, MQ producers/consumers, FluxonFS, and other applications to the local Owner Client</td>
+<td>Elastic; contributes no cluster capacity</td>
+</tr>
+</tbody></table>
+
+<p>Application processes connect to their local Owner Client. Owner Clients handle cross-machine transfers, so workers do not form a full mesh of network connections. Because External Clients do not contribute capacity, restarting or scaling them does not directly trigger capacity migration or rebalance churn.</p>
+
+<p>The transport path follows the physical boundary:</p>
+
+<ul>
+<li><strong>On one host:</strong> shared memory is the primary object-handoff path, with busy-polling and epoll-based Unix domain socket options where appropriate.</li>
+<li><strong>Inside a cluster:</strong> Owner Clients communicate peer to peer, preferring <code>RDMA</code> where available and falling back to <code>TCP</code> when that path degrades.</li>
+<li><strong>Across network domains:</strong> <code>QUIC</code>, <code>TCP</code>, and automatic relay carry traffic between nodes or sub-clusters that cannot use the preferred direct link.</li>
+</ul>
+
+<p>The local shared-memory path can avoid copying payload bytes between colocated processes. That benefit applies only to this leg of the path; metadata handling, encoding, object construction, scheduling, and downstream materialization still add work.</p>
+
+<h2>Three Interfaces, One Substrate</h2>
+
+<h3>Fluxon KV/RPC</h3>
+
+<p>The same client exposes both KV and RPC, using one object representation, routing layer, cache, and transport. Reads prefer the local fast path, while metadata synchronization continues asynchronously in the background. Reusing hot objects reduces duplicate copies across cache tiers, and batched reclamation consolidates control-plane cleanup.</p>
+
+<p>Fluxon KV/RPC covers more than transformer <code>KV Cache</code>. It also supports latent caches, prefix caches, world-model state, reusable tensor objects, and service-to-service calls.</p>
+
+<p>![Fluxon KV and RPC data path](<a href="https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fluxon_kv.png">https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fluxon_kv.png</a>)</p>
+
+<h3>Fluxon MQ</h3>
+
+<p>Fluxon MQ is designed to hand off large intermediate states in heterogeneous training and data-processing pipelines. Producers and consumers join as External Clients, so they can scale without changing which processes provide data-plane capacity.</p>
+
+<p>The control plane stores the message envelope, membership state, and offset; the payload remains on the KV data plane. Messages are retained under a channel lease, which gives unconsumed data a clear expiration boundary. The location of each consumer can also guide payload placement and shorten the prefetch path across resource pools or sub-clusters.</p>
+
+<h3>Fluxon FS</h3>
+
+<p>Fluxon FS is an <code>S3</code>-compatible file and object cache layer for datasets, model files, checkpoints, high-resolution video, and trajectory data. It splits files into key-value shards and uses the KV/RPC cache and transport underneath. Applications continue to use file or object APIs while the shared substrate handles transport, placement, and capacity management.</p>
+
+<h2>Why Rust</h2>
+
+<p>Connection handling, protocol encoding and decoding, state transitions, shared-memory management, and transport under high concurrency all sit on the hot path. Fluxon keeps that work in Rust for four practical reasons:</p>
+
+<ul>
+<li>CPU-intensive core work is not constrained by Python&#39;s GIL.</li>
+<li>There is no garbage collector in the Rust core to pause these paths.</li>
+<li>Ownership and lifetimes make the validity of shared-memory references, connection state, and cleanup responsibilities explicit.</li>
+<li>Strong types and explicit state machines make error propagation and lifecycle transitions easier to audit.</li>
+</ul>
+
+<p>Fluxon still provides Python interfaces for application integration. These properties apply to the Rust core, not to arbitrary work performed by application code in Python.</p>
+
+<h2>Observability Is Part of the Data Plane</h2>
+
+<p>Fluxon exports metrics through the Prometheus protocol and uses GreptimeDB as a common backend for metrics, logs, and traces. The built-in GUI shows cluster topology, member status, latency metrics, logs, and queue depth.</p>
+
+<p>When an operation slows down, we need to tell whether time is going into an Owner Client queue, work inside an External Client, network transfer, message wait time, or object materialization. Putting those signals in one place makes that diagnosis much easier.</p>
+
+<h2>Where Fluxon Fits—and Where It Doesn&#39;t</h2>
+
+<p>Fluxon is a good fit when a workload needs several of the following at once: cross-process reuse, cross-node object movement, elastic producer/consumer membership, large payload handoff, file and object caching, and shared capacity management.</p>
+
+<p>There are also some clear limits:</p>
+
+<ul>
+<li>Fluxon runs on Linux. The public Python package requires Python <code>&gt;= 3.10</code>; source builds use the Rust toolchain pinned by the repository.</li>
+<li><code>NCCL</code> remains the right tool for synchronous collective communication inside a training process group. Fluxon addresses asynchronous handoff outside that fixed group.</li>
+<li>Fluxon FS accelerates file and object access through caching. Its <code>S3</code>-compatible API should not be read as a claim that Fluxon implements every durability guarantee of a general-purpose object store.</li>
+<li>We do not yet publish an MQ throughput chart. For now, the public MQ material covers its design and automated runtime tests; the performance charts cover RPC, KV, and FS.</li>
+<li>Our current results are strongest on RPC, read-heavy KV workloads, and large-file writes. KV <code>PUT_ONLY</code> metadata deduplication and FS small-file writes still have room for improvement.</li>
+</ul>
+
+<h2>Try It</h2>
+
+<p>The quickest way to try Fluxon is the Docker image. On a Linux host with Docker, KV mode starts the bundled service plane and an interactive client:</p>
+
+<p><code>bash
+docker run --rm -it --network host \
+  hanbaoaaa/fluxon_quick_start:0.2.1 \
+  --mode kv \
+  --etcd-client-port 12379 \
+  --master-p2p-port 31000 \
+  --panel-port 18080 \
+  --greptime-http-port 14000 \
+  --kv-http-port 8083
+</code></p>
+
+<p>At the prompt:</p>
+
+<p><code>text
+put demo:hello world
+get demo:hello
+del demo:hello
+</code></p>
+
+<p>The process prints the address of the KV Web UI. Separate <code>MQ</code> and <code>FS</code> modes are documented in the repository <a href="https://github.com/Tele-AI/Fluxon#quick-start">Quick Start</a>.</p>
+
+<p>If you already have a Fluxon service plane, install the Python client on Linux x86_64 with:</p>
+
+<p><code>bash
+python3 -m pip install fluxon-ai
+</code></p>
+
+<p>The package installs the <code>fluxon_py</code> import module. The complete service-plane bundle remains available from GitHub Releases.</p>
+
+<h2>What the Current Benchmarks Show</h2>
+
+<p>These charts are scoped comparisons, not universal rankings. Results will vary with topology, transport, concurrency, object size, cache state, and access pattern. The benchmark scripts and configurations are under <a href="https://github.com/Tele-AI/Fluxon/tree/main/fluxon_test_stack"><code>fluxon_test_stack/</code></a> in the repository.</p>
+
+<table><thead>
+<tr>
+<th>Path</th>
+<th>Workload</th>
+<th>Result in the checked-in chart</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RPC</td>
+<td>4 KiB echo; Fluxon TCP Thread and RDMA compared with ZeroRPC in the <code>P1</code> and <code>P8</code> chart configurations</td>
+<td>RDMA reaches <code>9.09x</code> the ZeroRPC throughput at <code>P1</code> and <code>6.30x</code> at <code>P8</code>, with latency <code>79.8%</code> and <code>73.4%</code> lower, respectively</td>
+</tr>
+<tr>
+<td>KV</td>
+<td>Fluxon TCP compared with MooncakeStore and Redis in the chart&#39;s <code>N3</code> and <code>N7</code> configurations</td>
+<td><code>READ_AFFINITY</code>: <code>3.78x–4.82x</code> vs. MooncakeStore and <code>2.67x–3.78x</code> vs. Redis; <code>READ_ZIPF</code>: <code>1.98x–6.07x</code> vs. MooncakeStore and <code>1.76x–5.13x</code> vs. Redis; <code>PUT_ONLY</code>: <code>1.00x–1.28x</code> vs. MooncakeStore and <code>0.59x–0.81x</code> vs. Redis</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>Warm-cache local bandwidth compared with Alluxio</td>
+<td>Average Fluxon/Alluxio ratios: small-file read <code>1.74x</code>, large-file read <code>0.93x</code>, small-file write <code>0.57x</code>, large-file write <code>10.07x</code></td>
+</tr>
+</tbody></table>
+
+<h3>RPC: 4 KiB Echo</h3>
+
+<p>The RPC chart compares throughput and end-to-end latency for ZeroRPC, Fluxon TCP Thread, and Fluxon RDMA. The table above calls out the RDMA-to-ZeroRPC comparison; the chart also includes the TCP Thread results.</p>
+
+<p>![RPC benchmark: ZeroRPC, Fluxon TCP Thread, and Fluxon RDMA](<a href="https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fluxon_rpc_bench.png">https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fluxon_rpc_bench.png</a>)</p>
+
+<h3>KV: Read-Heavy and Write-Only Workloads</h3>
+
+<p>The two read-heavy workloads are the strongest part of the current KV results. In <code>PUT_ONLY</code>, Fluxon roughly matches or outperforms MooncakeStore in the checked-in configurations and trails Redis. Profiling points to inflight metadata deduplication, rather than payload transport, as the current constraint.</p>
+
+<p>![KV benchmark: Fluxon, MooncakeStore, and Redis](<a href="https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/kv_benchmark_chart.png">https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/kv_benchmark_chart.png</a>)</p>
+
+<h3>FS: Warm-Cache File Workloads</h3>
+
+<p>The FS result is workload-dependent. Fluxon leads on average in small-file reads and large-file writes, is roughly on par for large-file reads, and trails on average for small-file writes. The small-file write path still pays for upper-layer open, write, close, and commit work.</p>
+
+<p>![FS benchmark: Fluxon and Alluxio](<a href="https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fs_benchmark_chart.png">https://raw.githubusercontent.com/Tele-AI/Fluxon/main/pics/fs_benchmark_chart.png</a>)</p>
+
+<h2>Why We Open-Sourced Fluxon</h2>
+
+<p>AI deployments are growing to include more models, more elastic services, and more complex data flows. We think cache reuse, intermediate-state handoff, and file and object access should be designed together at the data-plane boundary.</p>
+
+<p>By open-sourcing the entire stack, we make those trade-offs visible: the Rust core, Python bindings, control and data planes, deployment tooling, tests, and benchmark paths are all in one repository. We&#39;d especially value feedback on the role model, object lifecycle, transport fallback, benchmark methodology, and real workloads that combine two or more interfaces.</p>
+
+<p>Next on the roadmap is deeper <code>KV Cache</code> integration with <code>SGLang</code>, including a more direct path between framework-owned indexing, local shared memory, and the Fluxon data plane.</p>
+
+<p>Fluxon is developed by the AI Infra team at the Artificial Intelligence Research Institute of China Telecom (TeleAI), led by China Telecom Chief Scientist Professor Xuelong Li.</p>
+
+<p>Repository: <a href="https://github.com/Tele-AI/Fluxon">https://github.com/Tele-AI/Fluxon</a></p>
+
+<p>Trial and contributions are always welcome. Any feedback, bug reports, or feature requests are highly appreciated.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8meek/introducing_fluxon_an_ainative_distributed_data/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v83mbp">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/abdullah_albanna">u/abdullah_albanna</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 15:27:09 UTC">12h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v83mbp/the_long_awaited_usbmuxd_rewrite/">The long awaited usbmuxd rewrite</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/linux/comments/1v83b2m/the_long_awaited_usbmuxd_rewrite/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="7">
+    
+    7
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v83mbp/the_long_awaited_usbmuxd_rewrite/" class="post_comments" title="2 comments">2 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8hdhd">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/jed533">u/jed533</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 23:46:50 UTC">3h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🙋 seeking help &#38; advice%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🙋 seeking help &#38; advice</span></a>
+		
+		<a href="/r/rust/comments/1v8hdhd/stm32_black_pill_help_stm32f411ceu6/">stm32 black pill help (STM32F411CEU6)</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="1">
+    
+    1
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Weird ask but does anyone have any free time next week to sit in a discord call for maybe 30 min to an hour to help me get my project off the ground. I get a rotation of JtagGetIdcodeError, JtagNoDeviceConnected and &quot;cannot perform this operation while interfaces are claimed&quot;. I have been pulling my hair out for the last couple days because sometimes it will randomly flash and then got back to having one of those three problems.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8hdhd/stm32_black_pill_help_stm32f411ceu6/" class="post_comments" title="2 comments">2 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7ysq9">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/aymanana">u/aymanana</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 12:20:41 UTC">15h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v7ysq9/rust_terminal_ui_library/">Rust terminal UI library</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="https://github.com/aymanbagabas/uncurses" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span>github.com</span>
+	</a>
+	
+	<div class="post_score" title="7">
+    
+    7
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7ysq9/rust_terminal_ui_library/" class="post_comments" title="5 comments">5 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8l8z6">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Capital_Monk9200">u/Capital_Monk9200</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 28 2026, 02:33:12 UTC">1h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22💡 ideas &#38; proposals%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>💡 ideas &#38; proposals</span></a>
+		
+		<a href="/r/rust/comments/1v8l8z6/apis_as_firstclass_citizen/">APIs as first-class citizen</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>A few years ago, I encountered neovim and a new concept: APIs as first-class citizens.</p>
+
+<p>As I used it more and more in my work, I became increasingly aware of its importance.</p>
+
+<p>Exposing the software&#39;s state and operations through APIs greatly improves the debugging experience, provides extensibility, and makes it very convenient for other programs to call them.</p>
+
+<p>On the other hand, centering on APIs can also improve program structure, because the entire program is written around a single context.</p>
+
+<p>Currently, I usually use HTTP as the external interface because it allows for operations using curl and exposes these operations to the front end.</p>
+
+<p>Previously, I used Axum as the HTTP server and utoipa to export the API to OpenAPI. Then, I used tools to convert the OpenAPI as TypeScript code for front-end.</p>
+
+<p>However, I quickly encountered some problems. First, utoipa&#39;s documentation isn&#39;t generated during the build process; I need to run <code>cargo test</code> separately to generate the OpenAPI documentation. Second, utoipa&#39;s procedural macros are sometimes complex than the functions themselves. Finally, Axum&#39;s type system is overly complex, making every interface writing or modification a painful experience.</p>
+
+<p>Furthermore, while OpenAPI to TypeScript tools are available, their quality is often inconsistent, and the generated code is rarely usable.</p>
+
+<p>I&#39;m hoping for a tool that generates Rust/OpenAPI/TypeScript code by writing something like a proto file. For Rust, ideally, it would generate a trait, so implementing the trait would automatically implement the HTTP interface. In other words, I&#39;d like a tool like this:</p>
+
+<pre><code>interface API {
+    @get
+    void hello_world();
+
+    @post
+    string hello_world2();
+};
+</code></pre>
+
+<p>I&#39;ve carefully studied tools like gRPC/TypeSpec, but I&#39;m not entirely satisfied.</p>
+
+<p>Since I have prior experience writing parsers and code generation tools, I finally decided to create my own—<a href="https://github.com/xidl/xidl">XIDL</a>. I made the following improvements:</p>
+
+<p>First, I generated the trait and OpenAPI documentation using <code>xidl-build</code>, thus resolving the inconsistency in OpenAPI generation time.</p>
+
+<p>Second, I exposed the HTTP interface as an asynchronous trait, hiding its internal complexity within the generated codes. This eliminates the need for developers to struggle with Axum&#39;s complex types.</p>
+
+<p>Furthermore, I strictly defined the interface behavior using RFCs, ensuring consistent presentation across different languages. Simultaneously, I used <a href="http://behave.readthedocs.io/en/stable/">behave</a> and <a href="http://hurl.dev/">hurl</a> to ensure interoperability among all generators.</p>
+
+<p>Furthermore, I wrote a simple <a href="https://github.com/xidl/idl-language-server">LSP</a> that allows real-time preview of the OpenAPI interface via scalars. This enables direct HTTP API calls within the browser.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8l8z6/apis_as_firstclass_citizen/" class="post_comments" title="16 comments">16 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7lpif">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/PitifulTheme411">u/PitifulTheme411</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 01:00:08 UTC">1d ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🎙️ discussion%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🎙️ discussion</span></a>
+		
+		<a href="/r/rust/comments/1v7lpif/is_it_bad_practice_to_have_hashmaps_ignore_some/">Is it Bad Practice to Have HashMaps Ignore Some Fields?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="35">
+    
+    35
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>I&#39;m working on a project and I ended up needing a hashmap, but the elements would also need some metadata. How I initially implemented it is that I manually implemented Hash and PartialEq to ignore those fields so that I can use those for metadata and validating without interfering with my desired hashing behavior.</p>
+
+<p>But I couldn&#39;t help but feel that this is kind of dirty / not good practice? Is there some other approach that I should be using instead? If it helps, I can edit with the snippet of my code that is relevant.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7lpif/is_it_bad_practice_to_have_hashmaps_ignore_some/" class="post_comments" title="31 comments">31 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v8auu3">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Accurate_Gift_3929">u/Accurate_Gift_3929</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 19:39:51 UTC">7h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v8auu3/sturdy_framework_yet_another_rust_web_framework/">Sturdy Framework - Yet another Rust web framework</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>Hello there. I&#39;ve been building a web framework for Rust. I&#39;m coming from the PHP/Laravel world where fast dynamic typing can help you prototype and build very quickly. However, I&#39;ve come to love Rust and would love to start building with it. It is slower to prototype, but with a blazing fast compiled runtime, memory safety and modern features for a systems programming language, I couldn&#39;t resist.</p>
+
+<p>So why not Axum? Or Rocket? Or the ten other major Rust web frameworks? Well, being honest, none of them really clicked with me. They seem to be some combination of too light and/or too macro-heavy, and macros aren&#39;t the reason I like Rust.</p>
+
+<p>This framework (Sturdy Framework) aims to reduce the use of macros, which will end up with more verbose code, but much easier to understand at a glance. I do not like the hidden nature of macros, and I will choose verbosity over obscurity (in most cases).</p>
+
+<p>Features (currently):</p>
+
+<ul>
+<li>Variable supporting routing system</li>
+<li>Struct based action endpoints</li>
+<li>File watchers for auto compilation, and auto reloading</li>
+</ul>
+
+<p>Upcoming:</p>
+
+<ul>
+<li>Finish database integration (had no need for it yet for the documentation website, so it is not yet finished)</li>
+<li>Better feature parity with frameworks like PHP&#39;s Laravel (or Ruby&#39;s Rails)</li>
+</ul>
+
+<p>Feedback/code review is very much sought after. The project is in a pre-alpha state, so please let me know if you have issues with installation. Appreciate your time!</p>
+
+<p>Link (docs): <a href="https://sturdyframework.com/">https://sturdyframework.com</a><br/>
+Docs source (as an example): <a href="https://github.com/jayclees/framework-docs">https://github.com/jayclees/framework-docs</a><br/>
+Starter template: <a href="https://github.com/jayclees/sturdy-project">https://github.com/jayclees/sturdy-project</a><br/>
+Framework source: <a href="https://github.com/jayclees/framework">https://github.com/jayclees/framework</a></p>
+
+<p>As a note I will say, the routing system is custom built, and was the hardest part of building this framework as I had to build a tokenizer to handle multi-variable route segments. There is even a struct called a <code>SegmentReconciliator</code> which parses incoming paths and &quot;reconciliates&quot; or matches route segments.</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v8auu3/sturdy_framework_yet_another_rust_web_framework/" class="post_comments" title="4 comments">4 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v83x3c">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Bruhkev23">u/Bruhkev23</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 15:38:08 UTC">11h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/rust/comments/1v83x3c/added_3d_energy_domain_and_radar_tab_the_rust/">Added 3D energy domain and radar tab. The rust WGPU and EGUI are a bit complex to integrate but once done, they are beautiful.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="2">
+    
+    2
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><figure><a href="/preview/pre/okknwgttksfh1.png?width=1919&amp;format=png&amp;auto=webp&amp;s=e20cd8fc5dc43225b1756ed813d966c9c0696cae"><img loading="lazy" src="/preview/pre/okknwgttksfh1.png?width=1919&amp;format=png&amp;auto=webp&amp;s=e20cd8fc5dc43225b1756ed813d966c9c0696cae"></a></figure>
+
+<p>Cant 2nd image but I will share in a separate post</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v83x3c/added_3d_energy_domain_and_radar_tab_the_rust/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<hr class="sep" />
+			<div class="post" id="1v7ysiy">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/rust">r/rust</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Odd-Pie7133">u/Odd-Pie7133</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 27 2026, 12:20:27 UTC">15h ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/rust/search?q=flair_name%3A%22🛠️ project%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#f2f2f2;"
+				dir="ltr"><span>🛠️ project</span></a>
+		
+		<a href="/r/rust/comments/1v7ysiy/replaced_two_stringlytyped_subsystems_in_my/">Replaced two stringly-typed subsystems in my custom Rust engine with compile-time codegen.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/0qh7mc1cjrfh1.png" class="post_media_image " >
+			
+			<!-- i.redd.it images speical case -->
+			<img width="100%" height="100%" loading="lazy" alt="Post image" src="/img/0qh7mc1cjrfh1.png"/>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="3">
+    
+    3
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/rust/comments/1v7ysiy/replaced_two_stringlytyped_subsystems_in_my/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+			
+			
+			
+			<script src="/hls.min.js"></script>
+			<script src="/playHLSVideo.js"></script>
+			
+			</div>
+			
+
+			<footer>
+				
+
+				
+				<a href="?sort=hot&t=&after=t3_1v7ysiy" accesskey="N">NEXT</a>
+				
+			</footer>
+		</div>
+		
+		
+		<aside>
+			
+			
+			<details class="panel" id="subreddit" open>
+				<summary id="subreddit_label">Subreddit</summary>
+				
+				<div id="top">
+					<div>Posts</div>
+					<a href="/r/rust/wiki/index">Wiki</a>
+				</div>
+				
+				<div id="sub_meta">
+					<img loading="lazy" id="sub_icon" src="/style/t5_2s7lj/styles/communityIcon_pjg3ktzyju771.png?width=256&#38;s=5e99f497418f31f47439c0e8de10553ea9150a00" alt="Icon for r/rust">
+					<h1 id="sub_title">The Rust Programming Language</h1>
+					<p id="sub_name">r/rust</p>
+					<p id="sub_description">A place for all things related to the Rust programming language—an open-source systems language that emphasizes performance, reliability, and productivity.</p>
+					<div id="sub_details">
+						<label>Members</label>
+						<label>Active</label>
+						<div title="415519">415.5k</div>
+						<div title="0">0</div>
+					</div>
+					<div id="sub_actions">
+						<div id="sub_subscription">
+							
+								<form action="/r/rust/subscribe?redirect=r/rust/hot" method="POST">
+									<button class="subscribe">Subscribe</button>
+								</form>
+							
+						</div>
+						<div id="sub_filter">
+							
+							<form action="/r/rust/filter?redirect=r/rust/hot" method="POST">
+								<button class="filter">Filter</button>
+							</form>
+							
+						</div>
+						
+				</div>
+			</details>
+			<details class="panel" id="sidebar">
+				<summary id="sidebar_label">Sidebar</summary>
+				<div id="sidebar_contents">
+					<!-- SC_OFF --><div class="md"><h3><strong>Please read <a href="https://www.rust-lang.org/policies/code-of-conduct">The Rust Community Code of Conduct</a></strong></h3>
+
+<hr/>
+
+<h3>The Rust Programming Language</h3>
+
+<p>A place for all things related to <a href="https://www.rust-lang.org/">the Rust programming language</a>—an open-source systems language that emphasizes performance, reliability, and productivity.</p>
+
+<hr/>
+
+<h3>Rules</h3>
+
+<h1>Observe our code of conduct</h1>
+
+<ul>
+<li><p>Strive to treat others with respect, patience, kindness, and empathy.</p></li>
+<li><p>We observe <a href="https://www.rust-lang.org/policies/code-of-conduct">the Rust Project Code of Conduct</a>.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_1._observe_our_code_of_conduct">Details</a></p></li>
+</ul>
+
+<h1>Submissions must be on-topic</h1>
+
+<ul>
+<li><p>Posts must reference Rust or relate to things using Rust. For content that does not, use a text post to explain its relevance.</p></li>
+<li><p>Post titles should include useful context.</p></li>
+<li><p>For Rust questions, use the stickied Q&amp;A thread.</p></li>
+<li><p>Arts-and-crafts posts are permitted <a href="https://mrmonday.github.io/craft-time/">on weekends</a>.</p></li>
+<li><p>No meta posts; <a href="/message/compose/?to=/r/rust">message the mods</a> instead.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_2._submissions_must_be_on-topic">Details</a></p></li>
+</ul>
+
+<h1>Constructive criticism only</h1>
+
+<ul>
+<li><p>Criticism is encouraged, though it must be constructive, useful and actionable.</p></li>
+<li><p>If criticizing a project on GitHub, you may not link directly to the project&#39;s issue tracker. Please <a href="https://archive.org/web/">create a read-only mirror</a> and link that instead.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_3._constructive_criticism_only">Details</a></p></li>
+</ul>
+
+<h1>Keep things in perspective</h1>
+
+<ul>
+<li><p>A programming language is rarely worth getting worked up over.</p></li>
+<li><p>No zealotry or fanaticism.</p></li>
+<li><p>Be charitable in intent. Err on the side of giving others the benefit of the doubt.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_4._keep_things_in_perspective">Details</a></p></li>
+</ul>
+
+<h1>No endless relitigation</h1>
+
+<ul>
+<li><p>Avoid re-treading topics that have been long-settled or utterly exhausted.</p></li>
+<li><p>Avoid bikeshedding.</p></li>
+<li><p>This is not an official Rust forum, and cannot fulfill feature requests. Use the official venues for that.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_5._no_endless_re-litigation">Details</a></p></li>
+</ul>
+
+<h1>No low-effort content</h1>
+
+<ul>
+<li><p>No memes, image macros, etc.</p></li>
+<li><p>Consider the existing content of the subreddit and whether your post fits in. Does it inspire thoughtful discussion?</p></li>
+<li><p>Use properly formatted text to share code samples and error messages. Do not use images.</p></li>
+<li><p>Submissions appearing to contain AI-generated content may be removed at moderator discretion.</p></li>
+<li><p><a href="/r/rust/wiki/rules#wiki_6._no_low-effort_content">Details</a></p></li>
+</ul>
+
+<hr/>
+
+<h3>Useful Links</h3>
+
+<h1>Megathreads</h1>
+
+<p>Most links here will now take you to a search page listing posts with the relevant flair. The latest megathread for that flair should be the top result.</p>
+
+<ul>
+<li><a href="/r/rust/comments/14921t7/alternative_rust_discussion_venues/">Alternative Rust Discussion Venues</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%93%A1%2Bofficial%2Bblog">Official Blog Posts</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%AB%B1%F0%9F%8F%BB%E2%80%8D%F0%9F%AB%B2%F0%9F%8F%BE%2Bfoundation">Rust Foundation Posts</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%99%8B%2Bquestions%2Bmegathread">Got a Question?</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%90%9D%2Bactivity%2Bmegathread">What&#39;s Everyone Working On?</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%92%BC%2Bjobs%2Bmegathread">Who&#39;s Hiring? Jobs Threads</a></li>
+<li><a href="/r/rust/search?sort=new&amp;restrict_sr=on&amp;q=flair%3A%F0%9F%93%85%2Bthis%2Bweek%2Bin%2Brust">This Week in Rust</a></li>
+</ul>
+
+<h1>Official Resources</h1>
+
+<ul>
+<li><a href="https://www.rust-lang.org">Official Website</a></li>
+<li><a href="https://blog.rust-lang.org/">Official Blog</a></li>
+<li><a href="https://this-week-in-rust.org/">This Week In Rust</a></li>
+<li><a href="https://www.rust-lang.org/install.html">Installers</a></li>
+<li><a href="https://github.com/rust-lang/">Source Code</a></li>
+<li><a href="https://github.com/rust-lang/rust/issues">Bug Tracker</a></li>
+</ul>
+
+<h1>Learn Rust</h1>
+
+<ul>
+<li><a href="https://doc.rust-lang.org/book/">The Rust E-Book</a></li>
+<li><a href="https://doc.rust-lang.org/std/index.html">Stdlib API Reference</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust By Example</a></li>
+<li><a href="https://github.com/rust-lang/rustlings">Rustlings</a></li>
+<li><a href="https://play.rust-lang.org/">Online Playground</a></li>
+</ul>
+
+<h1>Discussion Platforms</h1>
+
+<ul>
+<li><a href="https://users.rust-lang.org/">Official Users Forum</a></li>
+<li><a href="https://discord.gg/rust-lang-community">Community Discord</a></li>
+<li><a href="https://chat.mozilla.org/#/room/#rust:mozilla.org">Mozilla Matrix Chat</a></li>
+<li><a href="https://stackoverflow.com/questions/tagged/rust">Stack Overflow Chat</a></li>
+</ul>
+</div><!-- SC_ON -->
+					
+				</div>
+			</details>
+			
+		</aside>
+		
+	</main>
+
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>

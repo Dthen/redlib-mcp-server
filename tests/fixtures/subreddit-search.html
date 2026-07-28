@@ -1,0 +1,1360 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>Redlib: search results - python</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/search?q=python&#38;type=sr</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/search?q=python&#38;type=sr" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+		<main>
+			
+	<div id="column_one">
+		<form id="search_sort">
+			<div class="search_widget_divider_box">
+				<input id="search" type="text" name="q" placeholder="Search" value="python" title="Search redlib">
+				<div class="search_widget_divider_box">
+					
+					
+					<select id="sort_options" name="sort" title="Sort results by">
+						
+		<option value="relevance" selected>
+			Relevance
+		</option>
+	
+		<option value="hot" >
+			Hot
+		</option>
+	
+		<option value="top" >
+			Top
+		</option>
+	
+		<option value="new" >
+			New
+		</option>
+	
+		<option value="comments" >
+			Comments
+		</option>
+	
+					</select>
+					
+					<select id="timeframe" name="t" title="Timeframe"> 
+						
+		<option value="hour" >
+			Hour
+		</option>
+	
+		<option value="day" >
+			Day
+		</option>
+	
+		<option value="week" >
+			Week
+		</option>
+	
+		<option value="month" >
+			Month
+		</option>
+	
+		<option value="year" >
+			Year
+		</option>
+	
+		<option value="all" selected>
+			All
+		</option>
+	
+					</select>
+					
+				</div>
+			</div>
+
+			<button id="sort_submit" class="submit">
+				<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+					<path d="M20 50 H100" />
+					<path d="M75 15 L100 50 L75 85" />
+					&rarr;
+				</svg>
+			</button>
+ 		</form>
+
+		
+		
+		<div id="search_subreddits">
+			
+			
+			<a href="/r/Python/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_2qh0y/styles/communityIcon_lctik80p96tg1.png?width=256&amp;s=6d91fcc92d9f08c5ba30096d43a555ddd0edbc7d" alt="r/Python icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/Python</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="1500021 Members">1.5m Members</span>
+					</p>
+					<p class="search_subreddit_description">The largest Python community for Reddit! Stay up to date with the latest news, packages, and meta information relating to the Python programming language. 
+---
+
+If you have questions or are new to Python use r/LearnPython</p>
+				</div>
+			</a>
+			
+			<a href="/r/PythonLearning/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_2qeibm/styles/communityIcon_5rysoa19mr351.png?width=256&amp;s=9b820932f4a5f426f855ff8cb2519b40b739846f" alt="r/PythonLearning icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/PythonLearning</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="106861 Members">106.9k Members</span>
+					</p>
+					<p class="search_subreddit_description">Everything about learning the Python programming language. Ask questions, give recommendations, explain concepts, show projects, demo free tools, compare courses, ...</p>
+				</div>
+			</a>
+			
+			<a href="/r/PythonJobs/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_2zo0t/styles/communityIcon_52qqom0b4pz41.png?width=256&amp;s=bb78073149515e4b0bfc767fcd52883b4a2d121a" alt="r/PythonJobs icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/PythonJobs</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="35929 Members">35.9k Members</span>
+					</p>
+					<p class="search_subreddit_description">Python jobs are posted here</p>
+				</div>
+			</a>
+			
+			
+			<a href="?q=python&sort=relevance&t=&type=sr_user" class="search_subreddit" id="more_subreddits">More subreddit results →</a>
+			
+		</div>
+		
+		
+
+		
+
+		
+
+		
+			
+				
+					<div class="post" id="2qh0y">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jan 25 2008, 03:14:39 UTC">Jan 25 &#39;08</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Python</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/Python/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2qeibm">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 08 2020, 22:47:13 UTC">Jun 08 &#39;20</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">PythonLearning</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonLearning/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2zo0t">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jan 06 2014, 18:29:38 UTC">Jan 06 &#39;14</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Python jobs, python job offers</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonJobs/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2r8ot">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 02 2009, 15:59:41 UTC">Oct 02 &#39;09</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Python Education</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/learnpython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2srho">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Aug 20 2011, 09:06:43 UTC">Aug 20 &#39;11</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Ball Python - Often imitated, never duplicated.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/ballpython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="fnrmm">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 10 2018, 22:31:14 UTC">Feb 10 &#39;18</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Where the rookies roam</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonProjects2/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="igglo">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Apr 25 2018, 06:09:42 UTC">Apr 25 &#39;18</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">PythonBeginners: A Subreddit for Python Absolute Beginners</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonBeginners/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2ryfw">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 22 2010, 18:22:35 UTC">Jul 22 &#39;10</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Snakes</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/snakes/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="3evbu">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jun 02 2016, 21:17:06 UTC">Jun 02 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Quick python tips to add to your collection</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/pythontips/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="39346">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 12 2015, 07:11:24 UTC">Jul 12 &#39;15</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Python Brasil</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonBrasil/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2sreo">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Aug 19 2011, 16:25:09 UTC">Aug 19 &#39;11</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Ask Python</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/AskPython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2r7yd">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Sep 24 2009, 04:25:37 UTC">Sep 24 &#39;09</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">learn programming</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/learnprogramming/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2qosk">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Nov 19 2008, 04:38:47 UTC">Nov 19 &#39;08</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Monty Python Subreddit!</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/montypython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="3fziv">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Aug 22 2016, 22:29:20 UTC">Aug 22 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Are those refrences?</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/unexpectedMontyPython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="v9ws4">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jan 24 2019, 06:30:47 UTC">Jan 24 &#39;19</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Python_AND_Hacking</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/Python_AND_Hacking/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2fwo">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 28 2006, 18:19:29 UTC">Feb 28 &#39;06</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">programming</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/programming/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2tex6">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jan 22 2012, 13:11:51 UTC">Jan 22 &#39;12</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">memesAndJokesAboutEverythingProgrammingAndCS</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/ProgrammerHumor/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="3d262">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Mar 08 2016, 16:36:10 UTC">Mar 08 &#39;16</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Ball Python Morph</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/BallPythonMorph/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="26e159">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Oct 11 2019, 11:15:29 UTC">Oct 11 &#39;19</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">PythonPandas</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonPandas/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2vi60">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Nov 08 2012, 12:49:35 UTC">Nov 08 &#39;12</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Elite Dangerous</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/EliteDangerous/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2mx48p">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 05 2020, 03:28:20 UTC">May 05 &#39;20</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">madeinpython</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/madeinpython/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="7l5glk">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Dec 15 2022, 13:41:49 UTC">Dec 15 &#39;22</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">Everything related to Python and its ecosystem of tools, frameworks, and libraries.</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonLinks/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="f450on">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Aug 07 2025, 07:13:17 UTC">Aug 07 &#39;25</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">PythonLearnersHub</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/PythonLearnersHub/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="30aig">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Feb 11 2014, 00:16:09 UTC">Feb 11 &#39;14</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">This is snek</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/Sneks/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="2qy22">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/">r/</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/">u/</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="May 06 2009, 19:59:34 UTC">May 06 &#39;09</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="">reptiles</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail no_thumbnail" href="/r/reptiles/" rel="nofollow">
+		
+		<svg viewBox="0 0 100 106" width="140" height="53" xmlns="http://www.w3.org/2000/svg">
+			<title>Thumbnail</title>
+			<path d="M35,15h-15a10,10 0,0,0 0,20h25a10,10 0,0,0 10,-10m-12.5,0a10, 10 0,0,1 10, -10h25a10,10 0,0,1 0,20h-15" fill="none" stroke-width="5" stroke-linecap="round"/>
+		</svg>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="0">
+    
+    0
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+		
+		
+		<script src="/hls.min.js"></script>
+		<script src="/playHLSVideo.js"></script>
+		
+
+		
+		<footer>
+			
+
+			
+			<a href="?q=python&restrict_sr=
+				&sort=relevance&t=
+				&after=t5_2qy22" accesskey="N">NEXT</a>
+			
+		</footer>
+		
+	</div>
+
+		</main>
+		
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>
