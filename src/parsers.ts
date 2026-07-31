@@ -123,18 +123,32 @@ function parseCompactScore(text: string): number | undefined {
 }
 
 /**
- * Extracts just the numeric score text from a score element: clones the
- * element, drops label/spacer elements (e.g. <span class="label">Upvotes</span>)
- * and any other element that doesn't hold numeric content, then returns the
- * remaining text. Children are processed deepest-first so a numeric leaf inside
- * a wrapper survives when the wrapper's own text mixes in label words.
+ * Extracts just the numeric score text from a score element. Instead of
+ * mutating a clone, collects parse candidates and returns the first one that
+ * parses as a compact score:
+ *   1. the element's overall text (plain text, inline <b>12</b>, nested spans),
+ *   2. root-level text nodes (the "68.6k" in '68.6k <span class="label">Upvotes</span>'),
+ *   3. every LEAF element's text (an element with no element children — its
+ *      .text() is its own text, so a numeric leaf like <b>12</b> inside a
+ *      wrapper whose text mixes in label words still survives).
+ * Guarantee: a numeric leaf inside a mixed-text wrapper is parsed; text that
+ * no candidate can parse (e.g. '12abc') yields nothing.
  */
 function compactScoreText($: cheerio.CheerioAPI, $score: cheerio.Cheerio<any>): string {
   const $clone = $score.clone();
-  const els = $clone.find('*').get();
-  for (let i = els.length - 1; i >= 0; i--) {
-    const text = $(els[i]).text().trim();
-    if (!text || !/^-?[\d.,]+[km]?$/i.test(text)) $(els[i]).remove();
+  const candidates: string[] = [$clone.text()];
+  const root = $clone.get(0);
+  if (root) {
+    for (const node of root.childNodes) {
+      if (node.type === 'text' && node.data) candidates.push(node.data);
+    }
+  }
+  $clone.find('*').each((_i, el) => {
+    const $el = $(el);
+    if ($el.children().length === 0) candidates.push($el.text());
+  });
+  for (const candidate of candidates) {
+    if (parseCompactScore(candidate) !== undefined) return candidate;
   }
   return $clone.text();
 }
@@ -157,7 +171,9 @@ function compactScoreText($: cheerio.CheerioAPI, $score: cheerio.Cheerio<any>): 
 function parseScore($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, selector: string = '.post_score'): { score: number | null; score_hidden?: boolean; score_exact?: number } {
   const $score = $el.find(selector).first();
   const title = $score.attr('title');
-  if (title?.toLowerCase() === 'hidden') {
+  // Whitespace-padded titles (' hidden ') count too, matching the numeric-title
+  // trimming below.
+  if (title?.trim().toLowerCase() === 'hidden') {
     return { score: null, score_hidden: true };
   }
   const titleDigits = title ? title.replace(/,/g, '').trim() : '';
@@ -303,9 +319,15 @@ function extractMedia($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, baseU
     const type = mediaType(imgSrc || '') === 'gif' || mediaType(href || '') === 'gif' ? 'gif' : 'image';
     push(type, url);
   });
-  $scope.find('a.post_media_image[href]').each((_i, el) => {
-    const href = $(el).attr('href') || '';
-    if (href) push(mediaType(href), href);
+  $scope.find('a.post_media_image').each((_i, el) => {
+    const $a = $(el);
+    const href = $a.attr('href') || '';
+    const imgSrc = $a.find('img[src]').first().attr('src') || '';
+    // Prefer the anchor href (full-size), fall back to the inner img[src]
+    // (proxied preview) when the href is missing/empty; skip only when both are.
+    const url = href || imgSrc;
+    if (!url) return;
+    push(mediaType(url), url);
   });
   // Bare imgs: skip imgs handled by their own branches (figure and
   // a.post_media_image), so one image never yields two media items.

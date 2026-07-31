@@ -130,7 +130,7 @@ describe('parsePostList with sorted posts', () => {
     const posts = parsePostList(html);
     expect(posts[0].permalink).toBeTruthy();
     // Some posts may be flair-filter links, but most should have /comments/ permalinks
-    const postsWithPermalinks = posts.filter(p => p.permalink.includes('/comments/'));
+    const postsWithPermalinks = posts.filter(p => p.permalink?.includes('/comments/'));
     expect(postsWithPermalinks.length).toBeGreaterThan(0);
     expect(postsWithPermalinks[0].permalink).toContain('/comments/');
   });
@@ -1477,7 +1477,7 @@ describe('parsePostList with popular front page', () => {
   it('should generate permalinks for popular front page posts', () => {
     const posts = parsePostList(html);
     // Some posts may be flair-filter links, but most should have /comments/ permalinks
-    const postsWithPermalinks = posts.filter(p => p.permalink.includes('/comments/'));
+    const postsWithPermalinks = posts.filter(p => p.permalink?.includes('/comments/'));
     expect(postsWithPermalinks.length).toBeGreaterThan(0);
     expect(postsWithPermalinks[0].permalink).toContain('/comments/');
   });
@@ -1620,7 +1620,7 @@ describe('parsePostList with r/all front page', () => {
   it('should generate permalinks for r/all front page posts', () => {
     const posts = parsePostList(html);
     // Some posts may be flair-filter links, but most should have /comments/ permalinks
-    const postsWithPermalinks = posts.filter(p => p.permalink.includes('/comments/'));
+    const postsWithPermalinks = posts.filter(p => p.permalink?.includes('/comments/'));
     expect(postsWithPermalinks.length).toBeGreaterThan(0);
     expect(postsWithPermalinks[0].permalink).toContain('/comments/');
   });
@@ -1999,6 +1999,24 @@ describe('parseScore: compact scores and honest null semantics', () => {
     expect(posts[0].score).toBe(-5);
     expect(posts[0].score_exact).toBe(-5);
   });
+
+  it('parses a numeric leaf inside a mixed-text wrapper ("Upvotes <b>12</b>" → 12)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score"><span class="wrap">Upvotes <b>12</b></span></div>'));
+    expect(posts[0].score).toBe(12);
+    expect(posts[0].score_exact).toBeUndefined();
+  });
+
+  it('rejects a non-numeric leaf the same as bare text ("<span>12abc</span>" → null)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score"><span>12abc</span></div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBeUndefined();
+  });
+
+  it('treats whitespace-padded title=" hidden " as a hidden score (trim before check)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title=" hidden ">• <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBe(true);
+  });
 });
 
 describe('URL absolutization edge cases', () => {
@@ -2134,6 +2152,20 @@ describe('comment media extraction (dedupe, gif heuristic, video branches)', () 
     expect(result.comments[0].media).toEqual([
       { type: 'image', url: 'http://127.0.0.1:8080/img/full.jpg' },
     ]);
+  });
+
+  it('falls back to the inner img[src] when a.post_media_image has no href', () => {
+    const body = '<a class="post_media_image"><img src="/x.jpg"/></a>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'http://127.0.0.1:8080/x.jpg' },
+    ]);
+  });
+
+  it('emits no media for a.post_media_image with neither href nor img', () => {
+    const body = '<a class="post_media_image"></a>';
+    const result = parsePostDetails(commentHtml(body), 100);
+    expect(result.comments[0].media).toBeUndefined();
   });
 
   it('classifies a figure as gif when the href is .gif even with a static .jpg preview img', () => {

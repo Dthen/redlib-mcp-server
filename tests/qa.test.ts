@@ -1280,6 +1280,8 @@ async function main() {
 
         // Check that each result has all required fields.
         // score may legitimately be null (Reddit hides scores on search pages → score_hidden: true).
+        // permalink is optional too (omitted when the title link has an empty href); its
+        // presence/URL shape is asserted separately below for posts that carry one.
         const requiredFields: (keyof PostListItem)[] = [
           "id",
           "title",
@@ -1287,7 +1289,6 @@ async function main() {
           "author",
           "score",
           "commentCount",
-          "permalink",
         ];
         const allFieldsPresent1 = results1.every((p) =>
           requiredFields.every((f) =>
@@ -1307,9 +1308,11 @@ async function main() {
           "HIGH"
         );
 
-        // Permalinks should be valid public URLs (never the private instance)
-        const permalinksOk1 = results1.every((p) => p.permalink.startsWith("https://www.reddit.com"));
-        const permalinksOk2 = results2.every((p) => p.permalink.startsWith("https://www.reddit.com"));
+        // Permalinks should be valid public URLs (never the private instance).
+        // Null-safe: posts without a permalink yield a clean false instead of a
+        // TypeError, and are reported as a QA failure rather than a crash.
+        const permalinksOk1 = results1.every((p) => p.permalink?.startsWith("https://www.reddit.com"));
+        const permalinksOk2 = results2.every((p) => p.permalink?.startsWith("https://www.reddit.com"));
         qa(
           "D3",
           "all permalinks start with public Reddit base URL",
