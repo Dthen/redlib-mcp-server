@@ -576,11 +576,12 @@ describe('parsePostDetails with nested comments', () => {
     expect(c001.created_relative).toBe('5h ago');
   });
 
-  it('should extract permalink fragment from a.created href', () => {
+  it('should extract public permalink with fragment from a.created href', () => {
     const result = parsePostDetails(html, 100);
     const c001 = result.comments[0];
-    expect(c001.permalink).toBe('#c001');
-    expect(c001.replies![0].permalink).toBe('#c002');
+    // Permalinks are now absolute public URLs: {publicBaseUrl}{postPath}#{fragment}
+    expect(c001.permalink).toBe('https://www.reddit.com/r/testsub/comments/abc123/test_post/#c001');
+    expect(c001.replies![0].permalink).toBe('https://www.reddit.com/r/testsub/comments/abc123/test_post/#c002');
   });
 
   it('should parse score with commas', () => {
@@ -1175,10 +1176,15 @@ describe('parseSubredditMeta', () => {
     expect(result).not.toBeNull();
   });
 
-  it('should parse the icon URL', () => {
+  it('should parse the icon URL (absolute against base URL)', () => {
     const result = parseSubredditMeta(html);
     expect(result.icon_url).toBeTruthy();
     expect(result.icon_url).toContain('communityIcon');
+    // Relative icon srcs are made absolute against the default instance base URL
+    expect(result.icon_url).toMatch(/^http:\/\/localhost:8080\//);
+    // Explicit base URL is honored
+    const explicit = parseSubredditMeta(html, 'http://127.0.0.1:8080');
+    expect(explicit.icon_url).toMatch(/^http:\/\/127\.0\.0\.1:8080\//);
   });
 
   it('should parse the display title', () => {
@@ -1778,6 +1784,18 @@ describe('parsePostList with author search results', () => {
     // author-search.html has a post by spez with class="post_author admin"
     const adminPost = posts.find(p => p.author_flair === 'admin');
     expect(adminPost).toBeDefined();
+  });
+});
+
+describe('public permalinks', () => {
+  it('uses REDLIB_PUBLIC_URL-style base for permalinks when provided', () => {
+    const posts = parsePostList(loadFixture('post-list.html'), 'http://127.0.0.1:8080', 'https://www.reddit.com');
+    expect(posts[0].permalink.startsWith('https://www.reddit.com')).toBe(true);
+  });
+
+  it('defaults permalink base to https://www.reddit.com', () => {
+    const posts = parsePostList(loadFixture('post-list.html'), 'http://127.0.0.1:8080');
+    expect(posts[0].permalink.startsWith('https://www.reddit.com')).toBe(true);
   });
 });
 

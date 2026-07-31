@@ -1302,12 +1302,12 @@ async function main() {
           "HIGH"
         );
 
-        // Permalinks should be valid URLs starting with REDLIB
-        const permalinksOk1 = results1.every((p) => p.permalink.startsWith(REDLIB));
-        const permalinksOk2 = results2.every((p) => p.permalink.startsWith(REDLIB));
+        // Permalinks should be valid public URLs (never the private instance)
+        const permalinksOk1 = results1.every((p) => p.permalink.startsWith("https://www.reddit.com"));
+        const permalinksOk2 = results2.every((p) => p.permalink.startsWith("https://www.reddit.com"));
         qa(
           "D3",
-          "all permalinks start with REDLIB base URL",
+          "all permalinks start with public Reddit base URL",
           permalinksOk1 && permalinksOk2,
           `relevance: ${permalinksOk1}, top: ${permalinksOk2}`,
           "HIGH"

@@ -4,6 +4,8 @@ import fetch from "node-fetch";
 import { parsePostList, parsePostDetails, parseSubredditSearch, parseUserSearch, parseSubredditInfo, parseSubredditMeta, parseUserProfile, parseWikiPage } from "./parsers.js";
 
 const REDLIB_BASE_URL = process.env.REDLIB_URL || "http://localhost:8080";
+// Public base for permalinks / navigation links (the private instance URLs are useless to consumers)
+const REDLIB_PUBLIC_URL = (process.env.REDLIB_PUBLIC_URL || "https://www.reddit.com").replace(/\/+$/, "");
 
 /**
  * Registers all Redlib MCP tools on the given server instance.
@@ -54,7 +56,7 @@ export function registerTools(server: McpServer): void {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL);
+        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit since Redlib may ignore the query param
         const limited = results.slice(0, limit);
@@ -105,7 +107,7 @@ export function registerTools(server: McpServer): void {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL);
+        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit since Redlib may ignore the query param
         const limited = results.slice(0, limit);
@@ -153,7 +155,7 @@ export function registerTools(server: McpServer): void {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
-        const postData = parsePostDetails(html, comment_limit);
+        const postData = parsePostDetails(html, comment_limit, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         return {
           content: [{
@@ -286,7 +288,7 @@ export function registerTools(server: McpServer): void {
         ]);
 
         const sidebarInfo = parseSubredditInfo(sidebarHtml);
-        const meta = parseSubredditMeta(mainHtml);
+        const meta = parseSubredditMeta(mainHtml, REDLIB_BASE_URL);
 
         // Merge: main-page meta first, sidebar fields fill in / override
         const merged = {
@@ -337,7 +339,7 @@ export function registerTools(server: McpServer): void {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
-        const profile = parseUserProfile(html, REDLIB_BASE_URL);
+        const profile = parseUserProfile(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limitedPosts = profile.posts.slice(0, limit);
@@ -410,7 +412,7 @@ export function registerTools(server: McpServer): void {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL);
+        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limited = results.slice(0, limit);
@@ -468,7 +470,7 @@ export function registerTools(server: McpServer): void {
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
         // Redlib renders comment search results as .post elements on search pages
-        const results = parsePostList(html, REDLIB_BASE_URL);
+        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limited = results.slice(0, limit);

@@ -69,15 +69,17 @@ export interface PostDetails {
 /**
  * Extracts flair data from a post element using the cheerio root.
  */
-function extractFlair($: cheerio.CheerioAPI, $postEl: cheerio.Cheerio<any>): FlairData | undefined {
+function extractFlair($: cheerio.CheerioAPI, $postEl: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com"): FlairData | undefined {
   const $flair = $postEl.find('.post_title a.post_flair').first();
-  return extractFlairFromAnchor($, $flair);
+  return extractFlairFromAnchor($, $flair, publicBaseUrl);
 }
 
 /**
  * Extracts flair data from a post_flair anchor element.
+ * filter_url is made absolute against publicBaseUrl (it is a navigation link
+ * that works on reddit.com, unlike media URLs which the instance proxies).
  */
-function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<any>): FlairData | undefined {
+function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com"): FlairData | undefined {
   if (!$flair.length) return undefined;
 
   const text = $flair.find('span:not(.emoji)').map((_, s) => $(s).text()).get().join(' ').trim();
@@ -89,7 +91,8 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
     const match = sStyle.match(/background-image:\s*url\('?([^')]+)'?\)/);
     return match ? match[1] : '';
   }).get().filter(Boolean);
-  const filter_url = $flair.attr('href') || '';
+  const filterHref = $flair.attr('href') || '';
+  const filter_url = filterHref.startsWith('http') ? filterHref : `${publicBaseUrl}${filterHref}`;
 
   return {
     text,
@@ -176,7 +179,7 @@ function extractAuthorFlair($el: cheerio.Cheerio<any>): 'moderator' | 'admin' | 
 /**
  * Parses Redlib search/hot results HTML into structured JSON
  */
-export function parsePostList(html: string, baseUrl: string = "http://localhost:8080"): PostListItem[] {
+export function parsePostList(html: string, baseUrl: string = "http://localhost:8080", publicBaseUrl: string = "https://www.reddit.com"): PostListItem[] {
   const $ = cheerio.load(html);
   const results: PostListItem[] = [];
 
@@ -184,7 +187,7 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
     const $el = $(el);
 
     // Extract flair if present
-    const flair = extractFlair($, $el);
+    const flair = extractFlair($, $el, publicBaseUrl);
 
     // Skip flair links — find the first non-flair <a> for the real title
     const $titleLink = $el.find('.post_title a').not('.post_flair').first();
@@ -245,7 +248,7 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
       author,
       score,
       commentCount,
-      permalink: `${baseUrl}${href}`,
+      permalink: `${publicBaseUrl}${href}`,
       ...(flair ? { flair } : {}),
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
@@ -405,10 +408,12 @@ export interface SubredditMeta {
  * Parses the #subreddit panel from a subreddit main page (e.g. /r/rust/hot).
  * Extracts icon, title, name, short description, and member/active stats.
  */
-export function parseSubredditMeta(html: string): SubredditMeta {
+export function parseSubredditMeta(html: string, baseUrl: string = "http://localhost:8080"): SubredditMeta {
   const $ = cheerio.load(html);
 
-  const icon_url = $('#sub_icon').attr('src') || undefined;
+  const iconSrc = $('#sub_icon').attr('src') || undefined;
+  // Make icon_url absolute against the instance base URL (it proxies the bytes)
+  const icon_url = iconSrc ? (iconSrc.startsWith('http') ? iconSrc : `${baseUrl}${iconSrc.startsWith('/') ? '' : '/'}${iconSrc}`) : undefined;
   const display_title = $('#sub_title').first().text().trim() || undefined;
   const name = $('#sub_name').first().text().trim() || undefined;
   const description_short = $('#sub_description').first().text().trim() || undefined;
@@ -473,7 +478,7 @@ export interface UserProfile {
  * Parses Redlib user profile HTML into structured JSON.
  * Handles all user listing pages: overview, submitted, comments.
  */
-export function parseUserProfile(html: string, baseUrl: string = "http://localhost:8080"): UserProfile {
+export function parseUserProfile(html: string, baseUrl: string = "http://localhost:8080", publicBaseUrl: string = "https://www.reddit.com"): UserProfile {
   const $ = cheerio.load(html);
 
   // Extract profile info from sidebar
@@ -503,7 +508,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const $el = $(el);
 
     // Extract flair if present
-    const flair = extractFlair($, $el);
+    const flair = extractFlair($, $el, publicBaseUrl);
 
     // Skip flair links — find the first non-flair <a> for the real title
     const $titleLink = $el.find('.post_title a').not('.post_flair').first();
@@ -545,7 +550,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
       author,
       score,
       commentCount,
-      permalink: `${baseUrl}${href}`,
+      permalink: `${publicBaseUrl}${href}`,
       ...(flair ? { flair } : {}),
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
@@ -623,7 +628,7 @@ export function parseWikiPage(html: string): WikiPage {
   return { title, content };
 }
 
-export function parsePostDetails(html: string, limit: number = 10): PostDetails {
+export function parsePostDetails(html: string, limit: number = 10, baseUrl: string = "http://localhost:8080", publicBaseUrl: string = "https://www.reddit.com"): PostDetails {
   const $ = cheerio.load(html);
   const $postTitle = $('.post_title').first();
   
@@ -631,7 +636,16 @@ export function parsePostDetails(html: string, limit: number = 10): PostDetails 
   const $flair = $postTitle.find('a.post_flair').first();
   let flair: FlairData | undefined;
   if ($flair.length) {
-    flair = extractFlairFromAnchor($, $flair);
+    flair = extractFlairFromAnchor($, $flair, publicBaseUrl);
+  }
+
+  // Derive the post path (for public comment permalinks) from the first
+  // non-flair title link; fall back to the first comment's created href.
+  const $postTitleLink = $postTitle.find('a').not('.post_flair').first();
+  let postPath = $postTitleLink.attr('href') || '';
+  if (!postPath) {
+    const firstCreatedHref = $('.comment_data a.created').first().attr('href') || '';
+    postPath = firstCreatedHref.split('#')[0].split('?')[0].replace(/\/[^/]+\/$/, '/');
   }
 
   // Get title text, excluding any flair link text  
@@ -685,8 +699,18 @@ export function parsePostDetails(html: string, limit: number = 10): PostDetails 
     const created_utc = $created.attr('title')?.trim() || undefined;
     const created_relative = $created.text().trim() || undefined;
     const permalinkHref = $created.attr('href') || undefined;
-    // Extract fragment from href for permalink (e.g. "#hzru9rk")
-    const permalink = permalinkHref ? (permalinkHref.includes('#') ? '#' + permalinkHref.split('#').pop() : permalinkHref) : undefined;
+    // Public permalink: full reddit.com URL + fragment (was a bare '#fragment' before)
+    let permalink: string | undefined;
+    if (permalinkHref) {
+      const fragment = permalinkHref.includes('#') ? permalinkHref.split('#').pop() : '';
+      if (postPath) {
+        permalink = `${publicBaseUrl}${postPath}${fragment ? `#${fragment}` : ''}`;
+      } else if (permalinkHref.startsWith('http')) {
+        permalink = permalinkHref;
+      } else {
+        permalink = permalinkHref;
+      }
+    }
 
     // Recurse into replies — only direct children of this comment's blockquote.replies
     const replies: CommentData[] = [];
