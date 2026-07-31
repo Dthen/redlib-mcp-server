@@ -1909,3 +1909,300 @@ describe('search_posts query builder logic', () => {
     expect(buildQuery('cats', { flair: 'off topic' })).toBe('flair_name:"off topic" cats');
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Edge-case coverage from the code-quality review
+// ═══════════════════════════════════════════════════════════════════════════
+
+function postWithScore(scoreMarkup: string): string {
+  return `<html><body><div class="post" id="sc1">
+    <div class="post_title"><a href="/r/test/comments/sc1/title/">Title</a></div>
+    ${scoreMarkup}
+    <div class="post_comments">5 comments</div>
+  </div></body></html>`;
+}
+
+describe('parseScore: compact scores and honest null semantics', () => {
+  it('prefers the exact title value over compact text ("68.6k" + title="68604" → 68604)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title="68604">68.6k <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBe(68604);
+    expect(posts[0].score_exact).toBe(68604);
+    expect(posts[0].score_hidden).toBeUndefined();
+  });
+
+  it('parses compact "1.2k" score text without a title', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">1.2k <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBe(1200);
+    expect(posts[0].score_exact).toBeUndefined();
+  });
+
+  it('parses compact "1.2m" score text without a title', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">1.2m</div>'));
+    expect(posts[0].score).toBe(1200000);
+  });
+
+  it('parses compact text when the title is present but not an integer', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title="12.5k">12.5k</div>'));
+    expect(posts[0].score).toBe(12500);
+    expect(posts[0].score_exact).toBeUndefined();
+  });
+
+  it('emits null score WITHOUT score_hidden for unparseable text (no title="Hidden")', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">N/A</div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBeUndefined();
+  });
+
+  it('emits null score WITHOUT score_hidden when the score element is absent', () => {
+    const posts = parsePostList(postWithScore(''));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBeUndefined();
+  });
+
+  it('emits null score + score_hidden ONLY for genuine title="Hidden"', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title="Hidden">• <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBe(true);
+  });
+
+  it('parses negative scores', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title="-5">-5</div>'));
+    expect(posts[0].score).toBe(-5);
+    expect(posts[0].score_exact).toBe(-5);
+  });
+});
+
+describe('URL absolutization edge cases', () => {
+  it('keeps protocol-relative thumbnail URLs as-is', () => {
+    const html = `<html><body><div class="post" id="u1">
+      <div class="post_title"><a href="/r/test/comments/u1/title/">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+      <a class="post_thumbnail" href="https://example.com/x"><svg><image href="//cdn.example.com/t.jpg"/></svg></a>
+    </div></body></html>`;
+    const posts = parsePostList(html);
+    expect(posts[0].thumbnail_url).toBe('//cdn.example.com/t.jpg');
+  });
+
+  it('detects uppercase-scheme external URLs (case-insensitive)', () => {
+    const html = `<html><body><div class="post" id="u2">
+      <div class="post_title"><a href="/r/test/comments/u2/title/">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+      <a class="post_thumbnail" href="HTTPS://EXAMPLE.COM/x"><svg><image href="/preview/p.jpg"/></svg></a>
+    </div></body></html>`;
+    const posts = parsePostList(html);
+    expect(posts[0].external_url).toBe('HTTPS://EXAMPLE.COM/x');
+    expect(posts[0].thumbnail_url).toBe('http://localhost:8080/preview/p.jpg');
+  });
+
+  it('normalizes a trailing-slash baseUrl (no "//" in absolutized URLs)', () => {
+    const html = `<html><body><div class="post" id="u3">
+      <div class="post_title"><a href="/r/test/comments/u3/title/">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+      <a class="post_thumbnail" href="https://example.com/x"><svg><image href="/preview/p.jpg"/></svg></a>
+    </div></body></html>`;
+    const posts = parsePostList(html, 'http://localhost:8080/');
+    expect(posts[0].thumbnail_url).toBe('http://localhost:8080/preview/p.jpg');
+  });
+
+  it('uses absolute title hrefs as permalinks without double-prefixing', () => {
+    const html = `<html><body><div class="post" id="u4">
+      <div class="post_title"><a href="https://www.reddit.com/r/test/comments/u4/title/">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+    </div></body></html>`;
+    const posts = parsePostList(html);
+    expect(posts[0].permalink).toBe('https://www.reddit.com/r/test/comments/u4/title/');
+  });
+
+  it('normalizes a trailing-slash public base URL in permalinks', () => {
+    const html = `<html><body><div class="post" id="u5">
+      <div class="post_title"><a href="/r/test/comments/u5/title/">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+    </div></body></html>`;
+    const posts = parsePostList(html, 'http://localhost:8080', 'https://www.reddit.com/');
+    expect(posts[0].permalink).toBe('https://www.reddit.com/r/test/comments/u5/title/');
+  });
+});
+
+describe('comment media extraction (dedupe, gif heuristic, video branches)', () => {
+  const commentHtml = (body: string) => `<html><body>
+    <div class="post_title">Post</div><div class="post_author">a</div>
+    <div class="post_subreddit">r/t</div><div class="post_body">b</div><div class="post_score">1</div>
+    <div class="comment"><span class="comment_author">u</span>
+    <div class="comment_body"><div class="md">${body}</div></div>
+    <span class="comment_score">5</span></div>
+  </body></html>`;
+
+  it('emits ONE media item per figure, preferring img[src] over a[href]', () => {
+    const body = '<figure><a href="/img/full.jpg"><img src="/preview/pre/thumb.jpg"/></a></figure>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'http://127.0.0.1:8080/preview/pre/thumb.jpg' },
+    ]);
+  });
+
+  it('falls back to the figure a[href] when there is no img', () => {
+    const body = '<figure><a href="/img/only.jpg">link</a></figure>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'http://127.0.0.1:8080/img/only.jpg' },
+    ]);
+  });
+
+  it('classifies .gif URLs as gif even with a query string', () => {
+    const body = '<figure><a href="/img/cat.gif?width=640"><img src="/img/cat.gif?width=640"/></a></figure>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'gif', url: 'http://127.0.0.1:8080/img/cat.gif?width=640' },
+    ]);
+  });
+
+  it('does not classify URLs that merely contain "gif" (e.g. giphy.com) as gif', () => {
+    const body = '<img src="https://giphy.com/media/abc123"/>';
+    const result = parsePostDetails(commentHtml(body), 100);
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'https://giphy.com/media/abc123' },
+    ]);
+  });
+
+  it('captures bare img[src] not inside a figure', () => {
+    const body = '<p>check this</p><img src="/img/bare.jpg"/>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'http://127.0.0.1:8080/img/bare.jpg' },
+    ]);
+  });
+
+  it('captures video from <video><source src/></video>', () => {
+    const body = '<video controls><source src="/v/clip.mp4"/></video>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'video', url: 'http://127.0.0.1:8080/v/clip.mp4' },
+    ]);
+  });
+
+  it('captures video from a direct <video src/>', () => {
+    const body = '<video src="/v/direct.mp4" controls></video>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'video', url: 'http://127.0.0.1:8080/v/direct.mp4' },
+    ]);
+  });
+
+  it('emits no media for text-only comments', () => {
+    const result = parsePostDetails(commentHtml('<p>just text</p>'), 100);
+    expect(result.comments[0].media).toBeUndefined();
+  });
+});
+
+describe('comment score honesty (parsePostDetails)', () => {
+  it('emits null score + score_hidden for comment_score title="Hidden"', () => {
+    const html = `<html><body>
+      <div class="post_title">Post</div><div class="post_author">a</div>
+      <div class="post_subreddit">r/t</div><div class="post_body">b</div><div class="post_score">1</div>
+      <div class="comment"><span class="comment_author">u</span>
+      <div class="comment_body"><div class="md">text</div></div>
+      <span class="comment_score" title="Hidden">•</span></div>
+    </body></html>`;
+    const result = parsePostDetails(html);
+    expect(result.comments[0].score).toBeNull();
+    expect(result.comments[0].score_hidden).toBe(true);
+  });
+
+  it('emits null score (no score_hidden) when the comment score element is absent', () => {
+    const html = `<html><body>
+      <div class="post_title">Post</div><div class="post_author">a</div>
+      <div class="post_subreddit">r/t</div><div class="post_body">b</div><div class="post_score">1</div>
+      <div class="comment"><span class="comment_author">u</span>
+      <div class="comment_body"><div class="md">text</div></div></div>
+    </body></html>`;
+    const result = parsePostDetails(html);
+    expect(result.comments[0].score).toBeNull();
+    expect(result.comments[0].score_hidden).toBeUndefined();
+  });
+
+  it('parses compact comment scores ("1.2k")', () => {
+    const html = `<html><body>
+      <div class="post_title">Post</div><div class="post_author">a</div>
+      <div class="post_subreddit">r/t</div><div class="post_body">b</div><div class="post_score">1</div>
+      <div class="comment"><span class="comment_author">u</span>
+      <div class="comment_body"><div class="md">text</div></div>
+      <span class="comment_score">1.2k</span></div>
+    </body></html>`;
+    const result = parsePostDetails(html);
+    expect(result.comments[0].score).toBe(1200);
+  });
+});
+
+describe('postPath fallback (comment permalinks without a title link)', () => {
+  it('derives the post path from the first created href even without a trailing slash', () => {
+    const html = `<html><body>
+      <div class="post_author">a</div>
+      <div class="post_subreddit">r/test</div>
+      <div class="post_body">b</div><div class="post_score">1</div>
+      <div class="comment"><span class="comment_author">u</span>
+      <div class="comment_data"><a class="created" href="/r/test/comments/abc123/slug/c001?context=3#c001" title="Jul 01 2026, 12:00:00 UTC">5h ago</a></div>
+      <div class="comment_body"><div class="md">text</div></div>
+      <span class="comment_score">5</span></div>
+    </body></html>`;
+    const result = parsePostDetails(html, 100);
+    expect(result.comments[0].permalink).toBe('https://www.reddit.com/r/test/comments/abc123/slug/#c001');
+  });
+});
+
+describe('parseUserProfile: honest comment scores + media fields on posts', () => {
+  it('returns null score (no fabricated 0) for unparseable comment scores', () => {
+    const html = `<html><body><div id="user_title">u</div>
+      <div id="posts">
+        <div class="comment user-comment">
+          <a class="comment_link" title="Some Post" href="/r/test/comments/1/x/">COMMENT</a>
+          <div class="md">my comment</div>
+          <span class="comment_score">N/A</span>
+          <span class="comment_subreddit">r/test</span>
+        </div>
+      </div></body></html>`;
+    const profile = parseUserProfile(html);
+    expect(profile.comments[0].score).toBeNull();
+  });
+
+  it('parses compact comment scores on user profiles ("2.5k")', () => {
+    const html = `<html><body><div id="user_title">u</div>
+      <div id="posts">
+        <div class="comment user-comment">
+          <a class="comment_link" title="Some Post" href="/r/test/comments/1/x/">COMMENT</a>
+          <div class="md">my comment</div>
+          <span class="comment_score">2.5k</span>
+          <span class="comment_subreddit">r/test</span>
+        </div>
+      </div></body></html>`;
+    const profile = parseUserProfile(html);
+    expect(profile.comments[0].score).toBe(2500);
+  });
+
+  it('makes comment linkHref absolute against the public base URL', () => {
+    const html = `<html><body><div id="user_title">u</div>
+      <div id="posts">
+        <div class="comment user-comment">
+          <a class="comment_link" title="Some Post" href="/r/test/comments/1/slug/c1/#c1">COMMENT</a>
+          <div class="md">my comment</div>
+          <span class="comment_score">5</span>
+          <span class="comment_subreddit">r/test</span>
+        </div>
+      </div></body></html>`;
+    const profile = parseUserProfile(html);
+    expect(profile.comments[0].linkHref).toBe('https://www.reddit.com/r/test/comments/1/slug/c1/#c1');
+  });
+
+  it('extracts thumbnail_url and external_url from profile posts', () => {
+    const html = `<html><body><div id="user_title">u</div>
+      <div id="posts">
+        <div class="post" id="p1">
+          <div class="post_title"><a href="/r/test/comments/p1/title/">Title</a></div>
+          <div class="post_score">10</div><div class="post_comments">1 comment</div>
+          <a class="post_thumbnail" href="https://example.com/x"><svg><image href="/preview/p1.jpg"/></svg></a>
+        </div>
+      </div></body></html>`;
+    const profile = parseUserProfile(html);
+    expect(profile.posts[0].thumbnail_url).toBe('http://localhost:8080/preview/p1.jpg');
+    expect(profile.posts[0].external_url).toBe('https://example.com/x');
+  });
+});

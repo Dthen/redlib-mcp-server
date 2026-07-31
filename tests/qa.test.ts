@@ -22,7 +22,6 @@ import {
   parseWikiPage,
   PostListItem,
   PostDetails,
-  PostComment,
   SubredditSearchResult,
   UserSearchResult,
   SubredditInfo,
@@ -139,8 +138,8 @@ async function main() {
     const r6 = parsePostList(badScoreHtml);
     qa(
       "A1",
-      "unparseable score → null score + score_hidden:true (honest, no fake 0)",
-      Array.isArray(r6) && r6.length > 0 && r6[0].score === null && r6[0].score_hidden === true,
+      "unparseable score → null score, no fabricated score_hidden (honest, no fake 0)",
+      Array.isArray(r6) && r6.length > 0 && r6[0].score === null && r6[0].score_hidden === undefined,
       "",
       "MEDIUM"
     );
@@ -1122,7 +1121,8 @@ async function main() {
           const first = parsed.comments[0];
           const hasAuthor = typeof first.author === "string";
           const hasText = typeof first.text === "string";
-          const hasScore = typeof first.score === "number";
+          // score follows the nullable contract: number, or null when hidden/unparseable
+          const hasScore = first.score === null || typeof first.score === "number";
           qa(
             "C3",
             "comment structure (author/text/score) → valid",

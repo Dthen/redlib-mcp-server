@@ -30,12 +30,6 @@ export interface PostListItem {
   external_url?: string;
 }
 
-export interface PostComment {
-  author: string;
-  text: string;
-  score: number | null;
-}
-
 export type MediaItem = { type: 'image' | 'gif' | 'video'; url: string };
 
 export interface CommentData {
@@ -100,7 +94,7 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
     return match ? absoluteUrl(match[1], baseUrl) : '';
   }).get().filter(Boolean);
   const filterHref = $flair.attr('href') || '';
-  const filter_url = filterHref.startsWith('http') ? filterHref : `${publicBaseUrl}${filterHref}`;
+  const filter_url = absolutePublicUrl(filterHref, publicBaseUrl);
 
   return {
     text,
@@ -112,13 +106,31 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
 }
 
 /**
+ * Parses a compact score like "68.6k" or "1.2m" into an integer
+ * (68604 / 1200000). Returns undefined when the text is not a parseable score.
+ */
+function parseCompactScore(text: string): number | undefined {
+  const match = text.replace(/,/g, '').trim().match(/^(-?\d+(?:\.\d+)?)([km])?/i);
+  if (!match) return undefined;
+  const value = parseFloat(match[1]);
+  const suffix = match[2] ? match[2].toLowerCase() : '';
+  if (suffix === 'k') return Math.round(value * 1000);
+  if (suffix === 'm') return Math.round(value * 1000000);
+  return Math.round(value);
+}
+
+/**
  * Parses a score element (default .post_score, pass '.comment_score' for comments).
  *
  * Redlib renders hidden scores (search pages, removed scores) as
  * `<div class="post_score" title="Hidden"> • <span class="label"> Upvotes</span></div>` —
- * the text is unparseable. Instead of fabricating 0, we emit `score: null` +
- * `score_hidden: true`. When the title attribute holds a real number it is
- * returned as `score_exact` (existing semantics; absent when Hidden).
+ * only then is `score_hidden: true` emitted (it is a claim about Reddit's behavior).
+ * When the title attribute holds a real number it is preferred as the primary
+ * score and also returned as `score_exact` — Redlib renders compact scores like
+ * "68.6k" with the exact value in the title (title="68604" → 68604). Otherwise
+ * the text is parsed with k/m suffix support ("1.2k" → 1200, "1.2m" → 1200000).
+ * Absent or unparseable markup yields `score: null` WITHOUT a fabricated
+ * `score_hidden`.
  */
 function parseScore($el: cheerio.Cheerio<any>, selector: string = '.post_score'): { score: number | null; score_hidden?: boolean; score_exact?: number } {
   const $score = $el.find(selector).first();
@@ -126,16 +138,14 @@ function parseScore($el: cheerio.Cheerio<any>, selector: string = '.post_score')
   if (title === 'Hidden') {
     return { score: null, score_hidden: true };
   }
-  const text = $score.text().trim().replace(/,/g, '');
-  const parsed = parseInt(text, 10);
-  const exact = title ? parseInt(title.replace(/,/g, ''), 10) : undefined;
-  if (isNaN(parsed) && isNaN(exact ?? NaN)) {
-    return { score: null, score_hidden: true };
+  const titleDigits = title ? title.replace(/,/g, '') : '';
+  const exact = title !== undefined && /^-?\d+$/.test(titleDigits) ? parseInt(titleDigits, 10) : undefined;
+  if (exact !== undefined) {
+    return { score: exact, score_exact: exact };
   }
-  return {
-    score: isNaN(parsed) ? (exact ?? null) : parsed,
-    ...(exact !== undefined && !isNaN(exact) ? { score_exact: exact } : {}),
-  };
+  const parsed = parseCompactScore($score.text());
+  if (parsed === undefined) return { score: null };
+  return { score: parsed };
 }
 
 /**
@@ -202,47 +212,167 @@ function extractAuthorFlair($el: cheerio.Cheerio<any>): 'moderator' | 'admin' | 
 }
 
 /**
- * Makes a URL absolute against baseUrl (the redlib instance proxies the bytes).
+ * Returns true for absolute http(s) URLs (scheme check is case-insensitive).
  */
-function absoluteUrl(url: string, baseUrl: string): string {
-  if (url.startsWith('http')) return url;
-  return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+function isAbsoluteUrl(url: string): boolean {
+  return /^https?:\/\//i.test(url);
 }
 
 /**
- * Extracts media (images, gifs, videos) from a comment body's markdown-rendered HTML.
- * Redlib renders image/gif comments as <figure><a href="..."><img src="..."/></a></figure>
- * and video comments as <video><source src="..."/></video>. URLs are made absolute
- * against baseUrl (the instance proxies them).
+ * Makes a URL absolute against baseUrl (the redlib instance proxies the bytes).
+ * Absolute http(s) URLs and protocol-relative ('//host/path') URLs are returned
+ * as-is; a trailing slash on baseUrl is stripped so callers are safe regardless
+ * of env value.
  */
-function extractCommentMedia($: cheerio.CheerioAPI, $body: cheerio.Cheerio<any>, baseUrl: string): MediaItem[] {
+function absoluteUrl(url: string, baseUrl: string): string {
+  if (isAbsoluteUrl(url) || url.startsWith('//')) return url;
+  return `${baseUrl.replace(/\/+$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+/**
+ * Makes a navigation URL absolute against the public base URL (e.g.
+ * https://www.reddit.com). Same guards as absoluteUrl.
+ */
+function absolutePublicUrl(url: string, publicBaseUrl: string): string {
+  if (isAbsoluteUrl(url) || url.startsWith('//')) return url;
+  return `${publicBaseUrl.replace(/\/+$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+/**
+ * Classifies a media URL: 'gif' only when the path (after stripping any query
+ * string / fragment) ends with '.gif', otherwise 'image'. The extension check
+ * avoids false positives on URLs that merely contain 'gif' (e.g. giphy.com).
+ */
+function mediaType(url: string): MediaItem['type'] {
+  const path = url.split('?')[0].split('#')[0].toLowerCase();
+  return path.endsWith('.gif') ? 'gif' : 'image';
+}
+
+/**
+ * Extracts media (images, gifs, videos) from a cheerio scope — a comment body
+ * or the post element. Redlib renders image/gif content as
+ * <figure><a href="..."><img src="..."/></a></figure> and video content as
+ * <video><source src="..."/></video> (or <video src="..."/>).
+ *
+ * For a figure exactly ONE media item is emitted, preferring the img[src]
+ * (proxied preview) over the a[href] (external full-size), so one image never
+ * yields two media items. Bare <img> elements outside figures, post image
+ * anchors (a.post_media_image) and both video forms are also captured. URLs
+ * are made absolute against baseUrl (the instance proxies them).
+ */
+function extractMedia($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, baseUrl: string): MediaItem[] {
   const media: MediaItem[] = [];
   const push = (type: MediaItem['type'], url: string) => {
     const abs = absoluteUrl(url, baseUrl);
     if (!media.some(m => m.url === abs)) media.push({ type, url: abs });
   };
 
-  $body.find('figure a[href]').each((_i, el) => {
+  $scope.find('figure').each((_i, el) => {
+    const $fig = $(el);
+    const imgSrc = $fig.find('img[src]').first().attr('src');
+    const href = $fig.find('a[href]').first().attr('href');
+    const url = imgSrc || href || '';
+    if (url) push(mediaType(url), url);
+  });
+  $scope.find('a.post_media_image[href]').each((_i, el) => {
     const href = $(el).attr('href') || '';
-    if (!href) return;
-    const lower = href.toLowerCase();
-    push(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
+    if (href) push(mediaType(href), href);
   });
-  $body.find('img[src]').each((_i, el) => {
+  $scope.find('img[src]').not('figure img').each((_i, el) => {
     const src = $(el).attr('src') || '';
-    if (!src) return;
-    const lower = src.toLowerCase();
-    push(lower.endsWith('.gif') ? 'gif' : 'image', src);
+    if (src) push(mediaType(src), src);
   });
-  $body.find('video source[src]').each((_i, el) => {
+  $scope.find('video source[src]').each((_i, el) => {
     const src = $(el).attr('src') || '';
     if (src) push('video', src);
   });
-  $body.find('video[src]').each((_i, el) => {
+  $scope.find('video[src]').each((_i, el) => {
     const src = $(el).attr('src') || '';
     if (src) push('video', src);
   });
   return media;
+}
+
+/**
+ * Parses ONE post element (.post) into a PostListItem.
+ * Shared by parsePostList and the parseUserProfile posts loop.
+ */
+function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, baseUrl: string, publicBaseUrl: string): PostListItem | undefined {
+  // Extract flair if present
+  const flair = extractFlair($, $el, publicBaseUrl, baseUrl);
+
+  // Skip flair links — find the first non-flair <a> for the real title
+  const $titleLink = $el.find('.post_title a').not('.post_flair').first();
+  const title = $titleLink.text().trim();
+  const href = $titleLink.attr('href') || '';
+
+  // Get post ID from the div's id attribute (most reliable)
+  let id = $el.attr('id') || '';
+
+  // Fallback: extract from href if id attribute is missing
+  if (!id) {
+    const idMatch = href.match(/\/comments\/([a-z0-9]+)/i);
+    id = idMatch ? idMatch[1] : '';
+  }
+
+  if (!id || !title) return undefined;
+
+  const subreddit = $el.find('.post_subreddit').text().replace('r/', '').replace('u/', '').trim();
+  const author = $el.find('.post_author').text().trim();
+  const { score, score_hidden, score_exact } = parseScore($el);
+  const commentsText = $el.find('.post_comments').first().text().trim();
+  const commentCountMatch = commentsText.match(/(\d+)/);
+  const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
+
+  // Extract created timestamps from <span class="created">
+  const $created = $el.find('.post_header span.created').first();
+  const created_utc = $created.attr('title')?.trim() || undefined;
+  const created_relative = $created.text().trim() || undefined;
+
+  // Extract new metadata fields
+  const stickied = $el.hasClass('stickied');
+  const { nsfw, spoiler } = checkPostTitleTag($, $el);
+  const post_type = determinePostType($el);
+  const author_flair = extractAuthorFlair($el);
+
+  // Extract thumbnail URL from post_thumbnail (svg image href or img src)
+  const $thumbnail = $el.find('a.post_thumbnail').first();
+  let thumbnail_url: string | undefined;
+  let external_url: string | undefined;
+  if ($thumbnail.length) {
+    const thumbHref = $thumbnail.attr('href') || '';
+    // external_url: only when href is an external link (starts with http)
+    if (isAbsoluteUrl(thumbHref)) {
+      external_url = thumbHref;
+    }
+    // thumbnail_url: from svg image href or img src (absolute against the instance base)
+    const svgImageHref = $thumbnail.find('svg image').attr('href');
+    const imgSrc = $thumbnail.find('img').attr('src');
+    const thumbSrc = svgImageHref || imgSrc || undefined;
+    thumbnail_url = thumbSrc ? absoluteUrl(thumbSrc, baseUrl) : undefined;
+  }
+
+  return {
+    id,
+    title,
+    subreddit,
+    author,
+    score,
+    commentCount,
+    permalink: absolutePublicUrl(href, publicBaseUrl),
+    ...(flair ? { flair } : {}),
+    ...(created_utc ? { created_utc } : {}),
+    ...(created_relative ? { created_relative } : {}),
+    ...(score_exact !== undefined ? { score_exact } : {}),
+    ...(score_hidden ? { score_hidden } : {}),
+    ...(stickied ? { stickied } : {}),
+    ...(nsfw ? { nsfw } : {}),
+    ...(spoiler ? { spoiler } : {}),
+    ...(post_type ? { post_type } : {}),
+    ...(author_flair ? { author_flair } : {}),
+    ...(thumbnail_url ? { thumbnail_url } : {}),
+    ...(external_url ? { external_url } : {}),
+  };
 }
 
 /**
@@ -253,83 +383,8 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
   const results: PostListItem[] = [];
 
   $('.post').each((_i: number, el: any) => {
-    const $el = $(el);
-
-    // Extract flair if present
-    const flair = extractFlair($, $el, publicBaseUrl, baseUrl);
-
-    // Skip flair links — find the first non-flair <a> for the real title
-    const $titleLink = $el.find('.post_title a').not('.post_flair').first();
-    const title = $titleLink.text().trim();
-    const href = $titleLink.attr('href') || '';
-
-    // Get post ID from the div's id attribute (most reliable)
-    let id = $el.attr('id') || '';
-
-    // Fallback: extract from href if id attribute is missing
-    if (!id) {
-      const idMatch = href.match(/\/comments\/([a-z0-9]+)/i);
-      id = idMatch ? idMatch[1] : '';
-    }
-
-    if (!id || !title) return;
-
-    const subreddit = $el.find('.post_subreddit').text().replace('r/', '').trim();
-    const author = $el.find('.post_author').text().trim();
-    const { score, score_hidden, score_exact } = parseScore($el);
-    const commentsText = $el.find('.post_comments').first().text().trim();
-    const commentCountMatch = commentsText.match(/(\d+)/);
-    const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
-
-    // Extract created timestamps from <span class="created">
-    const $created = $el.find('.post_header span.created').first();
-    const created_utc = $created.attr('title')?.trim() || undefined;
-    const created_relative = $created.text().trim() || undefined;
-
-    // Extract new metadata fields
-    const stickied = $el.hasClass('stickied');
-    const { nsfw, spoiler } = checkPostTitleTag($, $el);
-    const post_type = determinePostType($el);
-    const author_flair = extractAuthorFlair($el);
-
-    // Extract thumbnail URL from post_thumbnail (svg image href or img src)
-    const $thumbnail = $el.find('a.post_thumbnail').first();
-    let thumbnail_url: string | undefined;
-    let external_url: string | undefined;
-    if ($thumbnail.length) {
-      const thumbHref = $thumbnail.attr('href') || '';
-      // external_url: only when href is an external link (starts with http)
-      if (thumbHref.startsWith('http')) {
-        external_url = thumbHref;
-      }
-      // thumbnail_url: from svg image href or img src (absolute against the instance base)
-      const svgImageHref = $thumbnail.find('svg image').attr('href');
-      const imgSrc = $thumbnail.find('img').attr('src');
-      const thumbSrc = svgImageHref || imgSrc || undefined;
-      thumbnail_url = thumbSrc ? absoluteUrl(thumbSrc, baseUrl) : undefined;
-    }
-
-    results.push({
-      id,
-      title,
-      subreddit,
-      author,
-      score,
-      commentCount,
-      permalink: `${publicBaseUrl}${href}`,
-      ...(flair ? { flair } : {}),
-      ...(created_utc ? { created_utc } : {}),
-      ...(created_relative ? { created_relative } : {}),
-      ...(score_exact !== undefined ? { score_exact } : {}),
-      ...(score_hidden ? { score_hidden } : {}),
-      ...(stickied ? { stickied } : {}),
-      ...(nsfw ? { nsfw } : {}),
-      ...(spoiler ? { spoiler } : {}),
-      ...(post_type ? { post_type } : {}),
-      ...(author_flair ? { author_flair } : {}),
-      ...(thumbnail_url ? { thumbnail_url } : {}),
-      ...(external_url ? { external_url } : {}),
-    });
+    const post = parsePostElement($, $(el), baseUrl, publicBaseUrl);
+    if (post) results.push(post);
   });
 
   return results;
@@ -482,7 +537,7 @@ export function parseSubredditMeta(html: string, baseUrl: string = "http://local
 
   const iconSrc = $('#sub_icon').attr('src') || undefined;
   // Make icon_url absolute against the instance base URL (it proxies the bytes)
-  const icon_url = iconSrc ? (iconSrc.startsWith('http') ? iconSrc : `${baseUrl}${iconSrc.startsWith('/') ? '' : '/'}${iconSrc}`) : undefined;
+  const icon_url = iconSrc ? absoluteUrl(iconSrc, baseUrl) : undefined;
   const display_title = $('#sub_title').first().text().trim() || undefined;
   const name = $('#sub_name').first().text().trim() || undefined;
   const description_short = $('#sub_description').first().text().trim() || undefined;
@@ -526,7 +581,7 @@ export function parseSubredditMeta(html: string, baseUrl: string = "http://local
 
 export interface UserComment {
   text: string;
-  score: number;
+  score: number | null;
   linkTitle?: string;
   linkHref?: string;
   subreddit?: string;
@@ -571,64 +626,11 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     }
   });
 
-  // Parse posts (reuse parsePostList logic with flair extraction)
+  // Parse posts (reuse the shared post-element parser with flair extraction)
   const posts: PostListItem[] = [];
   $('#posts > .post').each((_i: number, el: any) => {
-    const $el = $(el);
-
-    // Extract flair if present
-    const flair = extractFlair($, $el, publicBaseUrl, baseUrl);
-
-    // Skip flair links — find the first non-flair <a> for the real title
-    const $titleLink = $el.find('.post_title a').not('.post_flair').first();
-    const title = $titleLink.text().trim();
-    const href = $titleLink.attr('href') || '';
-
-    let id = $el.attr('id') || '';
-    if (!id) {
-      const idMatch = href.match(/\/comments\/([a-z0-9]+)/i);
-      id = idMatch ? idMatch[1] : '';
-    }
-
-    if (!id || !title) return;
-
-    const subreddit = $el.find('.post_subreddit').text().replace('r/', '').replace('u/', '').trim();
-    const author = $el.find('.post_author').text().trim();
-    const { score, score_hidden, score_exact } = parseScore($el);
-    const commentsText = $el.find('.post_comments').first().text().trim();
-    const commentCountMatch = commentsText.match(/(\d+)/);
-    const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
-
-    // Extract created timestamps from <span class="created">
-    const $created = $el.find('.post_header span.created').first();
-    const created_utc = $created.attr('title')?.trim() || undefined;
-    const created_relative = $created.text().trim() || undefined;
-
-    // Extract new metadata fields
-    const stickied = $el.hasClass('stickied');
-    const { nsfw, spoiler } = checkPostTitleTag($, $el);
-    const post_type = determinePostType($el);
-    const author_flair = extractAuthorFlair($el);
-
-    posts.push({
-      id,
-      title,
-      subreddit,
-      author,
-      score,
-      commentCount,
-      permalink: `${publicBaseUrl}${href}`,
-      ...(flair ? { flair } : {}),
-      ...(created_utc ? { created_utc } : {}),
-      ...(created_relative ? { created_relative } : {}),
-      ...(score_exact !== undefined ? { score_exact } : {}),
-      ...(score_hidden ? { score_hidden } : {}),
-      ...(stickied ? { stickied } : {}),
-      ...(nsfw ? { nsfw } : {}),
-      ...(spoiler ? { spoiler } : {}),
-      ...(post_type ? { post_type } : {}),
-      ...(author_flair ? { author_flair } : {}),
-    });
+    const post = parsePostElement($, $(el), baseUrl, publicBaseUrl);
+    if (post) posts.push(post);
   });
 
   // Parse comments (user-comment elements)
@@ -640,8 +642,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const linkHref = $link.attr('href') || undefined;
 
     const bodyText = $el.find('.md').first().text().trim();
-    const scoreText = $el.find('.comment_score').first().text().trim().replace(/,/g, '');
-    const score = parseInt(scoreText) || 0;
+    const { score } = parseScore($el, '.comment_score');
 
     const subreddit = $el.find('.comment_subreddit').first().text().replace('r/', '').trim();
 
@@ -654,7 +655,9 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
       text: bodyText.substring(0, 2000),
       score,
       ...(linkTitle ? { linkTitle } : {}),
-      ...(linkHref ? { linkHref } : {}),
+      // linkHref is a post link — make it absolute against the public base
+      // URL, matching the post permalinks in the same output.
+      ...(linkHref ? { linkHref: absolutePublicUrl(linkHref, publicBaseUrl) } : {}),
       ...(subreddit ? { subreddit } : {}),
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
@@ -713,7 +716,13 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   let postPath = $postTitleLink.attr('href') || '';
   if (!postPath) {
     const firstCreatedHref = $('.comment_data a.created').first().attr('href') || '';
-    postPath = firstCreatedHref.split('#')[0].split('?')[0].replace(/\/[^/]+\/$/, '/');
+    // Strip query/fragment first, then trailing slashes, then drop the final
+    // path segment (the comment id) — robust whether or not the href ends in '/'.
+    postPath = firstCreatedHref
+      .split('#')[0]
+      .split('?')[0]
+      .replace(/\/+$/, '')
+      .replace(/\/[^/]+$/, '/');
   }
 
   // Get title text, excluding any flair link text  
@@ -744,31 +753,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   else if ($postAuthor.hasClass('admin')) author_flair = 'admin';
 
   // Post-level media: image/gif/video URLs from the post's media content region
-  const postMedia: MediaItem[] = [];
-  const pushPostMedia = (type: MediaItem['type'], url: string) => {
-    const abs = absoluteUrl(url, baseUrl);
-    if (!postMedia.some(m => m.url === abs)) postMedia.push({ type, url: abs });
-  };
-  $('.post_media_content a.post_media_image[href]').each((_i, el) => {
-    const href = $(el).attr('href') || '';
-    if (!href) return;
-    const lower = href.toLowerCase();
-    pushPostMedia(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
-  });
-  $('.post_media_video video source[src]').each((_i, el) => {
-    const src = $(el).attr('src') || '';
-    if (src) pushPostMedia('video', src);
-  });
-  $('.post_media_video video[src]').each((_i, el) => {
-    const src = $(el).attr('src') || '';
-    if (src) pushPostMedia('video', src);
-  });
-  $('.gallery figure a[href]').each((_i, el) => {
-    const href = $(el).attr('href') || '';
-    if (!href) return;
-    const lower = href.toLowerCase();
-    pushPostMedia(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
-  });
+  const postMedia = extractMedia($, $postDiv, baseUrl);
 
   // Recursive comment parsing
   function parseComment($comment: cheerio.Cheerio<any>, depth: number): CommentData {
@@ -778,7 +763,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     const author_is_op = $author.hasClass('op');
     const $commentBody = $comment.find('.comment_body .md').first();
     const text = $commentBody.text().trim();
-    const media = extractCommentMedia($, $commentBody, baseUrl);
+    const media = extractMedia($, $commentBody, baseUrl);
     const { score, score_hidden } = parseScore($comment, '.comment_score');
 
     // Created timestamp and permalink from a.created
@@ -790,13 +775,9 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     let permalink: string | undefined;
     if (permalinkHref) {
       const fragment = permalinkHref.includes('#') ? permalinkHref.split('#').pop() : '';
-      if (postPath) {
-        permalink = `${publicBaseUrl}${postPath}${fragment ? `#${fragment}` : ''}`;
-      } else if (permalinkHref.startsWith('http')) {
-        permalink = permalinkHref;
-      } else {
-        permalink = permalinkHref;
-      }
+      permalink = postPath
+        ? `${absolutePublicUrl(postPath, publicBaseUrl)}${fragment ? `#${fragment}` : ''}`
+        : permalinkHref;
     }
 
     // Recurse into replies — only direct children of this comment's blockquote.replies
