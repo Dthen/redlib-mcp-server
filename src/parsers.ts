@@ -36,6 +36,8 @@ export interface PostComment {
   score: number | null;
 }
 
+export type MediaItem = { type: 'image' | 'gif' | 'video'; url: string };
+
 export interface CommentData {
   id: string;
   author: string;
@@ -46,6 +48,7 @@ export interface CommentData {
   created_utc?: string;
   created_relative?: string;
   permalink?: string;
+  media?: MediaItem[];
   depth: number;
   replies?: CommentData[];
 }
@@ -194,6 +197,50 @@ function extractAuthorFlair($el: cheerio.Cheerio<any>): 'moderator' | 'admin' | 
   if ($author.hasClass('moderator')) return 'moderator';
   if ($author.hasClass('admin')) return 'admin';
   return undefined;
+}
+
+/**
+ * Makes a URL absolute against baseUrl (the redlib instance proxies the bytes).
+ */
+function absoluteUrl(url: string, baseUrl: string): string {
+  if (url.startsWith('http')) return url;
+  return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+/**
+ * Extracts media (images, gifs, videos) from a comment body's markdown-rendered HTML.
+ * Redlib renders image/gif comments as <figure><a href="..."><img src="..."/></a></figure>
+ * and video comments as <video><source src="..."/></video>. URLs are made absolute
+ * against baseUrl (the instance proxies them).
+ */
+function extractCommentMedia($: cheerio.CheerioAPI, $body: cheerio.Cheerio<any>, baseUrl: string): MediaItem[] {
+  const media: MediaItem[] = [];
+  const push = (type: MediaItem['type'], url: string) => {
+    const abs = absoluteUrl(url, baseUrl);
+    if (!media.some(m => m.url === abs)) media.push({ type, url: abs });
+  };
+
+  $body.find('figure a[href]').each((_i, el) => {
+    const href = $(el).attr('href') || '';
+    if (!href) return;
+    const lower = href.toLowerCase();
+    push(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
+  });
+  $body.find('img[src]').each((_i, el) => {
+    const src = $(el).attr('src') || '';
+    if (!src) return;
+    const lower = src.toLowerCase();
+    push(lower.endsWith('.gif') ? 'gif' : 'image', src);
+  });
+  $body.find('video source[src]').each((_i, el) => {
+    const src = $(el).attr('src') || '';
+    if (src) push('video', src);
+  });
+  $body.find('video[src]').each((_i, el) => {
+    const src = $(el).attr('src') || '';
+    if (src) push('video', src);
+  });
+  return media;
 }
 
 /**
@@ -699,7 +746,9 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     const $author = $comment.find('.comment_author').first();
     const author = $author.text().trim();
     const author_is_op = $author.hasClass('op');
-    const text = $comment.find('.comment_body .md').first().text().trim();
+    const $commentBody = $comment.find('.comment_body .md').first();
+    const text = $commentBody.text().trim();
+    const media = extractCommentMedia($, $commentBody, baseUrl);
     const { score, score_hidden } = parseScore($comment, '.comment_score');
 
     // Created timestamp and permalink from a.created
@@ -736,6 +785,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
       ...(permalink ? { permalink } : {}),
+      ...(media.length > 0 ? { media } : {}),
       depth,
       ...(replies.length > 0 ? { replies } : {}),
     };

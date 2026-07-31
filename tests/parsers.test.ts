@@ -1794,6 +1794,23 @@ describe('parsePostList with author search results', () => {
   });
 });
 
+describe('comment media', () => {
+  it('extracts image media from figure/img comments', () => {
+    const result = parsePostDetails(loadFixture('comment-with-image.html'), 100, 'http://127.0.0.1:8080');
+    const mediaComment = result.comments.find(c => c.id === 'p0tq0qh');
+    expect(mediaComment).toBeDefined();
+    expect(mediaComment!.media?.length).toBeGreaterThan(0);
+    expect(mediaComment!.media![0].type).toBe('image');
+    expect(mediaComment!.media![0].url.startsWith('http://127.0.0.1:8080/preview/')).toBe(true);
+  });
+
+  it('keeps text comments media-free', () => {
+    const result = parsePostDetails(loadFixture('post-detail.html'), 100);
+    const withMedia = result.comments.filter(c => c.media && c.media.length > 0);
+    expect(withMedia.length).toBe(0);
+  });
+});
+
 describe('hidden scores', () => {
   it('returns null score + score_hidden on search pages (title="Hidden")', () => {
     const posts = parsePostList(loadFixture('search-hidden-score.html'));
