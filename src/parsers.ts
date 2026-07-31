@@ -48,6 +48,7 @@ export interface CommentData {
 }
 
 export interface PostDetails {
+  id?: string;
   title: string;
   author: string;
   subreddit: string;
@@ -55,6 +56,7 @@ export interface PostDetails {
   body: string;
   commentCount: number;
   comments: CommentData[];
+  permalink?: string;
   flair?: FlairData;
   created_utc?: string;
   created_relative?: string;
@@ -764,7 +766,8 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   }
 
   // Derive the post path (for public comment permalinks) from the first
-  // non-flair title link; fall back to the first comment's created href.
+  // non-flair title link; fall back to the first comment's created href, then
+  // to the footer #post_links permalink anchor (present even with no comments).
   const $postTitleLink = $postTitle.find('a').not('.post_flair').first();
   let postPath = $postTitleLink.attr('href') || '';
   if (!postPath) {
@@ -776,6 +779,38 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
       .split('?')[0]
       .replace(/\/+$/, '')
       .replace(/\/[^/]+$/, '/');
+  }
+  if (!postPath) {
+    // No comment anchors on the page: use the post's own footer permalink
+    // link (#post_links), which redlib renders on every detail page.
+    postPath = ($('#post_links a[href]').first().attr('href') || '')
+      .split('#')[0]
+      .split('?')[0]
+      .replace(/\/+$/, '');
+  }
+
+  // Post-level id and permalink, following the same extraction rules as
+  // parsePostElement: prefer the post div's id attribute, else match the post
+  // id from the first non-flair title href, else from the derived post path.
+  // The permalink uses the first non-flair title href when present (absolute
+  // hrefs pass through verbatim, empty hrefs are omitted), else the derived
+  // post path prefixed with the public base URL.
+  let id = $('.post').first().attr('id') || '';
+  if (!id) {
+    const idMatch = ($postTitleLink.attr('href') || '').match(/\/comments\/([a-z0-9]+)/i);
+    id = idMatch ? idMatch[1] : '';
+  }
+  if (!id && postPath) {
+    const pathMatch = postPath.match(/\/comments\/([a-z0-9]+)/i);
+    id = pathMatch ? pathMatch[1] : '';
+  }
+
+  const titleHref = ($postTitleLink.attr('href') || '').trim();
+  let permalink: string | undefined;
+  if (titleHref) {
+    permalink = absolutePublicUrl(titleHref, publicBaseUrl);
+  } else if (postPath) {
+    permalink = absolutePublicUrl(postPath, publicBaseUrl);
   }
 
   // Get title text, excluding any flair link text  
@@ -872,12 +907,14 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
 
   return {
     title,
+    ...(id ? { id } : {}),
     author,
     subreddit,
     score,
     body: body.substring(0, 2000),
     commentCount,
     comments,
+    ...(permalink ? { permalink } : {}),
     ...(flair ? { flair } : {}),
     ...(created_utc ? { created_utc } : {}),
     ...(created_relative ? { created_relative } : {}),

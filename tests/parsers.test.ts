@@ -409,6 +409,57 @@ describe('parsePostDetails', () => {
     expect(result.body).toContain('For more information');
   });
 
+  it('should extract the post id from the post-detail fixture', () => {
+    // Fixture has no id attribute on the post div and no title href — the id
+    // comes from the derived post path (/comments/t93ec3/...).
+    const result = parsePostDetails(html);
+    expect(result.id).toBe('t93ec3');
+  });
+
+  it('should extract an absolute permalink containing /comments/ from the post-detail fixture', () => {
+    const result = parsePostDetails(html);
+    expect(result.permalink).toMatch(/^https:\/\/www\.reddit\.com\//);
+    expect(result.permalink).toContain('/comments/t93ec3');
+  });
+
+  it('should omit id and permalink when there is no post id and no title href', () => {
+    const bareHtml = `<html><body>
+      <h1 class="post_title">No identifiers here</h1>
+      <span class="post_author">testuser</span>
+      <span class="post_subreddit">r/testsub</span>
+      <span class="post_score">10</span>
+      <div class="post_body">Body</div>
+    </body></html>`;
+    const result = parsePostDetails(bareHtml);
+    expect(result.id).toBeUndefined();
+    expect(result.permalink).toBeUndefined();
+  });
+
+  it('should keep an absolute title href verbatim as the permalink (no double prefix)', () => {
+    const absoluteHtml = `<html><body>
+      <h1 class="post_title"><a href="https://example.com/some/post">External Title</a></h1>
+      <span class="post_author">testuser</span>
+      <span class="post_subreddit">r/testsub</span>
+      <span class="post_score">10</span>
+      <div class="post_body">Body</div>
+    </body></html>`;
+    const result = parsePostDetails(absoluteHtml);
+    expect(result.permalink).toBe('https://example.com/some/post');
+  });
+
+  it('should extract id and prefixed permalink from a relative title href', () => {
+    const relativeHtml = `<html><body>
+      <h1 class="post_title"><a href="/r/test/comments/abc123/my_title/">My Title</a></h1>
+      <span class="post_author">testuser</span>
+      <span class="post_subreddit">r/testsub</span>
+      <span class="post_score">10</span>
+      <div class="post_body">Body</div>
+    </body></html>`;
+    const result = parsePostDetails(relativeHtml);
+    expect(result.id).toBe('abc123');
+    expect(result.permalink).toBe('https://www.reddit.com/r/test/comments/abc123/my_title/');
+  });
+
   it('should parse comment fields correctly', () => {
     const result = parsePostDetails(html);
     if (result.comments.length > 0) {
