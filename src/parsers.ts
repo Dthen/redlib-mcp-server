@@ -15,7 +15,7 @@ export interface PostListItem {
   author: string;
   score: number | null;
   commentCount: number;
-  permalink: string;
+  permalink?: string;
   flair?: FlairData;
   created_utc?: string;
   created_relative?: string;
@@ -110,7 +110,10 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
  * (68604 / 1200000). Returns undefined when the text is not a parseable score.
  */
 function parseCompactScore(text: string): number | undefined {
-  const match = text.replace(/,/g, '').trim().match(/^(-?\d+(?:\.\d+)?)([km])?/i);
+  // Anchored both ends: the full text must be a score (callers strip the
+  // ' Upvotes' label first), so garbage like '12abc' is rejected instead of
+  // prefix-matching '12'. A leading dot is accepted ('.5k' → 500).
+  const match = text.replace(/,/g, '').trim().match(/^(-?(?:\d+(?:\.\d+)?|\.\d+))([km])?$/i);
   if (!match) return undefined;
   const value = parseFloat(match[1]);
   const suffix = match[2] ? match[2].toLowerCase() : '';
@@ -120,30 +123,49 @@ function parseCompactScore(text: string): number | undefined {
 }
 
 /**
+ * Extracts just the numeric score text from a score element: clones the
+ * element, drops label/spacer elements (e.g. <span class="label">Upvotes</span>)
+ * and any other element that doesn't hold numeric content, then returns the
+ * remaining text. Children are processed deepest-first so a numeric leaf inside
+ * a wrapper survives when the wrapper's own text mixes in label words.
+ */
+function compactScoreText($: cheerio.CheerioAPI, $score: cheerio.Cheerio<any>): string {
+  const $clone = $score.clone();
+  const els = $clone.find('*').get();
+  for (let i = els.length - 1; i >= 0; i--) {
+    const text = $(els[i]).text().trim();
+    if (!text || !/^-?[\d.,]+[km]?$/i.test(text)) $(els[i]).remove();
+  }
+  return $clone.text();
+}
+
+/**
  * Parses a score element (default .post_score, pass '.comment_score' for comments).
  *
  * Redlib renders hidden scores (search pages, removed scores) as
  * `<div class="post_score" title="Hidden"> • <span class="label"> Upvotes</span></div>` —
- * only then is `score_hidden: true` emitted (it is a claim about Reddit's behavior).
+ * only then is `score_hidden: true` emitted (case-insensitive, so title="hidden"
+ * counts too; it is a claim about Reddit's behavior).
  * When the title attribute holds a real number it is preferred as the primary
  * score and also returned as `score_exact` — Redlib renders compact scores like
  * "68.6k" with the exact value in the title (title="68604" → 68604). Otherwise
- * the text is parsed with k/m suffix support ("1.2k" → 1200, "1.2m" → 1200000).
+ * the label-stripped text is parsed with an anchored k/m-suffix regex
+ * ("68.6k Upvotes" → 68600, "1.2m" → 1200000, ".5k" → 500, "12abc" → null).
  * Absent or unparseable markup yields `score: null` WITHOUT a fabricated
  * `score_hidden`.
  */
-function parseScore($el: cheerio.Cheerio<any>, selector: string = '.post_score'): { score: number | null; score_hidden?: boolean; score_exact?: number } {
+function parseScore($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, selector: string = '.post_score'): { score: number | null; score_hidden?: boolean; score_exact?: number } {
   const $score = $el.find(selector).first();
   const title = $score.attr('title');
-  if (title === 'Hidden') {
+  if (title?.toLowerCase() === 'hidden') {
     return { score: null, score_hidden: true };
   }
-  const titleDigits = title ? title.replace(/,/g, '') : '';
+  const titleDigits = title ? title.replace(/,/g, '').trim() : '';
   const exact = title !== undefined && /^-?\d+$/.test(titleDigits) ? parseInt(titleDigits, 10) : undefined;
   if (exact !== undefined) {
     return { score: exact, score_exact: exact };
   }
-  const parsed = parseCompactScore($score.text());
+  const parsed = parseCompactScore(compactScoreText($, $score));
   if (parsed === undefined) return { score: null };
   return { score: parsed };
 }
@@ -225,7 +247,8 @@ function isAbsoluteUrl(url: string): boolean {
  * of env value.
  */
 function absoluteUrl(url: string, baseUrl: string): string {
-  if (isAbsoluteUrl(url) || url.startsWith('//')) return url;
+  // Empty/whitespace URLs are returned unchanged — never prefixed into '<base>/'.
+  if (!url.trim() || isAbsoluteUrl(url) || url.startsWith('//')) return url;
   return `${baseUrl.replace(/\/+$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
@@ -234,7 +257,8 @@ function absoluteUrl(url: string, baseUrl: string): string {
  * https://www.reddit.com). Same guards as absoluteUrl.
  */
 function absolutePublicUrl(url: string, publicBaseUrl: string): string {
-  if (isAbsoluteUrl(url) || url.startsWith('//')) return url;
+  // Empty/whitespace URLs are returned unchanged — never prefixed into '<base>/'.
+  if (!url.trim() || isAbsoluteUrl(url) || url.startsWith('//')) return url;
   return `${publicBaseUrl.replace(/\/+$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
@@ -272,13 +296,20 @@ function extractMedia($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, baseU
     const imgSrc = $fig.find('img[src]').first().attr('src');
     const href = $fig.find('a[href]').first().attr('href');
     const url = imgSrc || href || '';
-    if (url) push(mediaType(url), url);
+    if (!url) return;
+    // Classify by the MOST specific signal: if either the proxied img or the
+    // anchor href is a .gif, the media is a gif (a static .jpg preview img can
+    // sit next to a .gif href). The img src stays the emitted URL (proxied preview).
+    const type = mediaType(imgSrc || '') === 'gif' || mediaType(href || '') === 'gif' ? 'gif' : 'image';
+    push(type, url);
   });
   $scope.find('a.post_media_image[href]').each((_i, el) => {
     const href = $(el).attr('href') || '';
     if (href) push(mediaType(href), href);
   });
-  $scope.find('img[src]').not('figure img').each((_i, el) => {
+  // Bare imgs: skip imgs handled by their own branches (figure and
+  // a.post_media_image), so one image never yields two media items.
+  $scope.find('img[src]').not('figure img, a.post_media_image img').each((_i, el) => {
     const src = $(el).attr('src') || '';
     if (src) push(mediaType(src), src);
   });
@@ -319,7 +350,7 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
 
   const subreddit = $el.find('.post_subreddit').text().replace('r/', '').replace('u/', '').trim();
   const author = $el.find('.post_author').text().trim();
-  const { score, score_hidden, score_exact } = parseScore($el);
+  const { score, score_hidden, score_exact } = parseScore($, $el);
   const commentsText = $el.find('.post_comments').first().text().trim();
   const commentCountMatch = commentsText.match(/(\d+)/);
   const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
@@ -359,7 +390,7 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
     author,
     score,
     commentCount,
-    permalink: absolutePublicUrl(href, publicBaseUrl),
+    ...(href.trim() ? { permalink: absolutePublicUrl(href, publicBaseUrl) } : {}),
     ...(flair ? { flair } : {}),
     ...(created_utc ? { created_utc } : {}),
     ...(created_relative ? { created_relative } : {}),
@@ -642,7 +673,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const linkHref = $link.attr('href') || undefined;
 
     const bodyText = $el.find('.md').first().text().trim();
-    const { score } = parseScore($el, '.comment_score');
+    const { score } = parseScore($, $el, '.comment_score');
 
     const subreddit = $el.find('.comment_subreddit').first().text().replace('r/', '').trim();
 
@@ -730,7 +761,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   const author = $('.post_author').first().text().trim();
   const subreddit = $('.post_subreddit').first().text().replace('r/', '').trim();
   const body = $('.post_body').first().text().trim();
-  const { score, score_hidden, score_exact } = parseScore($('.post').first());
+  const { score, score_hidden, score_exact } = parseScore($, $('.post').first());
 
   // Extract created timestamps from .post_header span.created
   const $created = $('.post_header span.created').first();
@@ -764,7 +795,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     const $commentBody = $comment.find('.comment_body .md').first();
     const text = $commentBody.text().trim();
     const media = extractMedia($, $commentBody, baseUrl);
-    const { score, score_hidden } = parseScore($comment, '.comment_score');
+    const { score, score_hidden } = parseScore($, $comment, '.comment_score');
 
     // Created timestamp and permalink from a.created
     const $created = $comment.find('.comment_data a.created').first();

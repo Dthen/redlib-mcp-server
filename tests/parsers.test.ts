@@ -1965,6 +1965,35 @@ describe('parseScore: compact scores and honest null semantics', () => {
     expect(posts[0].score_hidden).toBe(true);
   });
 
+  it('treats lowercase title="hidden" as a hidden score (case-insensitive)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title="hidden">• <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBe(true);
+  });
+
+  it('parses leading-dot compact scores (".5k" → 500)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">.5k</div>'));
+    expect(posts[0].score).toBe(500);
+  });
+
+  it('rejects trailing-garbage text with the anchored regex ("12abc" → null)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">12abc</div>'));
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_exact).toBeUndefined();
+  });
+
+  it('parses "68.6k Upvotes" via label stripping (anchored parse)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score">68.6k <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBe(68600);
+    expect(posts[0].score_exact).toBeUndefined();
+  });
+
+  it('trims padded title attributes (" 68604 " → 68604 exact, no compact fallback)', () => {
+    const posts = parsePostList(postWithScore('<div class="post_score" title=" 68604 ">68.6k <span class="label">Upvotes</span></div>'));
+    expect(posts[0].score).toBe(68604);
+    expect(posts[0].score_exact).toBe(68604);
+  });
+
   it('parses negative scores', () => {
     const posts = parsePostList(postWithScore('<div class="post_score" title="-5">-5</div>'));
     expect(posts[0].score).toBe(-5);
@@ -2021,6 +2050,33 @@ describe('URL absolutization edge cases', () => {
     const posts = parsePostList(html, 'http://localhost:8080', 'https://www.reddit.com/');
     expect(posts[0].permalink).toBe('https://www.reddit.com/r/test/comments/u5/title/');
   });
+
+  it('omits permalink when the title link has an empty href (no "<base>/" fallback)', () => {
+    const html = `<html><body><div class="post" id="u6">
+      <div class="post_title"><a href="">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+    </div></body></html>`;
+    const posts = parsePostList(html, 'http://localhost:8080', 'https://www.reddit.com');
+    expect(posts[0].permalink).toBeUndefined();
+  });
+
+  it('omits permalink for a whitespace-only title link href', () => {
+    const html = `<html><body><div class="post" id="u7">
+      <div class="post_title"><a href="   ">Title</a></div>
+      <div class="post_score">10</div><div class="post_comments">1 comment</div>
+    </div></body></html>`;
+    const posts = parsePostList(html, 'http://localhost:8080', 'https://www.reddit.com');
+    expect(posts[0].permalink).toBeUndefined();
+  });
+
+  it('leaves an empty flair href unprefixed (filter_url stays "", no "<base>/" fallback)', () => {
+    const html = `<html><body><div class="post" id="u8"><div class="post_title">
+      <a href="" class="post_flair" style="color:black; background:#fff;" dir="ltr"><span>F</span></a>
+      <a href="/r/s/comments/u8/x/">Title</a></div>
+      <div class="post_score">5</div><div class="post_comments">1 comment</div></div></body></html>`;
+    const posts = parsePostList(html, 'http://localhost:8080', 'https://www.reddit.com');
+    expect(posts[0].flair!.filter_url).toBe('');
+  });
 });
 
 describe('comment media extraction (dedupe, gif heuristic, video branches)', () => {
@@ -2070,6 +2126,28 @@ describe('comment media extraction (dedupe, gif heuristic, video branches)', () 
     expect(result.comments[0].media).toEqual([
       { type: 'image', url: 'http://127.0.0.1:8080/img/bare.jpg' },
     ]);
+  });
+
+  it('emits ONE media item for a.post_media_image with a nested img (no double-count)', () => {
+    const body = '<a class="post_media_image" href="/img/full.jpg"><img src="/preview/thumb.jpg"/></a>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'image', url: 'http://127.0.0.1:8080/img/full.jpg' },
+    ]);
+  });
+
+  it('classifies a figure as gif when the href is .gif even with a static .jpg preview img', () => {
+    const body = '<figure><a href="/img/cat.gif"><img src="/preview/static.jpg"/></a></figure>';
+    const result = parsePostDetails(commentHtml(body), 100, 'http://127.0.0.1:8080');
+    expect(result.comments[0].media).toEqual([
+      { type: 'gif', url: 'http://127.0.0.1:8080/preview/static.jpg' },
+    ]);
+  });
+
+  it('emits no media entry for a figure with an empty href and no img', () => {
+    const body = '<figure><a href=""></a></figure>';
+    const result = parsePostDetails(commentHtml(body), 100);
+    expect(result.comments[0].media).toBeUndefined();
   });
 
   it('captures video from <video><source src/></video>', () => {
