@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="fixed_navbar">
+	<head>
+		
+		<title>Redlib: search results - deepseek v4</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="View on Redlib, an alternative private front-end to Reddit.">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- General PWA -->
+		<meta name="theme-color" content="#1F1F1F">
+		<!-- iOS Application -->
+		<meta name="apple-mobile-web-app-title" content="Redlib">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<!-- iOS Logo -->
+		<link href="/touch-icon-iphone.png" rel="apple-touch-icon">
+		<!-- OpenSearch description file -->
+		<link rel="search" type="application/opensearchdescription+xml" title="Search Redlib" href="/opensearch.xml">
+		<!-- PWA Manifest -->
+		<link rel="manifest" type="application/json" href="/manifest.json">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"> 
+		<link rel="stylesheet" type="text/css" href="/style.css?v=0.36.0">
+		<!-- Video quality -->
+		<div id="video_quality" data-value=""></div>
+		
+		</head>
+	<body class="
+		
+		 wide
+		 dark
+		 fixed_navbar">
+		<!-- NAVIGATION BAR -->
+		<nav class="
+			 fixed_navbar">
+			<div id="logo">
+				<a id="redlib" href="/"><span id="red">red</span><span id="lib">lib.</span></a>
+				
+	<details id="feeds">
+		<summary>Feeds</summary>
+		<div id="feed_list">
+			<p>MAIN FEEDS</p>
+			<a href="/">Home</a>
+			
+				<a href="/r/popular">Popular</a>
+				<a href="/r/all">All</a>
+			
+			
+		</div>
+	</details>
+
+			</div>
+			
+			<div id="links">
+				<a id="reddit_link" href="#popup">
+					<span>reddit</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M22 2L12 22"/>
+						<path d="M2 6.70587C3.33333 8.07884 3.33333 11.5971 3.33333 11.5971M3.33333 19.647V11.5971M3.33333 11.5971C3.33333 11.5971 5.125 7.47817 8 7.47817C10.875 7.47817 12 8.85114 12 8.85114"/>
+					</svg>
+				</a>
+				
+					<div class="popup" id="popup">
+	<div class="popup-inner">
+		<h1>You are about to leave Redlib</h1>
+		<p>Do you want to continue?</p>
+		<p id="reddit_url">https://www.reddit.com/search?q=deepseek+v4&#38;sort=new&#38;t=week&#38;limit=3</p>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.24 563">
+			<defs>
+				<style>.cls-1{fill:#000000;}.cls-2{fill:#f8aa00;}</style>
+			</defs>
+			<path class="cls-2" d="M322.03,0c1.95,2.5,4.88,.9,7.33,1.65,10.5,3.21,17.65,10.39,22.83,19.35,93.64,162.06,186.98,324.29,280.25,486.56,15.73,20.19,2.49,51.27-22.92,54.37-1.21,.19-2.72-.54-3.49,1.08H239.03c-70.33-2.43-141.6,.79-212.08-1.74-17.49-4.92-23.16-15.88-26.91-32.26l-.04-1.97C88.74,354.76,194.49,188.2,289.92,18.43c6.2-10.66,15.03-16.94,27.61-17.36,.95-.03,2.05,.18,2.51-1.07h2Zm-2.43,545c94.95-.02,189.9,.04,284.85-.02,11.84-.73,20.75-13.19,16.68-23.55C523.83,355.97,430.74,187.62,332.05,23.07c-7.93-9.02-22.2-6.58-27.23,3.22C230.28,156.11,155.21,285.64,80.41,415.31c-19.88,34.41-39.31,69.07-59.78,103.14-2.43,4.05-4.24,8.8-1.68,14.18,3.92,8.24,9.59,12.37,18.82,12.37,93.95,0,187.9,0,281.85,0Z"/>
+			<path class="cls-1" d="M319.61,545c-93.95,0-187.9,0-281.85,0-9.22,0-14.89-4.13-18.82-12.37-2.56-5.38-.75-10.13,1.68-14.18,20.47-34.07,39.9-68.73,59.78-103.14C155.21,285.64,230.28,156.11,304.82,26.29c5.03-9.8,19.3-12.24,27.23-3.22,98.7,164.55,191.79,332.9,289.1,498.35,4.06,10.36-4.85,22.82-16.68,23.55-94.94,.06-189.9,0-284.85,.02Zm.44-462.31C238.88,223.22,158.17,362.95,77.28,503h485.54c-80.94-140.13-161.61-279.79-242.77-420.31Z"/>
+			<path class="cls-2" d="M320.05,82.69c81.16,140.52,161.83,280.18,242.77,420.31H77.28C158.17,362.95,238.88,223.22,320.05,82.69Zm36.05,118.99c-.14-46.75-68.32-52.32-74.66-4.76,.73,51.49,9.2,102.97,12.63,154.49,1.18,13.14,10.53,21.81,23.32,22.76,13.12,.97,23.89-9.13,24.96-21.58,4.44-49.99,9.4-101.22,13.76-150.91Zm-36.56,271.4c48.8,.76,49.24-74.7-.31-75.47-53.45,3-46.02,78.12,.31,75.47Z"/>
+			<path class="cls-1" d="M356.1,201.67c-4.36,49.69-9.31,100.91-13.76,150.91-1.07,12.45-11.84,22.56-24.96,21.58-12.79-.95-22.14-9.63-23.31-22.76-3.43-51.52-11.9-103-12.63-154.49,6.33-47.53,74.51-42.03,74.66,4.76Z"/>
+			<path class="cls-1" d="M319.54,473.08c-46.34,2.64-53.75-72.47-.31-75.47,49.56,.78,49.1,76.24,.31,75.47Z"/>
+		</svg>
+		<a id="goback" href="#">No, go back!</a>
+		<a id="toreddit" href="https://www.reddit.com/search?q=deepseek+v4&#38;sort=new&#38;t=week&#38;limit=3" rel="nofollow">Yes, take me to Reddit</a>
+	</div>
+</div>
+				
+				<a id="settings_link" href="/settings">
+					<span>settings</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<title>settings</title>
+						<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+					</svg>
+				</a>
+			</div>
+		</nav>
+		
+		<!-- MAIN CONTENT -->
+		
+		<main>
+			
+	<div id="column_one">
+		<form id="search_sort">
+			<div class="search_widget_divider_box">
+				<input id="search" type="text" name="q" placeholder="Search" value="deepseek v4" title="Search redlib">
+				<div class="search_widget_divider_box">
+					
+					
+					<select id="sort_options" name="sort" title="Sort results by">
+						
+		<option value="relevance" >
+			Relevance
+		</option>
+	
+		<option value="hot" >
+			Hot
+		</option>
+	
+		<option value="top" >
+			Top
+		</option>
+	
+		<option value="new" selected>
+			New
+		</option>
+	
+		<option value="comments" >
+			Comments
+		</option>
+	
+					</select>
+					
+				</div>
+			</div>
+
+			<button id="sort_submit" class="submit">
+				<svg width="15" viewBox="0 0 110 100" fill="none" stroke-width="10" stroke-linecap="round">
+					<path d="M20 50 H100" />
+					<path d="M75 15 L100 50 L75 85" />
+					&rarr;
+				</svg>
+			</button>
+ 		</form>
+
+		
+		
+		<div id="search_subreddits">
+			
+			
+			<a href="/r/DeepSeek/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_a5tk5l/styles/communityIcon_9jaxsiqdd3fe1.jpg?width=256&amp;s=57d516da40c19152361beb295674c187f94f925b" alt="r/DeepSeek icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/DeepSeek</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="122555 Members">122.6k Members</span>
+					</p>
+					<p class="search_subreddit_description">Unravel the mystery of AGI with curiosity. Answer the essential question with long-termism. We are an unofficial community.</p>
+				</div>
+			</a>
+			
+			<a href="/r/LocalLLaMA/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_81eyvm/styles/communityIcon_cumnsvx9kzma1.png?width=256&amp;s=9b31c526d7ab1d39784b0e446bfd5c08ed85a53f" alt="r/LocalLLaMA icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/LocalLLaMA</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="788910 Members">788.9k Members</span>
+					</p>
+					<p class="search_subreddit_description">Subreddit to discuss locally hostable AI. </p>
+				</div>
+			</a>
+			
+			<a href="/r/SillyTavernAI/" class="search_subreddit">
+				<div class="search_subreddit_left"><img loading="lazy" src="/style/t5_88g8nv/styles/communityIcon_6uq5dtz9sa7b1.png?width=256&amp;s=d1fbbca1075c466752b49d25e5cfb72a4c645960" alt="r/SillyTavernAI icon"></div>
+				<div class="search_subreddit_right">
+					<p class="search_subreddit_header"> 
+						<span class="search_subreddit_name">r/SillyTavernAI</span>
+						<span class="dot">&bull;</span>
+						<span class="search_subreddit_members" title="121518 Members">121.5k Members</span>
+					</p>
+					<p class="search_subreddit_description">SillyTavern (or ST for short) is a locally installed user interface that allows you to interact with text generation LLMs, image generation engines, and TTS voice models.</p>
+				</div>
+			</a>
+			
+			
+			<a href="?q=deepseek v4&sort=new&t=week&type=sr_user" class="search_subreddit" id="more_subreddits">More subreddit results →</a>
+			
+		</div>
+		
+		
+
+		
+
+		
+
+		
+			
+				
+					<div class="post" id="1vc53ew">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/opencodeCLI">r/opencodeCLI</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/TestTxt">u/TestTxt</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 31 2026, 22:15:52 UTC">0m ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+		<a href="/r/opencodeCLI/comments/1vc53ew/data_retention_in_opencode_go_explained/">Data retention in Opencode Go explained</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><figure><a href="/preview/pre/isvcg2r93ngh1.png?width=474&amp;format=png&amp;auto=webp&amp;s=1865d6be1d9be90a49f0c4232ddfb9ea0781feda"><img loading="lazy" src="/preview/pre/isvcg2r93ngh1.png?width=474&amp;format=png&amp;auto=webp&amp;s=1865d6be1d9be90a49f0c4232ddfb9ea0781feda"></a></figure>
+
+<p>Here&#39;s the official table of data retention for different models available in Opencode Go.</p>
+
+<p>Unfortunately it looks like ZDR is gone and moreover, for the new Deepseek V4 Flash model - data is not only retained for an unlimited time, but also used for training, what makes it a no-go for many real-world business use cases. It kinda sucks that Opencode didn&#39;t just strike a deal with a third-party provider given that the model is open-weight anyways but it is what it is.</p>
+
+<p><a href="https://opencode.ai/docs/go/#privacy">https://opencode.ai/docs/go/#privacy</a></p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/opencodeCLI/comments/1vc53ew/data_retention_in_opencode_go_explained/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1vc527y">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/OpenAI">r/OpenAI</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/sirMoped">u/sirMoped</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 31 2026, 22:14:31 UTC">1m ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/OpenAI/search?q=flair_name%3A%22News%22&restrict_sr=on"
+				class="post_flair"
+				style="color:black; background:#edeff1;"
+				dir="ltr"><span>News</span></a>
+		
+		<a href="/r/OpenAI/comments/1vc527y/new_post_train_of_deepseek_v4_flash_is_out/">New post train of DeepSeek v4 flash is out</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<div class="post_media_content">
+		<a href="/img/vsao0zgg3ngh1.png" class="post_media_image short" >
+			
+			<svg
+				width="992px"
+				height="992px"
+				xmlns="http://www.w3.org/2000/svg">
+					<image width="100%" height="100%" href="/img/vsao0zgg3ngh1.png"/>
+					<desc>
+						<img loading="lazy" alt="Post image" src="/img/vsao0zgg3ngh1.png"/>
+					</desc>
+			</svg>
+			
+		</a>
+	</div>
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/OpenAI/comments/1vc527y/new_post_train_of_deepseek_v4_flash_is_out/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+				
+					<div class="post" id="1vc50md">
+	<p class="post_header">
+		<a class="post_subreddit" href="/r/DeepSeek">r/DeepSeek</a>
+		<span class="dot">&bull;</span>
+		<a class="post_author " href="/u/Waste-Ad-2678">u/Waste-Ad-2678</a>
+		<span class="dot">&bull;</span>
+		<span class="created" title="Jul 31 2026, 22:12:42 UTC">3m ago</span>
+		
+	</p>
+	<h2 class="post_title">
+		
+			<a href="/r/DeepSeek/search?q=flair_name%3A%22Discussion %22&restrict_sr=on"
+				class="post_flair"
+				style="color:white; background:#7a8999;"
+				dir="ltr"><span>Discussion </span></a>
+		
+		<a href="/r/DeepSeek/comments/1vc50md/i_built_a_voicetext_controlled_ai_project/">I built a voice/text controlled AI project &#34;VibeCraft&#34; that plays StarCraft II for you with DeepSeek-v4-flash[open source]</a>
+	</h2>
+	<!-- POST MEDIA/THUMBNAIL -->
+	
+	<a class="post_thumbnail" href="/r/starcraft/comments/1v97hat/i_built_a_voicetextcontrolled_project_vibecraft/" rel="nofollow">
+		
+		<div style="max-width:140px;max-height:70px;">
+			<svg width="140px" height="70px" xmlns="http://www.w3.org/2000/svg">
+				<image width="100%" height="100%" href="/preview/external-pre/5b1xGuA0X0Yx0kOth3Eq9iQHuMqRgz4p3A3lacqrHmY.png?width=140&#38;height=70&#38;auto=webp&#38;s=4bce6ff17b95c55f6b260f76ed5f181c74984ce8"/>
+				<desc>
+					<img loading="lazy" alt="Thumbnail" src="/preview/external-pre/5b1xGuA0X0Yx0kOth3Eq9iQHuMqRgz4p3A3lacqrHmY.png?width=140&#38;height=70&#38;auto=webp&#38;s=4bce6ff17b95c55f6b260f76ed5f181c74984ce8"/>
+				</desc>
+			</svg>
+		</div>
+		
+		<span></span>
+	</a>
+	
+	<div class="post_score" title="Hidden">
+    
+    •
+    
+    <span class="label"> Upvotes</span></div>
+	<div class="post_body post_preview">
+		<!-- SC_OFF --><div class="md"><p>In this project, you can use text or voice to intervene in the behavior of a StarCraft 2 bot, or you can retract your commands and let the bot take over.</p>
+
+<p>In other words, I need an LLM here that can quickly respond to and parse commands. Besides DeepSeek v4 flash, I haven&#39;t found any other alternative yet.🤩</p>
+</div><!-- SC_ON -->
+	</div>
+
+	
+	
+
+	<div class="post_footer">
+		<a href="/r/DeepSeek/comments/1vc50md/i_built_a_voicetext_controlled_ai_project/" class="post_comments" title="0 comments">0 comments</a>
+	</div>
+</div>
+				
+			
+		
+		
+		<script src="/hls.min.js"></script>
+		<script src="/playHLSVideo.js"></script>
+		
+
+		
+		<footer>
+			
+
+			
+			<a href="?q=deepseek v4&restrict_sr=
+				&sort=new&t=week
+				&after=t3_1vc50md" accesskey="N">NEXT</a>
+			
+		</footer>
+		
+	</div>
+
+		</main>
+		
+
+		<!-- FOOTER -->
+		
+			<footer>
+				<div class="footer-buttons">
+					<p><span id="version">v0.36.0&emsp;</span><a href="/info" title="View instance information">ⓘ View instance info</a>&emsp;<a href="https://github.com/redlib-org/redlib" title="View code on GitHub">&lt;&gt; Code</a></p>
+				</div>
+			</footer>
+		
+	</body>
+</html>
