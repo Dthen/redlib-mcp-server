@@ -139,8 +139,8 @@ async function main() {
     const r6 = parsePostList(badScoreHtml);
     qa(
       "A1",
-      "unparseable score → defaults to 0 (no crash)",
-      Array.isArray(r6) && r6.length > 0 && r6[0].score === 0,
+      "unparseable score → null score + score_hidden:true (honest, no fake 0)",
+      Array.isArray(r6) && r6.length > 0 && r6[0].score === null && r6[0].score_hidden === true,
       "",
       "MEDIUM"
     );
@@ -1278,7 +1278,8 @@ async function main() {
           "HIGH"
         );
 
-        // Check that each result has all required fields
+        // Check that each result has all required fields.
+        // score may legitimately be null (Reddit hides scores on search pages → score_hidden: true).
         const requiredFields: (keyof PostListItem)[] = [
           "id",
           "title",
@@ -1289,10 +1290,14 @@ async function main() {
           "permalink",
         ];
         const allFieldsPresent1 = results1.every((p) =>
-          requiredFields.every((f) => p[f] !== undefined && p[f] !== null)
+          requiredFields.every((f) =>
+            f === "score" ? p[f] !== undefined : p[f] !== undefined && p[f] !== null
+          )
         );
         const allFieldsPresent2 = results2.every((p) =>
-          requiredFields.every((f) => p[f] !== undefined && p[f] !== null)
+          requiredFields.every((f) =>
+            f === "score" ? p[f] !== undefined : p[f] !== undefined && p[f] !== null
+          )
         );
         qa(
           "D3",

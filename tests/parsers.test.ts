@@ -306,9 +306,11 @@ describe('parsePostList with search results', () => {
     expect(posts[0].author).toBeTruthy();
   });
 
-  it('should parse score as a number from search results', () => {
+  it('should return null score + score_hidden on search results (Reddit hides scores)', () => {
     const posts = parsePostList(html);
-    expect(typeof posts[0].score).toBe('number');
+    // search-posts.html is a real search page: every post_score has title="Hidden"
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBe(true);
   });
 
   it('should parse comment count as a number from search results', () => {
@@ -1599,9 +1601,14 @@ describe('parsePostList with r/all front page', () => {
     expect(posts[0].author).toBeTruthy();
   });
 
-  it('should parse score as a number from r/all front page', () => {
+  it('should return null score + score_hidden for hidden scores, numeric otherwise', () => {
     const posts = parsePostList(html);
-    expect(typeof posts[0].score).toBe('number');
+    // First r/all post has a hidden score (title="Hidden") → honest null contract
+    expect(posts[0].score).toBeNull();
+    expect(posts[0].score_hidden).toBe(true);
+    // Other posts have numeric scores
+    const numeric = posts.find(p => typeof p.score === 'number');
+    expect(numeric).toBeDefined();
   });
 
   it('should parse comment count as a number from r/all front page', () => {
@@ -1784,6 +1791,23 @@ describe('parsePostList with author search results', () => {
     // author-search.html has a post by spez with class="post_author admin"
     const adminPost = posts.find(p => p.author_flair === 'admin');
     expect(adminPost).toBeDefined();
+  });
+});
+
+describe('hidden scores', () => {
+  it('returns null score + score_hidden on search pages (title="Hidden")', () => {
+    const posts = parsePostList(loadFixture('search-hidden-score.html'));
+    expect(posts.length).toBeGreaterThan(0);
+    for (const p of posts) {
+      expect(p.score).toBeNull();
+      expect(p.score_hidden).toBe(true);
+    }
+  });
+
+  it('keeps numeric score + no score_hidden on feed pages', () => {
+    const posts = parsePostList(loadFixture('post-list.html'));
+    expect(typeof posts[0].score).toBe('number');
+    expect(posts[0].score_hidden).toBeUndefined();
   });
 });
 

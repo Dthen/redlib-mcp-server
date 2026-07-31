@@ -13,13 +13,14 @@ export interface PostListItem {
   title: string;
   subreddit: string;
   author: string;
-  score: number;
+  score: number | null;
   commentCount: number;
   permalink: string;
   flair?: FlairData;
   created_utc?: string;
   created_relative?: string;
   score_exact?: number;
+  score_hidden?: boolean;
   stickied?: boolean;
   nsfw?: boolean;
   spoiler?: boolean;
@@ -32,14 +33,15 @@ export interface PostListItem {
 export interface PostComment {
   author: string;
   text: string;
-  score: number;
+  score: number | null;
 }
 
 export interface CommentData {
   id: string;
   author: string;
   text: string;
-  score: number;
+  score: number | null;
+  score_hidden?: boolean;
   author_is_op: boolean;
   created_utc?: string;
   created_relative?: string;
@@ -52,7 +54,7 @@ export interface PostDetails {
   title: string;
   author: string;
   subreddit: string;
-  score: number;
+  score: number | null;
   body: string;
   commentCount: number;
   comments: CommentData[];
@@ -60,6 +62,7 @@ export interface PostDetails {
   created_utc?: string;
   created_relative?: string;
   score_exact?: number;
+  score_hidden?: boolean;
   nsfw?: boolean;
   spoiler?: boolean;
   post_type?: 'self' | 'link' | 'image' | 'video' | 'gallery';
@@ -104,13 +107,30 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
 }
 
 /**
- * Extracts the exact (unformatted) score from the post_score title attribute.
+ * Parses a score element (default .post_score, pass '.comment_score' for comments).
+ *
+ * Redlib renders hidden scores (search pages, removed scores) as
+ * `<div class="post_score" title="Hidden"> • <span class="label"> Upvotes</span></div>` —
+ * the text is unparseable. Instead of fabricating 0, we emit `score: null` +
+ * `score_hidden: true`. When the title attribute holds a real number it is
+ * returned as `score_exact` (existing semantics; absent when Hidden).
  */
-function extractScoreExact($el: cheerio.Cheerio<any>): number | undefined {
-  const title = $el.find('.post_score').attr('title');
-  if (!title || title === 'Hidden') return undefined;
-  const num = parseInt(title.replace(/,/g, ''), 10);
-  return isNaN(num) ? undefined : num;
+function parseScore($el: cheerio.Cheerio<any>, selector: string = '.post_score'): { score: number | null; score_hidden?: boolean; score_exact?: number } {
+  const $score = $el.find(selector).first();
+  const title = $score.attr('title');
+  if (title === 'Hidden') {
+    return { score: null, score_hidden: true };
+  }
+  const text = $score.text().trim().replace(/,/g, '');
+  const parsed = parseInt(text, 10);
+  const exact = title ? parseInt(title.replace(/,/g, ''), 10) : undefined;
+  if (isNaN(parsed) && isNaN(exact ?? NaN)) {
+    return { score: null, score_hidden: true };
+  }
+  return {
+    score: isNaN(parsed) ? (exact ?? null) : parsed,
+    ...(exact !== undefined && !isNaN(exact) ? { score_exact: exact } : {}),
+  };
 }
 
 /**
@@ -207,8 +227,7 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
 
     const subreddit = $el.find('.post_subreddit').text().replace('r/', '').trim();
     const author = $el.find('.post_author').text().trim();
-    const scoreText = $el.find('.post_score').text().trim().replace(/,/g, '');
-    const score = parseInt(scoreText) || 0;
+    const { score, score_hidden, score_exact } = parseScore($el);
     const commentsText = $el.find('.post_comments').first().text().trim();
     const commentCountMatch = commentsText.match(/(\d+)/);
     const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
@@ -219,7 +238,6 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
     const created_relative = $created.text().trim() || undefined;
 
     // Extract new metadata fields
-    const score_exact = extractScoreExact($el);
     const stickied = $el.hasClass('stickied');
     const { nsfw, spoiler } = checkPostTitleTag($, $el);
     const post_type = determinePostType($el);
@@ -253,6 +271,7 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
       ...(score_exact !== undefined ? { score_exact } : {}),
+      ...(score_hidden ? { score_hidden } : {}),
       ...(stickied ? { stickied } : {}),
       ...(nsfw ? { nsfw } : {}),
       ...(spoiler ? { spoiler } : {}),
@@ -525,8 +544,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
 
     const subreddit = $el.find('.post_subreddit').text().replace('r/', '').replace('u/', '').trim();
     const author = $el.find('.post_author').text().trim();
-    const scoreText = $el.find('.post_score').text().trim().replace(/,/g, '');
-    const score = parseInt(scoreText) || 0;
+    const { score, score_hidden, score_exact } = parseScore($el);
     const commentsText = $el.find('.post_comments').first().text().trim();
     const commentCountMatch = commentsText.match(/(\d+)/);
     const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
@@ -537,7 +555,6 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const created_relative = $created.text().trim() || undefined;
 
     // Extract new metadata fields
-    const score_exact = extractScoreExact($el);
     const stickied = $el.hasClass('stickied');
     const { nsfw, spoiler } = checkPostTitleTag($, $el);
     const post_type = determinePostType($el);
@@ -555,6 +572,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
       ...(score_exact !== undefined ? { score_exact } : {}),
+      ...(score_hidden ? { score_hidden } : {}),
       ...(stickied ? { stickied } : {}),
       ...(nsfw ? { nsfw } : {}),
       ...(spoiler ? { spoiler } : {}),
@@ -653,21 +671,12 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   const author = $('.post_author').first().text().trim();
   const subreddit = $('.post_subreddit').first().text().replace('r/', '').trim();
   const body = $('.post_body').first().text().trim();
-  const scoreText = $('.post_score').first().text().trim().replace(/,/g, '');
-  const score = parseInt(scoreText) || 0;
+  const { score, score_hidden, score_exact } = parseScore($('.post').first());
 
   // Extract created timestamps from .post_header span.created
   const $created = $('.post_header span.created').first();
   const created_utc = $created.attr('title')?.trim() || undefined;
   const created_relative = $created.text().trim() || undefined;
-
-  // Extract new metadata fields
-  const scoreTitle = $('.post_score').first().attr('title');
-  let score_exact: number | undefined;
-  if (scoreTitle && scoreTitle !== 'Hidden') {
-    const parsed = parseInt(scoreTitle.replace(/,/g, ''), 10);
-    score_exact = isNaN(parsed) ? undefined : parsed;
-  }
 
   // Check NSFW/Spoiler in post title full text
   const fullTitleText = $postTitle.text().trim();
@@ -691,8 +700,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     const author = $author.text().trim();
     const author_is_op = $author.hasClass('op');
     const text = $comment.find('.comment_body .md').first().text().trim();
-    const scoreText = $comment.find('.comment_score').first().text().trim().replace(/,/g, '');
-    const score = parseInt(scoreText) || 0;
+    const { score, score_hidden } = parseScore($comment, '.comment_score');
 
     // Created timestamp and permalink from a.created
     const $created = $comment.find('.comment_data a.created').first();
@@ -723,6 +731,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
       author,
       text,
       score,
+      ...(score_hidden ? { score_hidden } : {}),
       author_is_op,
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
@@ -759,6 +768,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     ...(created_utc ? { created_utc } : {}),
     ...(created_relative ? { created_relative } : {}),
     ...(score_exact !== undefined ? { score_exact } : {}),
+    ...(score_hidden ? { score_hidden } : {}),
     ...(nsfw ? { nsfw } : {}),
     ...(spoiler ? { spoiler } : {}),
     ...(post_type ? { post_type } : {}),

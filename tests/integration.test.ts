@@ -269,7 +269,7 @@ async function main() {
       if (!detail.title) fails.push("no title");
       if (!detail.author) fails.push("no author");
       if (!Array.isArray(detail.comments)) fails.push("comments not array");
-      if (typeof detail.score !== "number") fails.push("score not number");
+      if (typeof detail.score !== "number" && detail.score !== null) fails.push("score not number/null");
       if (typeof detail.commentCount !== "number") fails.push("commentCount not number");
 
       const ok = fails.length === 0;
