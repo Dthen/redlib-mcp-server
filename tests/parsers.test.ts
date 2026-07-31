@@ -478,7 +478,8 @@ describe('parsePostDetails', () => {
     const result = parsePostDetails(emojiFlairHtml);
     expect(result.flair).toBeDefined();
     expect(result.flair!.text).toBe('Custom');
-    expect(result.flair!.emoji_urls).toEqual(['/emoji/abc123', '/emoji/def456']);
+    // emoji_urls are absolute against the instance base URL (default http://localhost:8080)
+    expect(result.flair!.emoji_urls).toEqual(['http://localhost:8080/emoji/abc123', 'http://localhost:8080/emoji/def456']);
     expect(result.title).toBe('The Real Title');
   });
 
@@ -1791,6 +1792,31 @@ describe('parsePostList with author search results', () => {
     // author-search.html has a post by spez with class="post_author admin"
     const adminPost = posts.find(p => p.author_flair === 'admin');
     expect(adminPost).toBeDefined();
+  });
+});
+
+describe('post media and absolute URLs', () => {
+  it('extracts post media URLs from image posts', () => {
+    const result = parsePostDetails(loadFixture('post-detail-media.html'), 100, 'http://127.0.0.1:8080');
+    expect(result.media?.length).toBeGreaterThan(0);
+    expect(result.media![0].url.startsWith('http://127.0.0.1:8080/')).toBe(true);
+  });
+
+  it('makes thumbnail_url absolute', () => {
+    const posts = parsePostList(loadFixture('frontpage-popular.html'), 'http://127.0.0.1:8080');
+    const withThumb = posts.find(p => p.thumbnail_url);
+    expect(withThumb).toBeDefined();
+    expect(withThumb!.thumbnail_url!.startsWith('http://127.0.0.1:8080/')).toBe(true);
+  });
+
+  it('makes flair emoji_urls absolute', () => {
+    const html = `<html><body><div class="post" id="e1"><div class="post_title">
+      <a href="/r/s/comments/e1/x/" class="post_flair" style="color:black; background:#fff;" dir="ltr">
+      <span class="emoji" style="background-image:url('/emoji/abc123');"></span><span>F</span></a>
+      <a href="/r/s/comments/e1/x/">Title</a></div>
+      <div class="post_score">5</div><div class="post_comments">1 comment</div></div></body></html>`;
+    const posts = parsePostList(html, 'http://127.0.0.1:8080');
+    expect(posts[0].flair!.emoji_urls[0]).toBe('http://127.0.0.1:8080/emoji/abc123');
   });
 });
 

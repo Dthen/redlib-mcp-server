@@ -66,6 +66,7 @@ export interface PostDetails {
   created_relative?: string;
   score_exact?: number;
   score_hidden?: boolean;
+  media?: MediaItem[];
   nsfw?: boolean;
   spoiler?: boolean;
   post_type?: 'self' | 'link' | 'image' | 'video' | 'gallery';
@@ -75,17 +76,18 @@ export interface PostDetails {
 /**
  * Extracts flair data from a post element using the cheerio root.
  */
-function extractFlair($: cheerio.CheerioAPI, $postEl: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com"): FlairData | undefined {
+function extractFlair($: cheerio.CheerioAPI, $postEl: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com", baseUrl: string = "http://localhost:8080"): FlairData | undefined {
   const $flair = $postEl.find('.post_title a.post_flair').first();
-  return extractFlairFromAnchor($, $flair, publicBaseUrl);
+  return extractFlairFromAnchor($, $flair, publicBaseUrl, baseUrl);
 }
 
 /**
  * Extracts flair data from a post_flair anchor element.
  * filter_url is made absolute against publicBaseUrl (it is a navigation link
  * that works on reddit.com, unlike media URLs which the instance proxies).
+ * emoji_urls are made absolute against baseUrl (the instance proxies them).
  */
-function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com"): FlairData | undefined {
+function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<any>, publicBaseUrl: string = "https://www.reddit.com", baseUrl: string = "http://localhost:8080"): FlairData | undefined {
   if (!$flair.length) return undefined;
 
   const text = $flair.find('span:not(.emoji)').map((_, s) => $(s).text()).get().join(' ').trim();
@@ -95,7 +97,7 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
   const emoji_urls = $flair.find('span.emoji').map((_, s) => {
     const sStyle = $(s).attr('style') || '';
     const match = sStyle.match(/background-image:\s*url\('?([^')]+)'?\)/);
-    return match ? match[1] : '';
+    return match ? absoluteUrl(match[1], baseUrl) : '';
   }).get().filter(Boolean);
   const filterHref = $flair.attr('href') || '';
   const filter_url = filterHref.startsWith('http') ? filterHref : `${publicBaseUrl}${filterHref}`;
@@ -254,7 +256,7 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
     const $el = $(el);
 
     // Extract flair if present
-    const flair = extractFlair($, $el, publicBaseUrl);
+    const flair = extractFlair($, $el, publicBaseUrl, baseUrl);
 
     // Skip flair links — find the first non-flair <a> for the real title
     const $titleLink = $el.find('.post_title a').not('.post_flair').first();
@@ -300,10 +302,11 @@ export function parsePostList(html: string, baseUrl: string = "http://localhost:
       if (thumbHref.startsWith('http')) {
         external_url = thumbHref;
       }
-      // thumbnail_url: from svg image href or img src
+      // thumbnail_url: from svg image href or img src (absolute against the instance base)
       const svgImageHref = $thumbnail.find('svg image').attr('href');
       const imgSrc = $thumbnail.find('img').attr('src');
-      thumbnail_url = svgImageHref || imgSrc || undefined;
+      const thumbSrc = svgImageHref || imgSrc || undefined;
+      thumbnail_url = thumbSrc ? absoluteUrl(thumbSrc, baseUrl) : undefined;
     }
 
     results.push({
@@ -574,7 +577,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const $el = $(el);
 
     // Extract flair if present
-    const flair = extractFlair($, $el, publicBaseUrl);
+    const flair = extractFlair($, $el, publicBaseUrl, baseUrl);
 
     // Skip flair links — find the first non-flair <a> for the real title
     const $titleLink = $el.find('.post_title a').not('.post_flair').first();
@@ -701,7 +704,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   const $flair = $postTitle.find('a.post_flair').first();
   let flair: FlairData | undefined;
   if ($flair.length) {
-    flair = extractFlairFromAnchor($, $flair, publicBaseUrl);
+    flair = extractFlairFromAnchor($, $flair, publicBaseUrl, baseUrl);
   }
 
   // Derive the post path (for public comment permalinks) from the first
@@ -739,6 +742,33 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   let author_flair: 'moderator' | 'admin' | undefined;
   if ($postAuthor.hasClass('moderator')) author_flair = 'moderator';
   else if ($postAuthor.hasClass('admin')) author_flair = 'admin';
+
+  // Post-level media: image/gif/video URLs from the post's media content region
+  const postMedia: MediaItem[] = [];
+  const pushPostMedia = (type: MediaItem['type'], url: string) => {
+    const abs = absoluteUrl(url, baseUrl);
+    if (!postMedia.some(m => m.url === abs)) postMedia.push({ type, url: abs });
+  };
+  $('.post_media_content a.post_media_image[href]').each((_i, el) => {
+    const href = $(el).attr('href') || '';
+    if (!href) return;
+    const lower = href.toLowerCase();
+    pushPostMedia(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
+  });
+  $('.post_media_video video source[src]').each((_i, el) => {
+    const src = $(el).attr('src') || '';
+    if (src) pushPostMedia('video', src);
+  });
+  $('.post_media_video video[src]').each((_i, el) => {
+    const src = $(el).attr('src') || '';
+    if (src) pushPostMedia('video', src);
+  });
+  $('.gallery figure a[href]').each((_i, el) => {
+    const href = $(el).attr('href') || '';
+    if (!href) return;
+    const lower = href.toLowerCase();
+    pushPostMedia(lower.endsWith('.gif') || lower.includes('gif') ? 'gif' : 'image', href);
+  });
 
   // Recursive comment parsing
   function parseComment($comment: cheerio.Cheerio<any>, depth: number): CommentData {
@@ -819,6 +849,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     ...(created_relative ? { created_relative } : {}),
     ...(score_exact !== undefined ? { score_exact } : {}),
     ...(score_hidden ? { score_hidden } : {}),
+    ...(postMedia.length > 0 ? { media: postMedia } : {}),
     ...(nsfw ? { nsfw } : {}),
     ...(spoiler ? { spoiler } : {}),
     ...(post_type ? { post_type } : {}),
