@@ -164,6 +164,7 @@ services:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `REDLIB_URL` | `http://localhost:8080` | URL of your Redlib instance |
+| `REDLIB_PUBLIC_URL` | `https://www.reddit.com` | Public base URL used for permalinks and flair filter links in tool output (the private instance URL is useless to consumers). Set it to a public Redlib mirror if you prefer. Trailing slashes are stripped. |
 
 ### Custom Redlib Port Example
 
