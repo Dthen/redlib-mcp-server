@@ -378,6 +378,33 @@ describe('parsePostDetails', () => {
     expect(result.subreddit).toBe('announcements');
   });
 
+  it('should normalize the pseudo-subreddit of a profile post (r/u_spez → spez)', () => {
+    // On /user/<name>/comments/<id> detail pages redlib renders the post's
+    // pseudo-subreddit as r/u_<username>; it must normalize to the bare
+    // username, matching parsePostElement on profile listings.
+    const profileHtml = `<html><body>
+      <h1 class="post_title"><a href="/user/spez/comments/1u7hraf/21_years_of_reddit/">21 years of Reddit</a></h1>
+      <span class="post_author">u/spez</span>
+      <span class="post_subreddit">r/u_spez</span>
+      <span class="post_score">10</span>
+      <div class="post_body">Body</div>
+    </body></html>`;
+    const result = parsePostDetails(profileHtml);
+    expect(result.subreddit).toBe('spez');
+  });
+
+  it('should keep a normal subreddit label untouched (r/DeepSeek → DeepSeek)', () => {
+    const normalHtml = `<html><body>
+      <h1 class="post_title"><a href="/r/DeepSeek/comments/1vbj0aa/my_title/">Title</a></h1>
+      <span class="post_author">user</span>
+      <span class="post_subreddit">r/DeepSeek</span>
+      <span class="post_score">10</span>
+      <div class="post_body">Body</div>
+    </body></html>`;
+    const result = parsePostDetails(normalHtml);
+    expect(result.subreddit).toBe('DeepSeek');
+  });
+
   it('should parse score as a number', () => {
     const result = parsePostDetails(html);
     expect(typeof result.score).toBe('number');
@@ -1354,6 +1381,15 @@ describe('parseUserProfile with overview page', () => {
     expect(typeof comment.score).toBe('number');
     expect(comment.linkTitle).toBeTruthy();
     expect(comment.subreddit).toBeTruthy();
+  });
+
+  it('should normalize pseudo-subreddits of comments on profile posts (r/u_spez → spez)', () => {
+    // Comments on the user's own profile posts render r/u_spez (fixture
+    // comment_subreddit href); they must normalize to the bare username like
+    // post subreddits do.
+    const result = parseUserProfile(html);
+    expect(result.comments.some((c) => c.subreddit === 'spez')).toBe(true);
+    expect(result.comments.some((c) => c.subreddit === 'u_spez')).toBe(false);
   });
 
   it('should extract flair from user posts', () => {

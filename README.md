@@ -247,10 +247,10 @@ Get posts from a specific subreddit. Supports all sort modes (hot, new, top, ris
 ---
 
 ### 3. `get_post`
-Get a specific Reddit post and its comments. Use post ID from search or hot post results.
+Get a specific Reddit post and its comments. Use post ID from search or hot post results. `subreddit` may also be a username: profile posts resolve via a `/user/` fallback when the `/r/` path returns 404.
 
 **Parameters:**
-- `subreddit` (required) - Subreddit name
+- `subreddit` (required) - Subreddit name, or username for user-profile posts
 - `postId` (required) - Reddit post ID (from search/hot results)
 - `comment_sort` (optional) - Comment sort order: `confidence`, `top`, `new`, `controversial`, `old` (Redlib default is confidence)
 - `comment_limit` (optional) - Maximum comments to return (default: 10)

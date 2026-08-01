@@ -139,9 +139,9 @@ export function registerTools(server: McpServer): void {
   // Tool 3: Get specific post with comments
   server.tool(
     "get_post",
-    "Get a specific Reddit post and its comments. Use post ID from search or hot post results.",
+    "Get a specific Reddit post and its comments. Use post ID from search or hot post results. `subreddit` may also be a username: profile posts resolve via a /user/ fallback when the /r/ path 404s.",
     {
-      subreddit: z.string().describe("Subreddit name"),
+      subreddit: z.string().describe("Subreddit name, or username for user-profile posts"),
       postId: z.string().describe("Reddit post ID (from search/hot results)"),
       comment_sort: z.enum(["confidence", "top", "new", "controversial", "old"]).optional().describe("Comment sort order (optional, Redlib default is confidence)"),
       comment_limit: z.number().optional().default(10).describe("Maximum number of comments to return (default: 10)"),

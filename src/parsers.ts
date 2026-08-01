@@ -189,6 +189,16 @@ function parseScore($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, selector: 
 }
 
 /**
+ * Normalizes a redlib-rendered subreddit label to the bare subreddit or
+ * username. Strips the 'r/' subreddit prefix, the 'u/' user prefix, and the
+ * 'u_' prefix of the pseudo-subreddit redlib renders for user-profile posts
+ * (r/u_spez → spez). Anchored so real names containing 'u_' are untouched.
+ */
+function normalizeSubredditLabel(text: string): string {
+  return text.trim().replace(/^r\//, '').replace(/^u_/, '').replace(/^u\//, '').trim();
+}
+
+/**
  * Detects the post type based on DOM elements on the post element.
  */
 function determinePostType($el: cheerio.Cheerio<any>): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
@@ -372,7 +382,7 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
 
   if (!id || !title) return undefined;
 
-  const subreddit = $el.find('.post_subreddit').text().replace('r/', '').replace('u/', '').trim();
+  const subreddit = normalizeSubredditLabel($el.find('.post_subreddit').text());
   const author = $el.find('.post_author').text().trim();
   const { score, score_hidden, score_exact } = parseScore($, $el);
   const commentsText = $el.find('.post_comments').first().text().trim();
@@ -699,7 +709,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const bodyText = $el.find('.md').first().text().trim();
     const { score } = parseScore($, $el, '.comment_score');
 
-    const subreddit = $el.find('.comment_subreddit').first().text().replace('r/', '').trim();
+    const subreddit = normalizeSubredditLabel($el.find('.comment_subreddit').first().text());
 
     // Extract created timestamps from <span class="created"> or <a class="created">
     const $created = $el.find('.created').first();
@@ -816,7 +826,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   // Get title text, excluding any flair link text  
   const title = $postTitle.clone().find('a.post_flair').remove().end().text().trim();
   const author = $('.post_author').first().text().trim();
-  const subreddit = $('.post_subreddit').first().text().replace('r/', '').trim();
+  const subreddit = normalizeSubredditLabel($('.post_subreddit').first().text());
   const body = $('.post_body').first().text().trim();
   const { score, score_hidden, score_exact } = parseScore($, $('.post').first());
 

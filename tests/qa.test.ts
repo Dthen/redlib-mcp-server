@@ -210,7 +210,7 @@ async function main() {
       "MEDIUM"
     );
 
-    // Post body exceeding 2000 chars
+    // Long post body returned in full (5000 chars, no truncation)
     const longBody = "A".repeat(5000);
     const longBodyHtml =
       `<div class="post_title">Long Post</div><div class="post_author">tester</div>` +
@@ -219,7 +219,7 @@ async function main() {
     const r4 = parsePostDetails(longBodyHtml);
     qa("A2", "post body returned in full (5000 chars, no truncation)", r4.body.length === 5000, `Length: ${r4.body.length}`, "LOW");
 
-    // Comment body exceeding 1000 chars
+    // Long comment body returned in full (3000 chars, no truncation)
     const longComment = "B".repeat(3000);
     const longCommentHtml =
       `<div class="post_title">Test</div><div class="post_author">a</div>` +
@@ -914,7 +914,7 @@ async function main() {
         "LOW"
       );
     } catch (e: any) {
-      qa("B8", "r/all top t=year", false, e.message, "LOW");
+      qa("B8", "r/all top t=year → graceful empty (upstream aggregate behavior)", false, e.message, "LOW");
     }
   }
 
