@@ -206,7 +206,7 @@ async function main() {
       `<div class="post_subreddit">r/test</div><div class="post_body">${longBody}</div>` +
       `<div class="post_score">1</div>`;
     const r4 = parsePostDetails(longBodyHtml);
-    qa("A2", "post body truncated to 2000 chars", r4.body.length <= 2000, `Length: ${r4.body.length}`, "LOW");
+    qa("A2", "post body returned in full (5000 chars, no truncation)", r4.body.length === 5000, `Length: ${r4.body.length}`, "LOW");
 
     // Comment body exceeding 1000 chars
     const longComment = "B".repeat(3000);
@@ -219,8 +219,8 @@ async function main() {
     const r5 = parsePostDetails(longCommentHtml);
     qa(
       "A2",
-      "comment body truncated to 1000 chars",
-      r5.comments.length > 0 && r5.comments[0].text.length <= 1000,
+      "comment body returned in full (3000 chars, no truncation)",
+      r5.comments.length > 0 && r5.comments[0].text.length === 3000,
       `Length: ${r5.comments[0]?.text.length || 0}`,
       "LOW"
     );

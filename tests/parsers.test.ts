@@ -953,14 +953,14 @@ describe('parsePostDetails edge cases', () => {
     expect(result.comments[0].text.length).toBe(1500);
   });
 
-  it('should limit post body to 2000 characters', () => {
+  it('should keep full post body without truncation', () => {
     const longBody = 'y'.repeat(3000);
     const html = `<html><body>
       <div class="post_title">Test</div>
       <div class="post_body">${longBody}</div>
     </body></html>`;
     const result = parsePostDetails(html);
-    expect(result.body.length).toBeLessThanOrEqual(2000);
+    expect(result.body.length).toBe(3000);
   });
 });
 
@@ -1477,6 +1477,22 @@ describe('parseUserProfile edge cases', () => {
     expect(result.username).toBe('');
     expect(result.posts).toEqual([]);
     expect(result.comments).toEqual([]);
+  });
+
+  it('should keep full profile comment text (no truncation)', () => {
+    const longText = 'z'.repeat(2500);
+    const html = `<html><body><div id="user_title">u</div>
+      <div id="posts">
+        <div class="comment user-comment">
+          <a class="comment_link" title="Some Post" href="/r/test/comments/1/x/">COMMENT</a>
+          <div class="md">${longText}</div>
+          <span class="comment_score">5</span>
+          <span class="comment_subreddit">r/test</span>
+        </div>
+      </div></body></html>`;
+    const profile = parseUserProfile(html);
+    expect(profile.comments.length).toBe(1);
+    expect(profile.comments[0].text.length).toBe(2500);
   });
 });
 

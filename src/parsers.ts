@@ -707,7 +707,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
     const created_relative = $created.text().trim() || undefined;
 
     comments.push({
-      text: bodyText.substring(0, 2000),
+      text: bodyText,
       score,
       ...(linkTitle ? { linkTitle } : {}),
       // linkHref is a post link — make it absolute against the public base
@@ -911,7 +911,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     author,
     subreddit,
     score,
-    body: body.substring(0, 2000),
+    body,
     commentCount,
     comments,
     ...(permalink ? { permalink } : {}),
