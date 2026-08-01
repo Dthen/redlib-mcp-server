@@ -405,6 +405,44 @@ describe('parsePostDetails', () => {
     expect(result.subreddit).toBe('DeepSeek');
   });
 
+  it('should leave embedded prefix-like occurrences untouched (anchored semantics)', () => {
+    // normalizeSubredditLabel anchors on ^r/, ^u_, ^u/ — it only strips when the
+    // label STARTS with a prefix. Values that merely contain one ('xr/DeepSeek',
+    // 'ru_spez') must survive verbatim through the shared parsePostElement path.
+    const embeddedHtml = `<html><body>
+      <div class="post" id="p1">
+        <div class="post_title"><a href="/r/DeepSeek/comments/1vbj0aa/my_title/">Title one</a></div>
+        <span class="post_subreddit">xr/DeepSeek</span>
+        <span class="post_author">user1</span>
+        <span class="post_score">10</span>
+      </div>
+      <div class="post" id="p2">
+        <div class="post_title"><a href="/r/DeepSeek/comments/1vbj0ab/my_title/">Title two</a></div>
+        <span class="post_subreddit">ru_spez</span>
+        <span class="post_author">user2</span>
+        <span class="post_score">10</span>
+      </div>
+    </body></html>`;
+    const posts = parsePostList(embeddedHtml);
+    expect(posts[0].subreddit).toBe('xr/DeepSeek');
+    expect(posts[1].subreddit).toBe('ru_spez');
+  });
+
+  it('should normalize a profile post subreddit through the shared post path (r/u_spez → spez)', () => {
+    // parsePostElement is shared by parsePostList and parseUserProfile posts;
+    // this pins exact equality: 'spez' — not 'u_spez', not 'u/spez'.
+    const profileHtml = `<html><body>
+      <div class="post" id="p1">
+        <div class="post_title"><a href="/user/spez/comments/1u7hraf/21_years_of_reddit/">21 years of Reddit</a></div>
+        <span class="post_subreddit">r/u_spez</span>
+        <span class="post_author">u/spez</span>
+        <span class="post_score">10</span>
+      </div>
+    </body></html>`;
+    const posts = parsePostList(profileHtml);
+    expect(posts[0].subreddit).toBe('spez');
+  });
+
   it('should parse score as a number', () => {
     const result = parsePostDetails(html);
     expect(typeof result.score).toBe('number');
