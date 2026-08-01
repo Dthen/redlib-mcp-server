@@ -302,6 +302,22 @@ async function main() {
     }
   })();
 
+  // 5c — user-profile post via the /user/ path (get_post's 404 fallback target):
+  // spez's "21 years of Reddit" lives at /user/spez/comments/1u7hraf, NOT
+  // /r/spez/comments/1u7hraf (which 404s).
+  await (async () => {
+    try {
+      const html = await fetchHtml(`${REDLIB}/user/spez/comments/1u7hraf`);
+      const detail = parsePostDetails(html, 10);
+
+      const ok = !!detail.title && detail.title.includes("21 years of Reddit") && detail.id === "1u7hraf";
+      record("get_post", "user/spez/comments/1u7hraf (profile post)", ok,
+        ok ? `title='${detail.title}'` : `title='${detail.title || "MISSING"}', id='${detail.id || "MISSING"}'`);
+    } catch (e: any) {
+      record("get_post", "user/spez/comments/1u7hraf (profile post)", false, e.message);
+    }
+  })();
+
   // ═══════════════════════════════════════════════════════════════════════════
   // 6. get_user
   // ═══════════════════════════════════════════════════════════════════════════

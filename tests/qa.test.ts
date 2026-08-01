@@ -67,6 +67,17 @@ async function fetchHtml(url: string): Promise<string> {
   return res.text();
 }
 
+// Fetch HTML with a 404 fallback, mirroring get_post's /user/<name>/comments/<id>
+// fallback for user-profile posts (they don't live under /r/<name>/).
+async function fetchPostHtml(primaryUrl: string, fallbackUrl: string): Promise<string> {
+  try {
+    return await fetchHtml(primaryUrl);
+  } catch (e: any) {
+    if (!String(e.message).includes("404")) throw e;
+    return fetchHtml(fallbackUrl);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // MAIN
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1234,15 +1245,19 @@ async function main() {
             "MEDIUM"
           );
 
-          // Fetch the same post via get_post
+          // Fetch the same post via get_post's URL logic: try /r/ first, and
+          // fall back to /user/<name>/comments/<id> on 404 (user-profile posts
+          // live under the /user/ path, not /r/<name>/).
           try {
-            const detailHtml = await fetchHtml(
-              `${REDLIB}/r/${userPost.subreddit}/comments/${userPost.id}`
+            const detailHtml = await fetchPostHtml(
+              `${REDLIB}/r/${userPost.subreddit}/comments/${userPost.id}`,
+              `${REDLIB}/user/${userPost.subreddit}/comments/${userPost.id}`
             );
             const detail = parsePostDetails(detailHtml);
 
-            // Check author consistency
-            const authorMatch = detail.author.toLowerCase() === "spez";
+            // Check author consistency (redlib renders authors as "u/spez")
+            const authorMatch =
+              detail.author.toLowerCase().replace(/^u\//, "") === "spez";
             qa(
               "D2",
               "cross-check: get_post author matches user profile",

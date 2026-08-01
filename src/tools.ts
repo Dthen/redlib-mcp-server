@@ -150,9 +150,16 @@ export function registerTools(server: McpServer): void {
       try {
         const params = new URLSearchParams();
         if (comment_sort) params.set("sort", comment_sort);
+        const query = params.toString() ? `?${params.toString()}` : '';
 
-        const url = `${REDLIB_BASE_URL}/r/${subreddit}/comments/${postId}${params.toString() ? `?${params.toString()}` : ''}`;
-        const response = await fetch(url);
+        const primaryUrl = `${REDLIB_BASE_URL}/r/${subreddit}/comments/${postId}${query}`;
+        let response = await fetch(primaryUrl);
+        if (response.status === 404) {
+          // User-profile posts live under /user/<name>/comments/<id> (not /r/<name>/...),
+          // so fall back to the /user/ path when the /r/ path 404s.
+          const fallbackUrl = `${REDLIB_BASE_URL}/user/${subreddit}/comments/${postId}${query}`;
+          response = await fetch(fallbackUrl);
+        }
         if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
         const html = await response.text();
         const postData = parsePostDetails(html, comment_limit, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
