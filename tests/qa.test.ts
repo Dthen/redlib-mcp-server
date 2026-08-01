@@ -875,13 +875,31 @@ async function main() {
 
     // Top with time filter
     try {
+      const html = await fetchHtml(`${REDLIB}/r/all/top?t=month`);
+      const posts = parsePostList(html, REDLIB);
+      qa(
+        "B8",
+        "r/all top t=month → has posts",
+        posts.length > 0 && !!posts[0].id,
+        `${posts.length} posts`,
+        "LOW"
+      );
+    } catch (e: any) {
+      qa("B8", "r/all top t=month", false, e.message, "LOW");
+    }
+
+    // Upstream Reddit returns ZERO posts for t=year on aggregate feeds
+    // (r/all and popular — verified live); individual subreddits DO have
+    // t=year data. Document the graceful-empty behavior rather than
+    // expecting posts here.
+    try {
       const html = await fetchHtml(`${REDLIB}/r/all/top?t=year`);
       const posts = parsePostList(html, REDLIB);
       qa(
         "B8",
-        "r/all top t=year → has posts",
-        posts.length > 0 && !!posts[0].id,
-        `${posts.length} posts`,
+        "r/all top t=year → graceful empty (upstream aggregate behavior)",
+        Array.isArray(posts) && posts.length === 0,
+        `${posts.length} posts (upstream returns no t=year data on aggregate feeds)`,
         "LOW"
       );
     } catch (e: any) {
