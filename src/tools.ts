@@ -12,22 +12,19 @@ const REDLIB_PUBLIC_URL = (process.env.REDLIB_PUBLIC_URL || "https://www.reddit.
  */
 export function registerTools(server: McpServer): void {
   // Tool 1: Search Reddit posts via Redlib
-  server.registerTool(
+  server.tool(
     "search_posts",
+    "Search Reddit posts using your private Redlib instance. Supports sort order, time filter, and advanced filters (flair, author, selftext, self_post_only). Returns post IDs for follow-up with get_post.",
     {
-      description: "Search Reddit posts using your private Redlib instance. Supports sort order, time filter, and advanced filters (flair, author, selftext, self_post_only). Returns post IDs for follow-up with get_post.",
-      inputSchema: z.object({
-        query: z.string().describe("Search query"),
-        subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
-        sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
-        t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
-        flair: z.string().optional().describe("Filter by flair name (e.g. 'discussion')"),
-        author: z.string().optional().describe("Filter by author username (e.g. 'spez')"),
-        selftext: z.string().optional().describe("Search within post body text"),
-        self_post_only: z.boolean().optional().describe("Only return self/text posts (no links)"),
-      }),
-      annotations: { readOnlyHint: true },
+      query: z.string().describe("Search query"),
+      subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
+      sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
+      t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
+      limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
+      flair: z.string().optional().describe("Filter by flair name (e.g. 'discussion')"),
+      author: z.string().optional().describe("Filter by author username (e.g. 'spez')"),
+      selftext: z.string().optional().describe("Search within post body text"),
+      self_post_only: z.boolean().optional().describe("Only return self/text posts (no links)"),
     },
     async ({ query, subreddit, sort, t, limit, flair, author, selftext, self_post_only }) => {
       try {
@@ -89,17 +86,14 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 2: Get posts from a subreddit with sort and time filter
-  server.registerTool(
+  server.tool(
     "get_posts",
+    "Get posts from a specific subreddit. Supports sort modes (hot, new, top, rising, controversial) and time filters for top/controversial.",
     {
-      description: "Get posts from a specific subreddit. Supports sort modes (hot, new, top, rising, controversial) and time filters for top/controversial.",
-      inputSchema: z.object({
-        subreddit: z.string().describe("Subreddit name (without r/)"),
-        sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
-        t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      subreddit: z.string().describe("Subreddit name (without r/)"),
+      sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
+      t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
+      limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
     },
     async ({ subreddit, sort, t, limit }) => {
       try {
@@ -143,17 +137,14 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 3: Get specific post with comments
-  server.registerTool(
+  server.tool(
     "get_post",
+    "Get a specific Reddit post and its comments. Use post ID from search or hot post results. `subreddit` may also be a username: profile posts resolve via a /user/ fallback when the /r/ path 404s.",
     {
-      description: "Get a specific Reddit post and its comments. Use post ID from search or hot post results. `subreddit` may also be a username: profile posts resolve via a /user/ fallback when the /r/ path 404s.",
-      inputSchema: z.object({
-        subreddit: z.string().describe("Subreddit name, or username for user-profile posts"),
-        postId: z.string().describe("Reddit post ID (from search/hot results)"),
-        comment_sort: z.enum(["confidence", "top", "new", "controversial", "old"]).optional().describe("Comment sort order (optional, Redlib default is confidence)"),
-        comment_limit: z.number().optional().default(10).describe("Maximum number of comments to return (default: 10)"),
-      }),
-      annotations: { readOnlyHint: true },
+      subreddit: z.string().describe("Subreddit name, or username for user-profile posts"),
+      postId: z.string().describe("Reddit post ID (from search/hot results)"),
+      comment_sort: z.enum(["confidence", "top", "new", "controversial", "old"]).optional().describe("Comment sort order (optional, Redlib default is confidence)"),
+      comment_limit: z.number().optional().default(10).describe("Maximum number of comments to return (default: 10)"),
     },
     async ({ subreddit, postId, comment_sort, comment_limit }) => {
       try {
@@ -192,15 +183,12 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 4: Search subreddits
-  server.registerTool(
+  server.tool(
     "search_subreddits",
+    "Search for subreddits on Reddit via Redlib. Returns subreddit names, subscriber counts, and descriptions.",
     {
-      description: "Search for subreddits on Reddit via Redlib. Returns subreddit names, subscriber counts, and descriptions.",
-      inputSchema: z.object({
-        query: z.string().describe("Search query for subreddits"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      query: z.string().describe("Search query for subreddits"),
+      limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
     },
     async ({ query, limit }) => {
       try {
@@ -240,15 +228,12 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 5: Search users
-  server.registerTool(
+  server.tool(
     "search_users",
+    "Search for Reddit users via Redlib. Returns usernames and optional profile descriptions.",
     {
-      description: "Search for Reddit users via Redlib. Returns usernames and optional profile descriptions.",
-      inputSchema: z.object({
-        query: z.string().describe("Search query for users"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      query: z.string().describe("Search query for users"),
+      limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
     },
     async ({ query, limit }) => {
       try {
@@ -288,14 +273,11 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 6: Get subreddit info from sidebar
-  server.registerTool(
+  server.tool(
     "get_subreddit_info",
+    "Get detailed information about a subreddit (description, rules, etc.) from the Redlib sidebar page.",
     {
-      description: "Get detailed information about a subreddit (description, rules, etc.) from the Redlib sidebar page.",
-      inputSchema: z.object({
-        subreddit: z.string().describe("Subreddit name (without r/)"),
-      }),
-      annotations: { readOnlyHint: true },
+      subreddit: z.string().describe("Subreddit name (without r/)"),
     },
     async ({ subreddit }) => {
       try {
@@ -343,18 +325,15 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 7: Get user profile
-  server.registerTool(
+  server.tool(
     "get_user",
+    "Get a Reddit user's profile information, posts, and comments via Redlib. Returns profile details (karma, cake day, description) and content listings.",
     {
-      description: "Get a Reddit user's profile information, posts, and comments via Redlib. Returns profile details (karma, cake day, description) and content listings.",
-      inputSchema: z.object({
-        username: z.string().describe("Reddit username (without u/)"),
-        listing: z.enum(["overview", "submitted", "comments"]).optional().default("overview").describe("Content listing type (default: overview)"),
-        sort: z.enum(["hot", "new", "top", "controversial"]).optional().describe("Sort order (optional)"),
-        t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts/comments to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      username: z.string().describe("Reddit username (without u/)"),
+      listing: z.enum(["overview", "submitted", "comments"]).optional().default("overview").describe("Content listing type (default: overview)"),
+      sort: z.enum(["hot", "new", "top", "controversial"]).optional().describe("Sort order (optional)"),
+      t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
+      limit: z.number().optional().default(25).describe("Maximum number of posts/comments to return (default: 25)"),
     },
     async ({ username, listing, sort, t, limit }) => {
       try {
@@ -404,17 +383,14 @@ export function registerTools(server: McpServer): void {
   );
 
   // Tool 8: Get Reddit front page (popular or r/all)
-  server.registerTool(
+  server.tool(
     "get_front_page",
+    "Get posts from the Reddit front page — either the popular feed or r/all. Supports sort modes (hot, new, top, rising, controversial) and time filters for top/controversial.",
     {
-      description: "Get posts from the Reddit front page — either the popular feed or r/all. Supports sort modes (hot, new, top, rising, controversial) and time filters for top/controversial.",
-      inputSchema: z.object({
-        feed: z.enum(["popular", "all"]).optional().default("popular").describe("Feed type: popular (default Reddit front page) or all (r/all)"),
-        sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
-        t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      feed: z.enum(["popular", "all"]).optional().default("popular").describe("Feed type: popular (default Reddit front page) or all (r/all)"),
+      sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
+      t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
+      limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
     },
     async ({ feed, sort, t, limit }) => {
       try {
@@ -472,19 +448,16 @@ export function registerTools(server: McpServer): void {
     }
   );
 
-  // Tool 9: Search comments
-  server.registerTool(
+  // Tool 10: Search comments
+  server.tool(
     "search_comments",
+    "Search Reddit comments via Redlib. Returns comment text, authors, scores, and links to the parent posts.",
     {
-      description: "Search Reddit comments via Redlib. Returns comment text, authors, scores, and links to the parent posts.",
-      inputSchema: z.object({
-        query: z.string().describe("Search query for comments"),
-        subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
-        sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
-        t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
-      }),
-      annotations: { readOnlyHint: true },
+      query: z.string().describe("Search query for comments"),
+      subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
+      sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
+      t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
+      limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
     },
     async ({ query, subreddit, sort, t, limit }) => {
       try {
@@ -533,16 +506,13 @@ export function registerTools(server: McpServer): void {
     }
   );
 
-  // Tool 10: Get subreddit wiki page
-  server.registerTool(
+  // Tool 9: Get subreddit wiki page
+  server.tool(
     "get_wiki_page",
+    "Get the contents of a subreddit's wiki page via Redlib. Returns the page title and wiki content.",
     {
-      description: "Get the contents of a subreddit's wiki page via Redlib. Returns the page title and wiki content.",
-      inputSchema: z.object({
-        subreddit: z.string().describe("Subreddit name (without r/)"),
-        page: z.string().optional().default("index").describe("Wiki page name (default: index)"),
-      }),
-      annotations: { readOnlyHint: true },
+      subreddit: z.string().describe("Subreddit name (without r/)"),
+      page: z.string().optional().default("index").describe("Wiki page name (default: index)"),
     },
     async ({ subreddit, page }) => {
       try {
