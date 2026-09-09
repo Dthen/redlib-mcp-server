@@ -7,7 +7,7 @@ This is a fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes
 ## Features
 
 - **Privacy-First** — Uses your self-hosted Redlib, no tracking or API keys
-- **9 Tools** — Search posts, subreddits, users; browse front page, user profiles, wiki pages; fetch posts with comments
+- **10 Tools** — Search posts, subreddits, users; browse front page, user profiles, wiki pages; fetch posts with comments; search comments
 - **Docker Ready** — Default and hardened images available
 - **Structured Output** — Returns clean JSON instead of raw HTML
 
@@ -105,6 +105,17 @@ Search for Reddit users. Returns usernames and optional profile descriptions.
 | Param | Required | Default | Description |
 |-------|----------|---------|-------------|
 | `query` | yes | — | Search query for users |
+| `limit` | no | 25 | Maximum results |
+
+### `search_comments`
+Search Reddit comments. Returns comment text, authors, scores, and links to parent posts.
+
+| Param | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `query` | yes | — | Search query for comments |
+| `subreddit` | no | — | Limit search to a specific subreddit |
+| `sort` | no | `relevance` | `relevance`, `hot`, `top`, `new`, `comments` |
+| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` |
 | `limit` | no | 25 | Maximum results |
 
 ### `get_subreddit_info`
