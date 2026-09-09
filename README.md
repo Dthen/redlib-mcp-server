@@ -19,15 +19,6 @@ This is a fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes
 
 ## Quick Start
 
-### Docker
-
-```bash
-docker run -i --rm \
-  --network host \
-  -e REDLIB_URL=http://localhost:8080 \
-  alfafadock/mcp-redlib:latest
-```
-
 ### Local Development
 
 ```bash
@@ -36,6 +27,28 @@ cd redlib-mcp-server
 npm install
 npm run build
 npm start
+```
+
+### Docker
+
+Build and run locally using the included Dockerfiles:
+
+```bash
+# Default image
+docker build -t redlib-mcp-server .
+docker run -i --rm \
+  --network host \
+  -e REDLIB_URL=http://localhost:8080 \
+  redlib-mcp-server
+
+# Hardened image (non-root, minimal privileges)
+docker build -f Dockerfile.hardened -t redlib-mcp-server:hardened .
+docker run -i --rm \
+  --network host \
+  --cap-drop=ALL \
+  --security-opt no-new-privileges:true \
+  -e REDLIB_URL=http://localhost:8080 \
+  redlib-mcp-server:hardened
 ```
 
 ## Configuration
@@ -132,14 +145,32 @@ Get a subreddit's wiki page.
 
 ## Integration
 
-All MCP clients use the same Docker command. Adjust `REDLIB_URL` if your Redlib runs on a different port.
+### Hermes Agent
+
+Add to `~/.hermes/config.yaml`:
+
+```yaml
+mcp_servers:
+  redlib:
+    command: node
+    args:
+      - /path/to/redlib-mcp-server/dist/index.js
+    env:
+      REDLIB_URL: http://127.0.0.1:8080
+    enabled: true
+```
+
+### Other MCP Clients
+
+All MCP clients use the same command. Adjust `REDLIB_URL` if your Redlib runs on a different port.
 
 ```json
 {
   "mcpServers": {
     "redlib": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "--network", "host", "-e", "REDLIB_URL=http://localhost:8080", "alfafadock/mcp-redlib:latest"]
+      "command": "node",
+      "args": ["/path/to/redlib-mcp-server/dist/index.js"],
+      "env": { "REDLIB_URL": "http://localhost:8080" }
     }
   }
 }
