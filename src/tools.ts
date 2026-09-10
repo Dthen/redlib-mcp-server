@@ -480,7 +480,7 @@ export function registerTools(server: McpServer): void {
     }
   );
 
-  // Tool 10: Search comments
+  // Tool 9: Search comments
   server.registerTool(
     "search_comments",
     {
@@ -542,7 +542,7 @@ export function registerTools(server: McpServer): void {
     }
   );
 
-  // Tool 9: Get subreddit wiki page
+  // Tool 10: Get subreddit wiki page
   server.registerTool(
     "get_wiki_page",
     {

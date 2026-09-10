@@ -960,6 +960,88 @@ async function main() {
     }
   }
 
+  // ── B10: search_comments live edge cases ──
+  console.log("\nB10: search_comments live edge cases");
+  {
+    // Basic comment search (mirrors the tool's URL: q + type=comment + sort, which
+    // is always set explicitly since the tool defaults sort to "relevance")
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=best&type=comment&sort=relevance&limit=25`);
+      const results = parsePostList(html, REDLIB);
+      qa(
+        "B10",
+        "basic comment search → results parsed",
+        results.length > 0,
+        `Got ${results.length} results`,
+        "MEDIUM"
+      );
+    } catch (e: any) {
+      qa("B10", "basic comment search", false, e.message, "MEDIUM");
+    }
+
+    // Subreddit-scoped comment search (mirrors the tool's subreddit path)
+    try {
+      const html = await fetchHtml(
+        `${REDLIB}/r/askscience/search?q=gravity&restrict_sr=on&type=comment&sort=relevance&limit=25`
+      );
+      const results = parsePostList(html, REDLIB);
+      qa(
+        "B10",
+        "subreddit-scoped comment search (r/askscience gravity)",
+        results.length > 0,
+        `Got ${results.length} results`,
+        "LOW"
+      );
+    } catch (e: any) {
+      qa("B10", "subreddit-scoped comment search", false, e.message, "LOW");
+    }
+
+    // Empty query string with type=comment
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=&type=comment`);
+      const results = parsePostList(html, REDLIB);
+      qa(
+        "B10",
+        "empty query (type=comment) → Redlib handles gracefully",
+        Array.isArray(results),
+        `Returned ${results.length} results`,
+        "MEDIUM"
+      );
+    } catch (e: any) {
+      qa("B10", "empty query (type=comment) → Redlib redirects/errors", true, `Redlib: ${e.message.substring(0, 80)}`, "INFO");
+    }
+
+    // Nonsense query → graceful empty
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=zzzxxxyyy_nobody_would_name_this&type=comment`);
+      const results = parsePostList(html, REDLIB);
+      qa(
+        "B10",
+        "nonsense query → graceful empty array (no crash)",
+        Array.isArray(results) && results.length === 0,
+        `Returned ${results.length} results`,
+        "LOW"
+      );
+    } catch (e: any) {
+      qa("B10", "nonsense query", false, e.message, "LOW");
+    }
+
+    // Invalid sort value → Redlib ignores
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=test&sort=INVALID&type=comment`);
+      const results = parsePostList(html, REDLIB);
+      qa(
+        "B10",
+        "invalid sort value → Redlib silently ignores",
+        Array.isArray(results) && results.length > 0,
+        `Redlib returns ${results.length} results (ignores invalid sort)`,
+        "MEDIUM"
+      );
+    } catch (e: any) {
+      qa("B10", "invalid sort value", false, e.message, "MEDIUM");
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION C: COMMENT HANDLING
   // ═══════════════════════════════════════════════════════════════════════════

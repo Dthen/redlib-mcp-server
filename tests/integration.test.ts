@@ -490,6 +490,51 @@ async function main() {
   })();
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // 10. search_comments
+  // ═══════════════════════════════════════════════════════════════════════════
+  console.log("\n10. search_comments");
+
+  // 10a — basic comment search (mirrors the tool's URL: q + type=comment + sort,
+  // which is always set explicitly since the tool defaults sort to "relevance")
+  await (async () => {
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=best&type=comment&sort=relevance`);
+      const comments = parsePostList(html, REDLIB);
+      const ok = comments.length > 0 && !!comments[0].id && !!comments[0].title;
+      record("search_comments", "best (default sort)", ok,
+        ok ? undefined : `Got ${comments.length} results, first id=${comments[0]?.id || "N/A"}`);
+    } catch (e: any) {
+      record("search_comments", "best (default sort)", false, e.message);
+    }
+  })();
+
+  // 10b — sort=new + t=week
+  await (async () => {
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=python&sort=new&t=week&type=comment`);
+      const comments = parsePostList(html, REDLIB);
+      const ok = comments.length > 0 && !!comments[0].id;
+      record("search_comments", "python sort=new t=week", ok,
+        ok ? undefined : `Got ${comments.length} results`);
+    } catch (e: any) {
+      record("search_comments", "python sort=new t=week", false, e.message);
+    }
+  })();
+
+  // 10c — nonsense query (parser should gracefully return 0)
+  await (async () => {
+    try {
+      const html = await fetchHtml(`${REDLIB}/search?q=zzzxxxyyy_nobody_would_name_this&type=comment`);
+      const comments = parsePostList(html, REDLIB);
+      const ok = Array.isArray(comments) && comments.length === 0;
+      record("search_comments", "nonsense query (empty results)", ok,
+        ok ? `Parser returned 0 results (graceful)` : `Got ${comments.length} results`);
+    } catch (e: any) {
+      record("search_comments", "nonsense query (empty results)", false, e.message);
+    }
+  })();
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // SUMMARY
   // ═══════════════════════════════════════════════════════════════════════════
   const passed = results.filter(r => r.pass).length;
