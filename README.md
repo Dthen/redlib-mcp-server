@@ -2,13 +2,12 @@
 
 A **Model Context Protocol (MCP) server** that enables AI agents to interact with Reddit through your private **Redlib** instance. No Reddit API keys required — just a running Redlib instance.
 
-This is a fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes/redlib-mcp-server), extended from 3 to 9 tools with full coverage of Redlib's capabilities.
+This is a fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes/redlib-mcp-server), extended from 3 to 10 tools with full coverage of Redlib's capabilities.
 
 ## Features
 
 - **Privacy-First** — Uses your self-hosted Redlib, no tracking or API keys
-- **9 Tools** — Search posts, subreddits, users; browse front page, user profiles, wiki pages; fetch posts with comments
-- **Docker Ready** — Default and hardened images available
+- **10 Tools** — Search posts, subreddits, users, comments; browse front page, user profiles, wiki pages; fetch posts with comments
 - **Structured Output** — Returns clean JSON instead of raw HTML
 
 ## Prerequisites
@@ -27,28 +26,6 @@ cd redlib-mcp-server
 npm install
 npm run build
 npm start
-```
-
-### Docker
-
-Build and run locally using the included Dockerfiles:
-
-```bash
-# Default image
-docker build -t redlib-mcp-server .
-docker run -i --rm \
-  --network host \
-  -e REDLIB_URL=http://localhost:8080 \
-  redlib-mcp-server
-
-# Hardened image (non-root, minimal privileges)
-docker build -f Dockerfile.hardened -t redlib-mcp-server:hardened .
-docker run -i --rm \
-  --network host \
-  --cap-drop=ALL \
-  --security-opt no-new-privileges:true \
-  -e REDLIB_URL=http://localhost:8080 \
-  redlib-mcp-server:hardened
 ```
 
 ## Configuration
@@ -105,6 +82,18 @@ Search for Reddit users. Returns usernames and optional profile descriptions.
 | Param | Required | Default | Description |
 |-------|----------|---------|-------------|
 | `query` | yes | — | Search query for users |
+| `limit` | no | 25 | Maximum results |
+
+### `search_comments`
+
+Search Reddit comments. Returns comment text, authors, scores, and links to parent posts.
+
+| Param | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `query` | yes | — | Search query for comments |
+| `subreddit` | no | — | Limit search to a specific subreddit |
+| `sort` | no | `relevance` | `relevance`, `hot`, `top`, `new`, `comments` |
+| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` |
 | `limit` | no | 25 | Maximum results |
 
 ### `get_subreddit_info`
@@ -196,9 +185,6 @@ redlib-mcp-server/
 │   ├── parsers.test.ts   # Parser unit tests
 │   ├── integration.test.ts
 │   └── qa.test.ts
-├── Dockerfile
-├── Dockerfile.hardened
-├── docker-compose.yml
 ├── package.json
 └── README.md
 ```

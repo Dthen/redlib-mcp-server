@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
  * Redlib MCP Server — Live Integration Tests
- * Tests all 9 tools against a running Redlib instance at 127.0.0.1:8080
+ * Tests all 10 tools against a running Redlib instance at 127.0.0.1:8080
  *
  * Usage: npx tsx tests/integration.test.ts
  *   or:  REDLIB_URL=http://127.0.0.1:8080 npx tsx tests/integration.test.ts

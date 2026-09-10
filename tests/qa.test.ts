@@ -1,7 +1,7 @@
 /**
  * Comprehensive QA Test Suite — Redlib MCP Server
  *
- * Tests all 9 tools for:
+ * Tests all 10 tools for:
  *   1. Negative cases (invalid params, edge limits)
  *   2. HTML resilience (empty, truncated, 503-style maintenance pages)
  *   3. Comment handling (zero comments, deleted/removed, nested, empty author)
