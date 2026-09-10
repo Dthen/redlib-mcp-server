@@ -45,8 +45,12 @@ Search Reddit posts. Supports sort order, time filter, and subreddit scoping.
 | `query` | yes | — | Search query string |
 | `subreddit` | no | — | Limit search to a specific subreddit |
 | `sort` | no | `relevance` | `relevance`, `hot`, `top`, `new`, `comments` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (only with `relevance` or `comments`) |
+| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (applies to all sort modes) |
 | `limit` | no | 25 | Maximum results |
+| `flair` | no | — | Filter by flair name (e.g. 'discussion') |
+| `author` | no | — | Filter by author username (e.g. 'spez') |
+| `selftext` | no | — | Search within post body text |
+| `self_post_only` | no | — | Only return self/text posts (no links) |
 
 ### `get_posts`
 Get posts from a subreddit. Supports all sort modes and time filters.
@@ -110,7 +114,7 @@ Get a user's profile, posts, and comments. Supports listing type, sort, and time
 |-------|----------|---------|-------------|
 | `username` | yes | — | Reddit username (without u/) |
 | `listing` | no | `overview` | `overview`, `submitted`, `comments` |
-| `sort` | no | `hot` | `hot`, `new`, `top`, `controversial` |
+| `sort` | no | — | `hot`, `new`, `top`, `controversial` |
 | `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (only with `top` or `controversial`) |
 | `limit` | no | 25 | Maximum posts/comments |
 
@@ -186,6 +190,9 @@ redlib-mcp-server/
 │   ├── integration.test.ts
 │   └── qa.test.ts
 ├── package.json
+├── tsconfig.json
+├── jest.config.ts
+├── LICENSE
 └── README.md
 ```
 
