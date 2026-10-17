@@ -33,7 +33,7 @@ npm start
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `REDLIB_URL` | `http://localhost:8080` | URL of your Redlib instance (every outbound request targets this origin) |
+| `REDLIB_URL` | `http://localhost:8080` | URL of your Redlib instance. `get_post`'s bounded fetch ensures every outbound request targets this origin (no escape via redirects). The other 9 handlers make direct `fetch` calls to this URL without redirect re-validation. |
 | `REDLIB_PUBLIC_URL` | `https://www.reddit.com` | Public base URL for permalinks and flair filter links in tool output |
 
 ## Tools
@@ -70,21 +70,41 @@ Get a post and its comments. `postId` accepts a Reddit post ID (from search or h
 
 | Form | Example | Needs `subreddit`? | Resolution |
 |------|---------|---------------------|------------|
-| Bare ASCII base36 ID | `1x7hpcl` | Optional | `/r/<hint>/comments/<id>` → 404 fallback `/user/<hint>/comments/<id>` |
+| Bare ASCII base36 ID | `1x7hpcl` | Optional | No hint: `/comments/<id>`. With hint: `/r/<hint>/comments/<id>` → 404 fallback `/user/<hint>/comments/<id>` |
 | `t3_`-prefixed fullname | `t3_1x7hpcl` | Optional | Same as bare ID (prefix stripped internally) |
 | Scoped path | `r/webscraping/comments/1x7hpcl` | No | Direct: `/r/webscraping/comments/1x7hpcl` |
+| Profile path | `user/spez/comments/1x7hpcl` or `/u/spez/comments/1x7hpcl` | No | Direct: `/user/spez/comments/1x7hpcl` (`/u/` alias → `/user/`) |
 | `/comments/<id>` | `/comments/1x7hpcl` | No | Direct: `/comments/1x7hpcl` |
-| Reddit permalink URL | `https://www.reddit.com/r/webscraping/comments/1x7hpcl/` | No | Host must be in allow-list; path extracted |
+| Compact `/<id>` | `/1x7hpcl` | No | Direct: `/comments/1x7hpcl` (no hint, no fallback) |
+| Reddit permalink URL | `https://www.reddit.com/r/webscraping/comments/1x7hpcl/` | No | Host must be in allow-list; path extracted; slug and comment-id suffix stripped → `/r/webscraping/comments/1x7hpcl` |
 | Full share URL | `https://www.reddit.com/r/webscraping/s/yf4R7bbaHP` | No | `/r/webscraping/s/<token>` → 302 → canonical |
 | Bare share fragment | `s/yf4R7bbaHP` | **Required** | `/r/<hint>/s/<token>` → 302 → canonical |
 | Scoped share path | `r/webscraping/s/yf4R7bbaHP` | No | `/r/webscraping/s/<token>` → 302 → canonical |
 | Short link | `https://redd.it/1x7hpcl` | No | `/comments/1x7hpcl` (shortener never fetched) |
 
+A Reddit comment URL (e.g. `https://www.reddit.com/r/<sub>/comments/<id>/<slug>/<comment_id>/`) resolves to the **parent post**: the slug and comment-id suffix are stripped, yielding `/r/<sub>/comments/<id>`. This is not a comment-scoped lookup.
+
+Share tokens are opaque, case-sensitive ASCII alphanumeric strings (`[A-Za-z0-9]+`). The supplied spelling is preserved exactly — never decoded, re-encoded, or repaired. Share references under `user/` or `u/` are not part of the contract and are rejected. A full scoped share URL ignores the `subreddit` hint.
+
+#### Example `get_post` requests
+
+```json
+{"subreddit": "webscraping", "postId": "s/yf4R7bbaHP"}
+```
+
+```json
+{"postId": "https://www.reddit.com/r/webscraping/s/yf4R7bbaHP"}
+```
+
+```json
+{"postId": "1x7hpcl"}
+```
+
 #### Subreddit hint policy
 
 - **Only** bare single-token IDs and bare `s/<token>` fragments use the hint.
 - Scoped paths (`r/<name>/...`, `/comments/<id>`), full URLs, and scoped shares are authoritative — the hint is ignored.
-- A non-string hint is treated as absent (never coerced to `"null"`).
+- The `subreddit` parameter is an optional string in the tool schema; non-string values are rejected at the tool boundary by schema validation. The parser's internal `typeof` guard is defensive — it treats a non-string hint as absent (never coerced to `"null"`), but this path is not reachable through the tool API.
 - The hint must be a valid `[A-Za-z0-9_-]+` segment.
 
 #### Profile fallback semantics
@@ -121,7 +141,7 @@ All other hosts are rejected before any network I/O. Unconfigured Redlib hostnam
 - **Redirects**: At most 5 hops per operation (the 404 profile fallback is not itself a redirect hop).
 - **Body cap**: 5 MiB decompressed. Oversize bodies fail with a typed error (not truncated).
 - **Redirect handling**: `redirect: 'manual'`. Only 301/302/303/307/308 are followed. Redirect `Location` is re-parsed through the same pure reference grammar; external hosts, unsafe routes, userinfo, non-HTTP schemes, https→http downgrades, and loops are rejected.
-- **eCAPTCHA**: Every outbound request targets the configured `REDLIB_URL` origin and its base-path prefix. Reddit URLs and `REDLIB_PUBLIC_URL` are reference origins — they are recognised and remapped, never fetched.
+- **Outbound target (get_post only)**: Every `get_post` outbound request targets the configured `REDLIB_URL` origin and its base-path prefix. Reddit URLs and `REDLIB_PUBLIC_URL` are reference origins — they are recognised and remapped, never fetched. This scoped no-escape policy applies only to `get_post`; the other 9 handlers make direct `fetch` calls to `REDLIB_BASE_URL` without the same redirect re-validation.
 
 #### Validity guard
 
@@ -129,7 +149,7 @@ A non-empty `title` and a valid ASCII base36 post ID (matching the expected ID, 
 
 #### Error responses
 
-All tool errors return `isError: true` with a human-readable message prefixed by `Error fetching post:`. Invalid input or unsafe `Location` values are rejected before any I/O.
+All tool errors return `isError: true` with a human-readable message prefixed by `Error fetching post:`. Invalid input is rejected before any fetch (before any I/O). An unsafe redirect `Location` is rejected before following it — the primary request has already been fetched at that point. Internal typed errors (e.g. `PostFetchError` with codes like `unsafe-redirect`, `timeout`, `too-large`) are an implementation detail of the fetch helper, not a new structured tool error API — callers see only the human-readable `isError: true` envelope.
 
 | Param | Required | Default | Description |
 |-------|----------|---------|-------------|
@@ -277,7 +297,7 @@ npm run build
 npm test
 ```
 
-**`npm test`** is hermetic: it runs all unit test suites via Jest with no network access. The standalone live harness (`tests/mcp-smoke.ts`) and integration/QA suites are excluded from the default Jest run.
+**`npm test`** runs all unit test suites via Jest with no INTERNET access. The `post-fetch-http.test.ts` suite uses real ephemeral `127.0.0.1` loopback HTTP servers (bound to port 0) to exercise the fetch helper against actual HTTP responses — no external network is contacted. The standalone live harness (`tests/mcp-smoke.ts`) and integration/QA suites are excluded from the default Jest run.
 
 ### Smoke Harness
 
@@ -295,7 +315,7 @@ The smoke harness (`tests/mcp-smoke.ts`) exercises the compiled MCP server over 
 REDLIB_URL=http://127.0.0.1:8080 ./node_modules/.bin/tsx tests/mcp-smoke.ts --live
 ```
 
-- **Default (mock)**: Starts a local HTTP fixture server on `127.0.0.1`, spawns the compiled server with a scoped `REDLIB_URL`, and exercises every supported post-reference form through the real MCP protocol boundary (initialize, notifications/initialized, tools/list, tools/call). All traffic stays on loopback. 10 test cases.
+- **Default (mock)**: Starts a local HTTP fixture server on `127.0.0.1`, spawns the compiled server with a scoped `REDLIB_URL`, and exercises a core post-reference form matrix through the real MCP protocol boundary (initialize, notifications/initialized, tools/list, tools/call). The matrix covers legacy ID + hint, unscoped `/comments/<id>`, full share URL (302 redirect), bare share fragment + hint, invalid host rejection, and the HTTP 200 invalid-page guard — not every possible form (e.g., profile shares, `t3_`-prefixed IDs, and all allow-list hosts are not compiled into the mock). All traffic stays on loopback. 10 test cases.
 - **Explicit live** (`--live`): Requires a reachable Redlib at `REDLIB_URL` (default `http://127.0.0.1:8080`). A bounded 3s upstream probe runs before any child spawn; if unreachable, live cases are recorded as `BLOCKED` (never a fake pass). Otherwise exactly 3 bounded `get_post` calls are made (legacy ID with comment_sort=new + comment_limit=1, full share URL, bare share fragment). 8 test cases.
 
 #### Exit codes
