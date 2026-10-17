@@ -364,15 +364,18 @@ function spawnCandidate(distPath: string, env: Record<string, string>): Promise<
     // Write initialize (child reads from stdin)
     child.stdin!.write(JSON.stringify(initMsg) + "\n");
 
-    // Send initialized notification (JSON-RPC 2.0 notification: NO id field)
-    child.stdin!.write(JSON.stringify({
-      jsonrpc: "2.0",
-      method: "notifications/initialized",
-      params: {},
-    }) + "\n");
-
+    // MCP handshake: wait for initialize response BEFORE sending
+    // notifications/initialized (JSON-RPC 2.0 notification: NO id field)
     initPromise
       .then((initResp) => {
+        if (initResp.error) {
+          throw new Error(`JSON-RPC error ${initResp.error.code}: ${initResp.error.message}`);
+        }
+        child.stdin!.write(JSON.stringify({
+          jsonrpc: "2.0",
+          method: "notifications/initialized",
+          params: {},
+        }) + "\n");
         settled = true;
         resolve({
           transport: {
