@@ -29,6 +29,18 @@ const BASE_PATH_CONFIG: Config = {
   publicBaseUrl: 'https://rd.example.com/redlib',
 };
 
+// Trailing slash on the configured origins must normalize away (Task 3).
+const TRAILING_SLASH_CONFIG: Config = {
+  baseUrl: 'http://127.0.0.1:8080/',
+  publicBaseUrl: 'https://rd.example.com/',
+};
+
+// Origin + non-root base path WITH trailing slashes.
+const BASE_PATH_TRAILING_CONFIG: Config = {
+  baseUrl: 'http://127.0.0.1:8080/redlib/',
+  publicBaseUrl: 'https://rd.example.com/redlib/',
+};
+
 interface ValidCase {
   name: string;
   input: string;
@@ -356,6 +368,135 @@ const shortLinkCases: ValidCase[] = [
   },
 ];
 
+// Task 3 — share references. A share token is an opaque, case-sensitive
+// alphanumeric handle; it is NOT a post id, so no `expectedPostId` and no
+// legacy profile fallback is emitted. Scope comes from the scoped route or, for
+// a bare share fragment only, from the subreddit hint.
+const shareCases: ValidCase[] = [
+  {
+    name: 'bare share fragment + hint -> scoped share path, token case preserved',
+    input: 's/yf4R7bbaHP',
+    subreddit: 'webscraping',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'leading-slash share fragment is equivalent',
+    input: '/s/yf4R7bbaHP',
+    subreddit: 'webscraping',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'scoped share path without leading slash',
+    input: 'r/webscraping/s/yf4R7bbaHP',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'scoped share path with leading slash',
+    input: '/r/webscraping/s/yf4R7bbaHP',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'full original user share URL (reddit.com/r/<sub>/s/<token>)',
+    input: 'https://www.reddit.com/r/webscraping/s/yf4R7bbaHP',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'share URL on bare reddit.com',
+    input: 'https://reddit.com/r/webscraping/s/yf4R7bbaHP',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'share token keeps mixed case exactly',
+    input: 'https://old.reddit.com/r/foo/s/AbC123xY',
+    expected: { path: '/r/foo/s/AbC123xY' },
+  },
+  {
+    name: 'scoped share is authoritative over a contradictory hint',
+    input: '/r/foo/s/yf4R7bbaHP',
+    subreddit: 'other-hint',
+    expected: { path: '/r/foo/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'canonical scoped share URL ignores a contradictory hint',
+    input: 'https://www.reddit.com/r/foo/s/yf4R7bbaHP',
+    subreddit: 'other-hint',
+    expected: { path: '/r/foo/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'configured REDLIB_URL origin share route',
+    input: 'http://127.0.0.1:8080/r/webscraping/s/yf4R7bbaHP',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'configured public origin share route',
+    input: 'https://rd.example.com/r/webscraping/s/yf4R7bbaHP',
+    config: INSTANCE_CONFIG,
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'trailing slash on a bare share fragment is accepted',
+    input: 's/yf4R7bbaHP/',
+    subreddit: 'webscraping',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'trailing slash on a scoped share path is accepted',
+    input: '/r/webscraping/s/yf4R7bbaHP/',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'bare share fragment keeps a recognized sort',
+    input: 's/yf4R7bbaHP?sort=new',
+    subreddit: 'webscraping',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP', urlCommentSort: 'new' },
+  },
+  {
+    name: 'share URL keeps a recognized sort',
+    input: 'https://www.reddit.com/r/webscraping/s/yf4R7bbaHP?sort=top',
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP', urlCommentSort: 'top' },
+  },
+];
+
+// Task 3 — configured base-url shapes (trailing slash, nonempty prefix).
+const baseUrlVariantCases: ValidCase[] = [
+  {
+    name: 'trailing slash on configured origins is normalized (instance /comments)',
+    input: 'http://127.0.0.1:8080/comments/1x7hpcl',
+    config: TRAILING_SLASH_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'trailing slash on configured origins is normalized (public scoped)',
+    input: 'https://rd.example.com/r/foo/comments/1x7hpcl',
+    config: TRAILING_SLASH_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'trailing-slash origin accepts a share route',
+    input: 'http://127.0.0.1:8080/r/webscraping/s/yf4R7bbaHP',
+    config: TRAILING_SLASH_CONFIG,
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+  {
+    name: 'nonempty base path with trailing slash is stripped (instance)',
+    input: 'http://127.0.0.1:8080/redlib/r/foo/comments/1x7hpcl',
+    config: BASE_PATH_TRAILING_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'nonempty base path with trailing slash is stripped (public /comments)',
+    input: 'https://rd.example.com/redlib/comments/1x7hpcl',
+    config: BASE_PATH_TRAILING_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'nonempty base path with trailing slash accepts a share route',
+    input: 'https://rd.example.com/redlib/r/webscraping/s/yf4R7bbaHP',
+    config: BASE_PATH_TRAILING_CONFIG,
+    expected: { path: '/r/webscraping/s/yf4R7bbaHP' },
+  },
+];
+
 const sortCases: ValidCase[] = [
   {
     name: 'sort=confidence surfaced as urlCommentSort',
@@ -466,9 +607,35 @@ const rejectCases: RejectCase[] = [
   { name: 'reddit origin with no route', input: 'https://www.reddit.com' },
   { name: 'unsupported /comments-less profile path', input: '/user/spez' },
   { name: 'scheme without authority', input: 'http:reddit.com/r/foo/comments/1x7hpcl' },
-  // Task 3 boundary: share syntax (s/<token>) is NOT part of this slice.
-  { name: 'share link (deferred to Task 3)', input: 's/yf4R7bbaHP', subreddit: 'webscraping' },
-  { name: 'share link with slash (deferred to Task 3)', input: '/r/webscraping/s/yf4R7bbaHP' },
+  // Task 3 — share grammar: supported forms now pass; these pin the rejections
+  // (missing context, malformed tokens, unsupported scopes, hostile hosts).
+  { name: 'bare share fragment without a hint', input: 's/yf4R7bbaHP' },
+  { name: 'leading-slash share fragment without a hint', input: '/s/yf4R7bbaHP' },
+  { name: 'empty share token', input: 's/', subreddit: 'webscraping' },
+  { name: 'share token with punctuation', input: 's/yf4R7bbaHP!', subreddit: 'webscraping' },
+  { name: 'share token with an encoded separator', input: 's/yf4R7bba%2fHP', subreddit: 'webscraping' },
+  { name: 'share fragment with an extra segment', input: 's/yf4R7bbaHP/extra', subreddit: 'webscraping' },
+  { name: 'scoped share with an extra segment', input: '/r/foo/s/yf4R7bbaHP/extra' },
+  { name: 'scoped share with an empty token', input: '/r/foo/s/' },
+  { name: 'scoped share with an invalid scoped name', input: '/r/ba!d/s/yf4R7bbaHP' },
+  { name: 'share under u/<name> is unsupported', input: '/u/spez/s/yf4R7bbaHP' },
+  { name: 'share under user/<name> is unsupported', input: '/user/spez/s/yf4R7bbaHP' },
+  { name: 'unscoped share URL cannot borrow a hint', input: 'https://www.reddit.com/s/yf4R7bbaHP', subreddit: 'webscraping' },
+  { name: 'share on an external host', input: 'https://evil.example.com/r/foo/s/yf4R7bbaHP' },
+  { name: 'share on a look-alike host', input: 'https://reddit.com.attacker.invalid/r/foo/s/yf4R7bbaHP' },
+  { name: 'share URL with userinfo', input: 'https://user:pass@reddit.com/r/foo/s/yf4R7bbaHP' },
+  { name: 'share with an unsupported scheme', input: 'ftp://reddit.com/r/foo/s/yf4R7bbaHP' },
+  { name: 'protocol-relative share URL', input: '//reddit.com/r/foo/s/yf4R7bbaHP' },
+  { name: 'backslash share separator', input: 'https://reddit.com/r/foo\\s\\yf4R7bbaHP' },
+  { name: 'literal traversal in a share URL', input: 'https://reddit.com/r/foo/s/../../search' },
+  { name: 'percent-encoded traversal in a share URL', input: 'https://reddit.com/r/foo/%2e%2e/s/yf4R7bbaHP' },
+  { name: 'encoded backslash in a share path', input: 'https://reddit.com/r/foo%5cs/yf4R7bbaHP' },
+  { name: 'double-encoded separator in a share path', input: 'https://reddit.com/r/foo/%252e%252e/s/yf4R7bbaHP' },
+  { name: 'malformed scheme separator (extra slashes)', input: 'https:////reddit.com/r/foo/s/yf4R7bbaHP' },
+  { name: 'malformed scheme separator (three slashes)', input: 'https:///reddit.com/r/foo/comments/1x7hpcl' },
+  { name: 'redd.it share path is not a compact id', input: 'https://redd.it/s/yf4R7bbaHP' },
+  { name: 'invalid post id punctuation', input: '/comments/1x7!pcl' },
+  { name: 'unsupported wiki route', input: '/r/foo/wiki/bar' },
 ];
 
 function runValid(cases: ValidCase[]): void {
@@ -523,6 +690,60 @@ describe('parsePostReference — redd.it short links', () => {
 
 describe('parsePostReference — source comment-sort extraction', () => {
   runValid(sortCases);
+});
+
+describe('parsePostReference — share references (Task 3)', () => {
+  runValid(shareCases);
+
+  it('maps the exact user share URL, preserving token case, with no expected id', () => {
+    const ref = parsePostReference(
+      'https://www.reddit.com/r/webscraping/s/yf4R7bbaHP',
+      undefined,
+      DEFAULT_CONFIG
+    );
+    expect(ref).toEqual({ path: '/r/webscraping/s/yf4R7bbaHP' });
+    expect(ref.path).toContain('/s/yf4R7bbaHP');
+    expect(ref.path).not.toContain('/comments/s/');
+    expect(ref.expectedPostId).toBeUndefined();
+    expect(ref.fallbackPath).toBeUndefined();
+  });
+
+  it('scopes a bare share fragment with the hint and never fabricates an id', () => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', DEFAULT_CONFIG);
+    expect(ref).toEqual({ path: '/r/webscraping/s/yf4R7bbaHP' });
+    expect(ref.expectedPostId).toBeUndefined();
+    expect(ref.fallbackPath).toBeUndefined();
+  });
+});
+
+describe('parsePostReference — missing share context is actionable', () => {
+  it('names the missing subreddit hint instead of guessing a scope', () => {
+    expect(() => parsePostReference('s/yf4R7bbaHP', undefined, DEFAULT_CONFIG)).toThrow(
+      /requires subreddit/i
+    );
+    expect(() => parsePostReference('/s/yf4R7bbaHP', undefined, DEFAULT_CONFIG)).toThrow(
+      /requires subreddit/i
+    );
+  });
+});
+
+describe('parsePostReference — configured base-url shapes (Task 3)', () => {
+  runValid(baseUrlVariantCases);
+});
+
+describe('parsePostReference — hint is never coerced from a non-string', () => {
+  it('ignores a null hint instead of scoping /r/null', () => {
+    expect(parsePostReference('1x7hpcl', null as unknown as string, DEFAULT_CONFIG)).toEqual({
+      path: '/comments/1x7hpcl',
+      expectedPostId: '1x7hpcl',
+    });
+  });
+
+  it('treats a null hint as missing for a bare share fragment', () => {
+    expect(() =>
+      parsePostReference('s/yf4R7bbaHP', null as unknown as string, DEFAULT_CONFIG)
+    ).toThrow(/requires subreddit/i);
+  });
 });
 
 describe('parsePostReference — rejected references', () => {

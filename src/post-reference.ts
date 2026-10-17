@@ -18,6 +18,14 @@
  *    `subreddit` hint when valid: `/r/<hint>/comments/<id>` with
  *    `/user/<hint>/comments/<id>` fallback. Explicit routes/URLs never take the
  *    hint.
+ *  - Share references (Task 3): `s/<token>` / `/s/<token>` (bare fragment, needs
+ *    the subreddit hint) and `r/<name>/s/<token>` (scoped, optional leading
+ *    slash; also accepted as a full URL on an allowed origin). The logical path
+ *    is `/r/<name>/s/<EXACT token>` with NO `expectedPostId` (a share token is
+ *    not a post id) and NO profile fallback. The token keeps its exact spelling;
+ *    it is never decoded, re-encoded or repaired. Shares under `user`/`u` are
+ *    not part of the contract and are rejected, as are malformed/empty tokens
+ *    and extra segments.
  *  - Only exact Reddit hosts, redd.it/www.redd.it, and the configured
  *    REDLIB_URL / REDLIB_PUBLIC_URL origins are accepted.
  *  - Tracking query/fragment is dropped and never forwarded; only a recognised
@@ -26,6 +34,8 @@
  *  - Everything else is rejected before the URL parser can normalise hostile
  *    input away (backslash, protocol-relative, userinfo, dot segments, encoded
  *    separators, unsupported hosts/schemes/routes).
+ *  - The subreddit hint is only consumed when it is a real string (a `null` or
+ *    other non-string hint is treated as absent, never coerced to `"null"`).
  */
 
 export interface PostReference {
@@ -64,7 +74,7 @@ const SHORT_LINK_HOSTS = new Set<string>(['redd.it', 'www.redd.it']);
 // trailing segment must not be mistaken for a bare `/<id>` post. Compared
 // case-insensitively.
 const RESERVED_ROUTE_SEGMENTS = new Set<string>([
-  'r', 'u', 'user', 'comments', 'search', 'login', 'logout', 'register',
+  'r', 'u', 'user', 'comments', 's', 'search', 'login', 'logout', 'register',
   'submit', 'wiki', 'settings', 'prefs', 'account', 'saved', 'hidden',
   'upvoted', 'downvoted', 'submitted', 'gilded', 'messages', 'message',
   'notifications', 'friends', 'random', 'explore', 'all', 'popular', 'live',
@@ -75,6 +85,9 @@ const RESERVED_ROUTE_SEGMENTS = new Set<string>([
 
 const NAME_SEGMENT = /^[A-Za-z0-9_-]+$/;
 const ID_BODY = /^[A-Za-z0-9]+$/;
+// A share token is opaque, case-sensitive and ASCII alphanumeric. It is never
+// `t3_`-stripped and never decoded/re-encoded/repaired.
+const SHARE_TOKEN = /^[A-Za-z0-9]+$/;
 const FULLNAME_PREFIX = /^t3_/;
 const SCHEME = /^([A-Za-z][A-Za-z0-9+.-]*):/;
 const HTTP_URL = /^https?:\/\//i;
@@ -89,8 +102,14 @@ function parseIdToken(token: string | undefined): string | undefined {
   return body.length > 0 && ID_BODY.test(body) ? body : undefined;
 }
 
+function parseShareToken(segment: string | undefined): string | undefined {
+  return typeof segment === 'string' && SHARE_TOKEN.test(segment) ? segment : undefined;
+}
+
+// `typeof` guard: a non-string hint (e.g. a runtime `null`) must be treated as
+// absent, never coerced to the literal "null" by regex stringification.
 function parseNameSegment(segment: string | undefined): string | undefined {
-  return segment !== undefined && NAME_SEGMENT.test(segment) ? segment : undefined;
+  return typeof segment === 'string' && NAME_SEGMENT.test(segment) ? segment : undefined;
 }
 
 // Literal dot segments must be rejected on the RAW string before the URL parser
@@ -132,12 +151,32 @@ function splitQueryFragment(reference: string): { pathPart: string; sort?: Comme
 }
 
 type MatchedRoute =
-  | { scoped: true; path: string; id: string }
-  | { scoped: false; id: string };
+  | { kind: 'post'; scoped: true; path: string; id: string }
+  | { kind: 'post'; scoped: false; id: string }
+  | { kind: 'share'; name: string; token: string }
+  | { kind: 'share-bare'; token: string };
 
 function matchPostRoute(segments: string[]): MatchedRoute | undefined {
   if (segments.length === 0) return undefined;
   const head = segments[0];
+
+  // Scoped share: r/<name>/s/<token>. Shares under user/u are not part of the
+  // contract, so only `r` reaches this branch. Extra segments are malformed.
+  if (head === 'r' && segments.length === 4 && segments[2] === 's') {
+    const name = parseNameSegment(segments[1]);
+    const token = parseShareToken(segments[3]);
+    if (name === undefined || token === undefined) return undefined;
+    return { kind: 'share', name, token };
+  }
+
+  // Bare share fragment: s/<token> (the leading slash, if any, is already gone).
+  // `s` is a reserved route marker, so a malformed or empty token is rejected
+  // rather than silently reinterpreted as the bare id `s`.
+  if (head === 's') {
+    if (segments.length !== 2) return undefined;
+    const token = parseShareToken(segments[1]);
+    return token === undefined ? undefined : { kind: 'share-bare', token };
+  }
 
   // Scoped: r/<name>/comments/<id>[...] | user/<name>/... | u/<name>/... (alias)
   if (head === 'r' || head === 'user' || head === 'u') {
@@ -146,19 +185,19 @@ function matchPostRoute(segments: string[]): MatchedRoute | undefined {
     const id = parseIdToken(segments[3]);
     if (name === undefined || id === undefined) return undefined;
     const prefix = head === 'r' ? 'r' : 'user';
-    return { scoped: true, path: `/${prefix}/${name}/comments/${id}`, id };
+    return { kind: 'post', scoped: true, path: `/${prefix}/${name}/comments/${id}`, id };
   }
 
   // /comments/<id>[...]
   if (head === 'comments') {
     const id = segments.length >= 2 ? parseIdToken(segments[1]) : undefined;
-    return id === undefined ? undefined : { scoped: false, id };
+    return id === undefined ? undefined : { kind: 'post', scoped: false, id };
   }
 
   // /<id>
   if (segments.length === 1 && !RESERVED_ROUTE_SEGMENTS.has(head.toLowerCase())) {
     const id = parseIdToken(head);
-    return id === undefined ? undefined : { scoped: false, id };
+    return id === undefined ? undefined : { kind: 'post', scoped: false, id };
   }
 
   return undefined;
@@ -200,9 +239,15 @@ function buildUnscoped(
 }
 
 function buildFromRoute(route: MatchedRoute, sort: CommentSort | undefined): PostReference {
-  const ref: PostReference = route.scoped
-    ? { path: route.path, expectedPostId: route.id }
-    : { path: `/comments/${route.id}`, expectedPostId: route.id };
+  // An unscoped share fragment has no scope of its own and URLs never borrow the
+  // hint, so it cannot be resolved here.
+  if (route.kind === 'share-bare') reject('share reference requires subreddit');
+  const ref: PostReference =
+    route.kind === 'share'
+      ? { path: `/r/${route.name}/s/${route.token}` }
+      : route.scoped
+        ? { path: route.path, expectedPostId: route.id }
+        : { path: `/comments/${route.id}`, expectedPostId: route.id };
   return sort === undefined ? ref : { ...ref, urlCommentSort: sort };
 }
 
@@ -243,7 +288,7 @@ function fromUrl(url: URL, config: { baseUrl: string; publicBaseUrl: string }): 
 
   if (SHORT_LINK_HOSTS.has(host)) {
     const id = shortLinkId(url.pathname) ?? reject('unexpected short-link path');
-    return buildFromRoute({ scoped: false, id }, sort);
+    return buildFromRoute({ kind: 'post', scoped: false, id }, sort);
   }
 
   const basePath = matchConfiguredOrigin(url, config);
@@ -276,6 +321,9 @@ export function parsePostReference(
   if (raw.includes('\\')) reject('backslash');
   if (/%2e|%2f|%5c|%25/i.test(raw)) reject('encoded separator or dot segment');
   if (raw.startsWith('//')) reject('protocol-relative reference');
+  // WHATWG would happily collapse `https:////reddit.com/...` to `reddit.com`, so
+  // pin the strict `scheme://` spelling (exactly two slashes) before it parses.
+  if (/^[A-Za-z][A-Za-z0-9+.-]*:\/{3,}/.test(raw)) reject('malformed scheme separator');
   if (hasDotSegment(raw)) reject('dot segment');
 
   const hint = parseNameSegment(subreddit);
@@ -298,5 +346,12 @@ export function parsePostReference(
 
   const logical = pathPart.startsWith('/') ? pathPart : `/${pathPart}`;
   const route = pathToRoute(logical) ?? reject('unsupported route');
+  // A bare share fragment is the only relative share form the hint may scope;
+  // without it there is no subreddit to build a logical path from.
+  if (route.kind === 'share-bare') {
+    if (hint === undefined) reject('share reference requires subreddit');
+    const ref: PostReference = { path: `/r/${hint}/s/${route.token}` };
+    return sort === undefined ? ref : { ...ref, urlCommentSort: sort };
+  }
   return buildFromRoute(route, sort);
 }
