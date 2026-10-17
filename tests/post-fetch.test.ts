@@ -1,4 +1,5 @@
 import { Response, Headers } from 'node-fetch';
+import { jest } from '@jest/globals';
 import { fetchPostHtml, PostFetchError } from '../src/post-fetch.js';
 import { parsePostReference } from '../src/post-reference.js';
 
@@ -27,12 +28,30 @@ const EMPTY_HTML =
 
 type Route = { status: number; body?: string | null; location?: string };
 
+// Record a dispose (destroy/resume) on the REAL node-fetch body stream so a test
+// can prove the helper releases a redirect/fallback/error body BEFORE the next
+// request. The stream is a Node `Readable`; `disposeBody` prefers `destroy()`.
+function instrumentDisposal(res: Response, url: string, events: string[]): void {
+  const body = (res as any).body;
+  if (!body) return;
+  for (const method of ['destroy', 'resume'] as const) {
+    const original = typeof body[method] === 'function' ? body[method].bind(body) : undefined;
+    if (!original) continue;
+    body[method] = (...args: any[]) => {
+      events.push(`dispose:${url}`);
+      return original(...args);
+    };
+  }
+}
+
 function makeFetch(routes: Record<string, Route>) {
   const requested: string[] = [];
   const inits: any[] = [];
+  const events: string[] = [];
   const fetchImpl = async (url: string, init: any) => {
     requested.push(url);
     inits.push(init);
+    events.push(`request:${url}`);
     const route = routes[url] ?? routes['*'];
     // A missing route is a 404 so an unexpected URL is caught by the exact
     // `requested` assertions rather than masked by an exception.
@@ -40,9 +59,11 @@ function makeFetch(routes: Record<string, Route>) {
     const headers = new Headers();
     if (route.location !== undefined) headers.set('location', route.location);
     const body = route.body === undefined ? null : route.body;
-    return new Response(body, { status: route.status, headers });
+    const res = new Response(body, { status: route.status, headers });
+    instrumentDisposal(res, url, events);
+    return res;
   };
-  return { fetchImpl, requested, inits };
+  return { fetchImpl, requested, inits, events };
 }
 
 interface RunResult {
@@ -50,6 +71,7 @@ interface RunResult {
   error?: Error;
   requested: string[];
   inits: any[];
+  events: string[];
 }
 
 async function runFetch(
@@ -58,12 +80,21 @@ async function runFetch(
   options: Parameters<typeof fetchPostHtml>[2] = {},
   bases: { baseUrl: string; publicBaseUrl: string } = BASES
 ): Promise<RunResult> {
-  const { fetchImpl, requested, inits } = makeFetch(routes);
+  const { fetchImpl, requested, inits, events } = makeFetch(routes);
   try {
     const result = await fetchPostHtml(ref, bases, { ...options, fetch: fetchImpl });
-    return { result, requested, inits };
+    return { result, requested, inits, events };
   } catch (error) {
-    return { error: error as Error, requested, inits };
+    return { error: error as Error, requested, inits, events };
+  }
+}
+
+// Every request the helper issues must target the configured Redlib origin (+ its
+// base-path prefix); nothing else may ever appear on the wire.
+function expectAllOnConfiguredOrigin(requested: string[], origin = BASE, prefix = ''): void {
+  expect(requested.length).toBeGreaterThan(0);
+  for (const url of requested) {
+    expect(url.startsWith(`${origin}${prefix}/`)).toBe(true);
   }
 }
 
@@ -375,6 +406,370 @@ describe('fetchPostHtml — bounded redirect safety decisions', () => {
 
     await expect(fetchPostHtml(ref, BASES, { fetch: oversize as any })).rejects.toMatchObject({
       code: 'too-large',
+    });
+  });
+});
+
+describe('fetchPostHtml — raw redirect shapes must not be normalised away (Task 5)', () => {
+  // A share ref has NO expected id, so a redirect that collapses a raw traversal
+  // into `/comments/<other-id>` would be silently accepted and the wrong post
+  // fetched. WHATWG URL resolution collapses BOTH literal `..` and `%2e%2e`
+  // segments before the pure parser can reject them, so the raw Location must be
+  // gated first — exactly as the same string would be rejected as INPUT.
+  it('rejects a raw literal traversal redirect and never fetches the normalised destination', async () => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', BASES);
+    expect(ref.expectedPostId).toBeUndefined();
+
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: {
+        status: 302,
+        location: '/a/../../../comments/2y8iqdm',
+      },
+      [`${BASE}/comments/2y8iqdm`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/r/webscraping/s/yf4R7bbaHP`]);
+  });
+
+  it('rejects a raw percent-encoded traversal redirect and never fetches the destination', async () => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', BASES);
+
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: {
+        status: 302,
+        location: '/a/%2e%2e/comments/2y8iqdm',
+      },
+      [`${BASE}/comments/2y8iqdm`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/r/webscraping/s/yf4R7bbaHP`]);
+  });
+
+  it.each([
+    ['backslash separators', '\\evil.example.com\\comments\\1x7hpcl'],
+    ['a malformed scheme separator', 'https:////redlib.test:8080/comments/1x7hpcl'],
+    ['a double-encoded traversal', '/comments/%252e%252e/2y8iqdm'],
+  ])('rejects %s in a redirect and never fetches the resolved target', async (_name, location) => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', BASES);
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: { status: 302, location },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/r/webscraping/s/yf4R7bbaHP`]);
+  });
+});
+
+describe('fetchPostHtml — adversarial redirect matrix (Task 5)', () => {
+  it('rejects a credential-bearing (userinfo) redirect and never fetches it', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: {
+        status: 302,
+        location: 'http://user:pass@redlib.test:8080/comments/1x7hpcl',
+      },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+
+  it('rejects a protocol-relative redirect before any resolution', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: {
+        status: 302,
+        location: '//evil.example.com/comments/1x7hpcl',
+      },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+
+  it.each(['javascript:alert(1)', 'data:text/html,<b>x</b>'])(
+    'rejects the non-HTTP redirect scheme %s',
+    async (location) => {
+      const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+      const { error, requested } = await runFetch(ref, {
+        [`${BASE}/comments/1x7hpcl`]: { status: 302, location },
+      });
+
+      expect((error as PostFetchError).code).toBe('unsafe-redirect');
+      expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+    }
+  );
+
+  it('rejects a redirect to an unsupported route', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: { status: 302, location: '/search?q=secret' },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+
+  it.each([
+    'http://169.254.169.254/latest/meta-data/',
+    'http://10.0.0.5/comments/1x7hpcl',
+    'https://arbitrary.example.org/comments/1x7hpcl',
+  ])('rejects the arbitrary/private redirect origin %s before I/O', async (location) => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: { status: 302, location },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+
+  it('rejects a redirect response with a missing Location header', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: { status: 302 },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+
+  it('rejects a redirect response with a malformed Location URL', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1x7hpcl`]: { status: 302, location: 'http://[::1' },
+    });
+
+    expect((error as PostFetchError).code).toBe('unsafe-redirect');
+    expect(requested).toEqual([`${BASE}/comments/1x7hpcl`]);
+  });
+});
+
+describe('fetchPostHtml — origin and identity boundaries (Task 5)', () => {
+  it('accepts a deliberately different publicBaseUrl origin as a reference but fetches only the Redlib origin', async () => {
+    const bases = { baseUrl: BASE, publicBaseUrl: 'https://public.redlib.example' };
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', bases);
+    const shareUrl = `${BASE}/r/webscraping/s/yf4R7bbaHP`;
+    const canonicalUrl = `${BASE}/r/webscraping/comments/1x7hpcl`;
+
+    const { result, requested } = await runFetch(
+      ref,
+      {
+        [shareUrl]: {
+          status: 302,
+          location: 'https://public.redlib.example/r/webscraping/comments/1x7hpcl/',
+        },
+        [canonicalUrl]: { status: 200, body: VALID_HTML },
+      },
+      {},
+      bases
+    );
+
+    expect(requested).toEqual([shareUrl, canonicalUrl]);
+    expect(requested.some((u) => u.includes('public.redlib.example'))).toBe(false);
+    expect(result?.expectedPostId).toBe('1x7hpcl');
+    expectAllOnConfiguredOrigin(requested);
+  });
+
+  it('keeps every request on the configured origin and base path across a multi-hop chain', async () => {
+    const bases = { baseUrl: `${BASE}/redlib`, publicBaseUrl: 'https://www.reddit.com' };
+    const ref = { path: '/r/webscraping/s/yf4R7bbaHP' };
+
+    const { requested } = await runFetch(
+      ref,
+      {
+        [`${BASE}/redlib/r/webscraping/s/yf4R7bbaHP`]: {
+          status: 302,
+          location: '/redlib/r/webscraping/comments/1x7hpcl/',
+        },
+        [`${BASE}/redlib/r/webscraping/comments/1x7hpcl`]: {
+          status: 302,
+          location: '/redlib/comments/1x7hpcl/',
+        },
+        [`${BASE}/redlib/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+      },
+      {},
+      bases
+    );
+
+    expect(requested).toEqual([
+      `${BASE}/redlib/r/webscraping/s/yf4R7bbaHP`,
+      `${BASE}/redlib/r/webscraping/comments/1x7hpcl`,
+      `${BASE}/redlib/comments/1x7hpcl`,
+    ]);
+    expectAllOnConfiguredOrigin(requested, BASE, '/redlib');
+  });
+
+  it('rejects an arbitrary input origin in the pure grammar before any I/O', () => {
+    // The helper consumes an already-parsed ref whose `path` is origin-free, so
+    // an input URL on an unconfigured origin can never reach the wire: the grammar
+    // refuses it first.
+    expect(() =>
+      parsePostReference('https://arbitrary.example.org/comments/1x7hpcl', undefined, BASES)
+    ).toThrow(/Unsupported post reference/);
+  });
+
+  it('cannot be pointed at another origin even with a hand-built hostile path', async () => {
+    const ref = { path: '//evil.example.com/comments/1x7hpcl' };
+    const url = `${BASE}//evil.example.com/comments/1x7hpcl`;
+    const { requested } = await runFetch(ref, { [url]: { status: 200, body: VALID_HTML } });
+
+    expect(requested).toEqual([url]);
+    expectAllOnConfiguredOrigin(requested);
+  });
+
+  it('retains an undefined expected id for a share that returns no canonical redirect', async () => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', BASES);
+    expect(ref.expectedPostId).toBeUndefined();
+
+    const { result, requested } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(result?.html).toBe(VALID_HTML);
+    expect(result?.expectedPostId).toBeUndefined();
+    expect(requested).toEqual([`${BASE}/r/webscraping/s/yf4R7bbaHP`]);
+  });
+});
+
+describe('fetchPostHtml — operation-wide wiring and body disposal (Task 5)', () => {
+  it('forwards the SAME AbortSignal across every request in a redirect chain', async () => {
+    const ref = { path: '/r/webscraping/s/yf4R7bbaHP' };
+    const { inits } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: {
+        status: 302,
+        location: '/r/webscraping/comments/1x7hpcl/',
+      },
+      [`${BASE}/r/webscraping/comments/1x7hpcl`]: { status: 302, location: '/comments/1x7hpcl/' },
+      [`${BASE}/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(inits).toHaveLength(3);
+    expect(inits.every((init) => init.signal === inits[0].signal)).toBe(true);
+  });
+
+  it('forwards the SAME AbortSignal across the primary and fallback requests', async () => {
+    const ref = parsePostReference('1x7hpcl', 'webscraping', BASES);
+    const { inits } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/comments/1x7hpcl`]: { status: 404 },
+      [`${BASE}/user/webscraping/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(inits).toHaveLength(2);
+    expect(inits[1].signal).toBe(inits[0].signal);
+  });
+
+  it('passes redirect:manual and the size cap on every request, honouring a test override', async () => {
+    const ref = { path: '/r/webscraping/s/yf4R7bbaHP' };
+    const { inits } = await runFetch(
+      ref,
+      {
+        [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: {
+          status: 302,
+          location: '/r/webscraping/comments/1x7hpcl/',
+        },
+        [`${BASE}/r/webscraping/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+      },
+      { limits: { maxBodyBytes: 1024 } }
+    );
+
+    expect(inits).toHaveLength(2);
+    for (const init of inits) {
+      expect(init.redirect).toBe('manual');
+      expect(init.size).toBe(1024);
+    }
+  });
+
+  it('disposes the redirect body BEFORE issuing the next request', async () => {
+    const ref = parsePostReference('s/yf4R7bbaHP', 'webscraping', BASES);
+    const shareUrl = `${BASE}/r/webscraping/s/yf4R7bbaHP`;
+    const canonicalUrl = `${BASE}/r/webscraping/comments/1x7hpcl`;
+
+    const { requested, events } = await runFetch(ref, {
+      [shareUrl]: {
+        status: 302,
+        body: 'redirecting',
+        location: '/r/webscraping/comments/1x7hpcl/',
+      },
+      [canonicalUrl]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(requested).toEqual([shareUrl, canonicalUrl]);
+    const disposeIdx = events.indexOf(`dispose:${shareUrl}`);
+    const nextIdx = events.indexOf(`request:${canonicalUrl}`);
+    expect(disposeIdx).toBeGreaterThanOrEqual(0);
+    expect(nextIdx).toBeGreaterThan(disposeIdx);
+  });
+
+  it('disposes the primary body before the fallback request', async () => {
+    const ref = parsePostReference('1x7hpcl', 'webscraping', BASES);
+    const primaryUrl = `${BASE}/r/webscraping/comments/1x7hpcl`;
+    const fallbackUrl = `${BASE}/user/webscraping/comments/1x7hpcl`;
+
+    const { requested, events } = await runFetch(ref, {
+      [primaryUrl]: { status: 404, body: 'not found' },
+      [fallbackUrl]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(requested).toEqual([primaryUrl, fallbackUrl]);
+    const disposeIdx = events.indexOf(`dispose:${primaryUrl}`);
+    expect(disposeIdx).toBeGreaterThanOrEqual(0);
+    expect(events.indexOf(`request:${fallbackUrl}`)).toBeGreaterThan(disposeIdx);
+  });
+
+  it('disposes a terminal error body before throwing', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const url = `${BASE}/comments/1x7hpcl`;
+
+    const { error, requested, events } = await runFetch(ref, {
+      [url]: { status: 500, body: 'server error' },
+    });
+
+    expect((error as PostFetchError).code).toBe('http-status');
+    expect(requested).toEqual([url]);
+    expect(events).toContain(`dispose:${url}`);
+  });
+
+  it('does not fall back to the hint route after a redirect has already occurred', async () => {
+    const hinted = parsePostReference('1x7hpcl', 'webscraping', BASES);
+    const shareUrl = `${BASE}/r/webscraping/s/yf4R7bbaHP`;
+    const ref = { path: '/r/webscraping/s/yf4R7bbaHP', fallbackPath: hinted.fallbackPath };
+
+    const { error, requested } = await runFetch(ref, {
+      [shareUrl]: { status: 302, location: '/comments/1x7hpcl/' },
+      [`${BASE}/comments/1x7hpcl`]: { status: 404 },
+      [`${BASE}/user/webscraping/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect((error as PostFetchError).code).toBe('http-status');
+    expect(requested).toEqual([shareUrl, `${BASE}/comments/1x7hpcl`]);
+  });
+
+  it('leaves no pending operation timer once the operation settles (wiring)', async () => {
+    jest.useFakeTimers();
+    try {
+      const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+      const { result } = await runFetch(ref, {
+        [`${BASE}/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+      });
+
+      expect(result?.html).toBe(VALID_HTML);
+      expect(jest.getTimerCount()).toBe(0);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('maps a network failure to a typed error', async () => {
+    const ref = { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' };
+    const boom = async () => {
+      throw new Error('ECONNREFUSED');
+    };
+
+    await expect(fetchPostHtml(ref, BASES, { fetch: boom as any })).rejects.toMatchObject({
+      code: 'network',
     });
   });
 });

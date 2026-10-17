@@ -36,7 +36,7 @@
 
 import nodeFetch from 'node-fetch';
 import type { RequestInit as NodeFetchRequestInit, Response as NodeFetchResponse } from 'node-fetch';
-import { parsePostReference } from './post-reference.js';
+import { parsePostReference, rawReferenceShapeError } from './post-reference.js';
 import type { PostReference } from './post-reference.js';
 
 export type CommentSort = NonNullable<PostReference['urlCommentSort']>;
@@ -144,6 +144,14 @@ function resolveRedirect(
   bases: PostFetchBases,
   base: BaseOrigin
 ): RedirectTarget {
+  // Gate the RAW Location with the SAME pure hostile-shape rules used for user
+  // input, BEFORE WHATWG resolution: `new URL` collapses literal `..` and
+  // `%2e%2e` segments and rewrites backslashes, which would let a traversal
+  // Location normalise into an accepted route the parser would reject verbatim.
+  const shapeError = rawReferenceShapeError(location);
+  if (shapeError !== undefined) {
+    throw new PostFetchError('unsafe-redirect', `Unsafe redirect target rejected (${shapeError})`);
+  }
   let resolved: URL;
   try {
     resolved = new URL(location, currentUrl);

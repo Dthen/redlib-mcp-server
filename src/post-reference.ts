@@ -118,6 +118,31 @@ function hasDotSegment(raw: string): boolean {
   return raw.split('/').some((segment) => segment === '.' || segment === '..');
 }
 
+/**
+ * Raw hostile-shape gate — the rejection reason for a reference string that must
+ * be refused BEFORE any URL normalisation can hide a separator, dot segment,
+ * protocol-relative prefix or malformed scheme, or `undefined` when the raw
+ * string is safe to normalise.
+ *
+ * Pure and host/path-agnostic: it inspects only the raw characters, so the SAME
+ * rules apply to user input (`parsePostReference`) and to a redirect `Location`
+ * (`fetchPostHtml`). This is the single source of truth for those rules — the
+ * host allow-list and route grammar stay in this module and are never duplicated.
+ */
+export function rawReferenceShapeError(raw: string): string | undefined {
+  if (/\s/.test(raw) || /[\u0000-\u001f\u007f]/.test(raw)) {
+    return 'whitespace or control characters';
+  }
+  if (raw.includes('\\')) return 'backslash';
+  if (/%2e|%2f|%5c|%25/i.test(raw)) return 'encoded separator or dot segment';
+  if (raw.startsWith('//')) return 'protocol-relative reference';
+  // WHATWG would happily collapse `https:////reddit.com/...` to `reddit.com`, so
+  // pin the strict `scheme://` spelling (exactly two slashes) before it parses.
+  if (/^[A-Za-z][A-Za-z0-9+.-]*:\/{3,}/.test(raw)) return 'malformed scheme separator';
+  if (hasDotSegment(raw)) return 'dot segment';
+  return undefined;
+}
+
 function normalizeBasePath(pathname: string): string {
   const trimmed = pathname.replace(/\/+$/, '');
   return trimmed === '/' ? '' : trimmed;
@@ -315,16 +340,8 @@ export function parsePostReference(
 
   // Hostile-shape gate — run on the raw string BEFORE any URL normalisation can
   // hide a separator, dot segment or protocol-relative prefix.
-  if (/\s/.test(raw) || /[\u0000-\u001f\u007f]/.test(raw)) {
-    reject('whitespace or control characters');
-  }
-  if (raw.includes('\\')) reject('backslash');
-  if (/%2e|%2f|%5c|%25/i.test(raw)) reject('encoded separator or dot segment');
-  if (raw.startsWith('//')) reject('protocol-relative reference');
-  // WHATWG would happily collapse `https:////reddit.com/...` to `reddit.com`, so
-  // pin the strict `scheme://` spelling (exactly two slashes) before it parses.
-  if (/^[A-Za-z][A-Za-z0-9+.-]*:\/{3,}/.test(raw)) reject('malformed scheme separator');
-  if (hasDotSegment(raw)) reject('dot segment');
+  const shapeError = rawReferenceShapeError(raw);
+  if (shapeError !== undefined) reject(shapeError);
 
   const hint = parseNameSegment(subreddit);
 
