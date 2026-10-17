@@ -4,7 +4,6 @@ import fetch from "node-fetch";
 import { parsePostList, parsePostDetails, parseSubredditSearch, parseUserSearch, parseSubredditInfo, parseSubredditMeta, parseUserProfile, parseWikiPage } from "./parsers.js";
 import { parsePostReference } from "./post-reference.js";
 import { fetchPostHtml } from "./post-fetch.js";
-import type { PostReference } from "./post-reference.js";
 
 const REDLIB_BASE_URL = process.env.REDLIB_URL || "http://localhost:8080";
 // Public base for permalinks / navigation links (the private instance URLs are useless to consumers)
@@ -152,7 +151,7 @@ export function registerTools(server: McpServer): void {
     "get_post",
     {
       title: "Get Post",
-      description: "Get a specific Reddit post and its comments. postId accepts a Reddit post ID (from search or hot results), a full Reddit URL, or a share reference (s/<token> or r/<sub>/s/<token>). The optional subreddit hint scopes bare IDs and share fragments to a subreddit or user profile.",
+      description: "Get a specific Reddit post and its comments. postId accepts a Reddit post ID (from search or hot results), a full Reddit URL, or a share reference (s/<token> or r/<sub>/s/<token>). The optional subreddit hint scopes bare IDs and bare share fragments (s/<token>) to a subreddit or user profile. Full scoped paths (r/<sub>/comments/<id>) and full scoped URLs do NOT use the hint.",
       inputSchema: z.object({
         postId: z.string().min(1).describe("Reddit post ID, permalink URL, or share reference (s/<token> or r/<sub>/s/<token>)"),
         subreddit: z.string().optional().describe("Optional scope hint for bare IDs and share fragments (subreddit or username). Scoped paths and URLs ignore it."),

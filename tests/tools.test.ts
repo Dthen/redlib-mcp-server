@@ -332,6 +332,57 @@ describe('get_post handler — reference forms', () => {
     expect(requestedUrls[0]).toBe(`http://redlib.test:8080${sharePath}`);
     expect(result.isError).not.toBe(true);
   });
+
+  it('full share URL without subreddit resolves and fetches the share route', async () => {
+    const html = makePostHtml({ id: '1x7hpcl' });
+    const sharePath = '/r/webscraping/s/yf4R7bbaHP';
+    const canonicalPath = '/r/webscraping/comments/1x7hpcl';
+    upstream = {
+      [`http://redlib.test:8080${sharePath}`]: { status: 302, location: canonicalPath },
+      [`http://redlib.test:8080${canonicalPath}`]: { status: 200, body: html },
+    };
+
+    const parsed = getPostSchema.parse({
+      postId: 'https://www.reddit.com/r/webscraping/s/yf4R7bbaHP',
+    });
+    const result = await getPost(parsed);
+
+    expect(requestedUrls[0]).toBe(`http://redlib.test:8080${sharePath}`);
+    expect(requestedUrls).toContain(`http://redlib.test:8080${canonicalPath}`);
+    expect(result.isError).not.toBe(true);
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.id).toBe('1x7hpcl');
+  });
+
+  it('explicit comment_sort propagates as URL sort query', async () => {
+    const html = makePostHtml({ id: '1x7hpcl', comments: makeCommentsHtml(3) });
+    upstream = {
+      'http://redlib.test:8080/comments/1x7hpcl?sort=new': { status: 200, body: html },
+    };
+
+    const parsed = getPostSchema.parse({ postId: '1x7hpcl', comment_sort: 'new' });
+    const result = await getPost(parsed);
+
+    expect(result.isError).not.toBe(true);
+    expect(requestedUrls[0]).toBe('http://redlib.test:8080/comments/1x7hpcl?sort=new');
+  });
+
+  it('explicit comment_sort overrides URL sort parameter', async () => {
+    const html = makePostHtml({ id: '1x7hpcl', comments: makeCommentsHtml(3) });
+    upstream = {
+      'http://redlib.test:8080/comments/1x7hpcl?sort=new': { status: 200, body: html },
+    };
+
+    // URL carries ?sort=old but handler is called with comment_sort=new
+    const parsed = getPostSchema.parse({
+      postId: 'https://www.reddit.com/comments/1x7hpcl/?sort=old',
+      comment_sort: 'new',
+    });
+    const result = await getPost(parsed);
+
+    expect(result.isError).not.toBe(true);
+    expect(requestedUrls[0]).toBe('http://redlib.test:8080/comments/1x7hpcl?sort=new');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -439,7 +490,9 @@ describe('get_post handler — error paths', () => {
     expect(requestedUrls).toEqual([]);
   });
 
-  it('returns isError for unsupported reference (parser error)', async () => {
+  it('returns isError for unsupported reference (resolver rejection) with zero fetch', async () => {
+    // A valid-length string that fails reference parsing at the resolver stage
+    // (parsePostDetails is NOT reached — no fetch occurs).
     const parsed = getPostSchema.parse({ postId: 'not-a-valid-ref' });
     const result = await getPost(parsed);
 
@@ -633,6 +686,84 @@ describe('get_post post-reference resolution (Task 1 regressions)', () => {
     const result = await getPost(parsed);
 
     expect(result.isError).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Handler tests — profile post fallback (bare ID + username hint)
+// ---------------------------------------------------------------------------
+
+describe('get_post handler — profile post fallback (bare ID + hint)', () => {
+  const PROFILE_POST_HTML = readFileSync(join(__dirname, 'fixtures', 'profile-post-excerpt.html'), 'utf-8');
+
+  it('falls back to /user/ when /r/ returns 404 (real profile excerpt)', async () => {
+    const scopedPath = '/r/spez/comments/1u7hraf';
+    const fallbackPath = '/user/spez/comments/1u7hraf';
+    upstream = {
+      [`http://redlib.test:8080${scopedPath}`]: { status: 404, body: '' },
+      [`http://redlib.test:8080${fallbackPath}`]: { status: 200, body: PROFILE_POST_HTML },
+    };
+
+    const parsed = getPostSchema.parse({ postId: '1u7hraf', subreddit: 'spez' });
+    const result = await getPost(parsed);
+
+    expect(requestedUrls[0]).toBe(`http://redlib.test:8080${scopedPath}`);
+    expect(requestedUrls[1]).toBe(`http://redlib.test:8080${fallbackPath}`);
+    expect(requestedUrls).toHaveLength(2);
+    expect(result.isError).not.toBe(true);
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.id).toBe('1u7hraf');
+    expect(payload.title).toBe('21 years of Reddit');
+  });
+
+  it('explicit /user scoped path succeeds without hint', async () => {
+    const userPath = '/user/spez/comments/1u7hraf';
+    upstream = {
+      [`http://redlib.test:8080${userPath}`]: { status: 200, body: PROFILE_POST_HTML },
+    };
+
+    const parsed = getPostSchema.parse({ postId: 'user/spez/comments/1u7hraf' });
+    const result = await getPost(parsed);
+
+    expect(requestedUrls).toEqual([`http://redlib.test:8080${userPath}`]);
+    expect(result.isError).not.toBe(true);
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.id).toBe('1u7hraf');
+    expect(payload.title).toBe('21 years of Reddit');
+  });
+
+  it('explicit /u scoped path succeeds without hint', async () => {
+    const userPath = '/user/spez/comments/1u7hraf';
+    upstream = {
+      [`http://redlib.test:8080${userPath}`]: { status: 200, body: PROFILE_POST_HTML },
+    };
+
+    const parsed = getPostSchema.parse({ postId: 'u/spez/comments/1u7hraf' });
+    const result = await getPost(parsed);
+
+    expect(requestedUrls).toEqual([`http://redlib.test:8080${userPath}`]);
+    expect(result.isError).not.toBe(true);
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.id).toBe('1u7hraf');
+    expect(payload.title).toBe('21 years of Reddit');
+  });
+
+  it('explicit /user full URL succeeds without hint', async () => {
+    const userPath = '/user/spez/comments/1u7hraf';
+    upstream = {
+      [`http://redlib.test:8080${userPath}`]: { status: 200, body: PROFILE_POST_HTML },
+    };
+
+    const parsed = getPostSchema.parse({
+      postId: 'https://www.reddit.com/user/spez/comments/1u7hraf/21_years_of_reddit/',
+    });
+    const result = await getPost(parsed);
+
+    expect(requestedUrls).toEqual([`http://redlib.test:8080${userPath}`]);
+    expect(result.isError).not.toBe(true);
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.id).toBe('1u7hraf');
+    expect(payload.title).toBe('21 years of Reddit');
   });
 });
 
