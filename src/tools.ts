@@ -2,6 +2,9 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import fetch from "node-fetch";
 import { parsePostList, parsePostDetails, parseSubredditSearch, parseUserSearch, parseSubredditInfo, parseSubredditMeta, parseUserProfile, parseWikiPage } from "./parsers.js";
+import { parsePostReference } from "./post-reference.js";
+import { fetchPostHtml } from "./post-fetch.js";
+import type { PostReference } from "./post-reference.js";
 
 const REDLIB_BASE_URL = process.env.REDLIB_URL || "http://localhost:8080";
 // Public base for permalinks / navigation links (the private instance URLs are useless to consumers)
@@ -149,32 +152,41 @@ export function registerTools(server: McpServer): void {
     "get_post",
     {
       title: "Get Post",
-      description: "Get a specific Reddit post and its comments. Use post ID from search or hot post results. `subreddit` may also be a username: profile posts resolve via a /user/ fallback when the /r/ path 404s.",
+      description: "Get a specific Reddit post and its comments. postId accepts a Reddit post ID (from search or hot results), a full Reddit URL, or a share reference (s/<token> or r/<sub>/s/<token>). The optional subreddit hint scopes bare IDs and share fragments to a subreddit or user profile.",
       inputSchema: z.object({
-        subreddit: z.string().describe("Subreddit name, or username for user-profile posts"),
-        postId: z.string().describe("Reddit post ID (from search/hot results)"),
+        postId: z.string().min(1).describe("Reddit post ID, permalink URL, or share reference (s/<token> or r/<sub>/s/<token>)"),
+        subreddit: z.string().optional().describe("Optional scope hint for bare IDs and share fragments (subreddit or username). Scoped paths and URLs ignore it."),
         comment_sort: z.enum(["confidence", "top", "new", "controversial", "old"]).optional().describe("Comment sort order (optional, Redlib default is confidence)"),
         comment_limit: z.number().optional().default(10).describe("Maximum number of comments to return (default: 10)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
-    async ({ subreddit, postId, comment_sort, comment_limit }) => {
+    async ({ postId, subreddit, comment_sort, comment_limit }) => {
       try {
-        const params = new URLSearchParams();
-        if (comment_sort) params.set("sort", comment_sort);
-        const query = params.toString() ? `?${params.toString()}` : '';
+        const bases = { baseUrl: REDLIB_BASE_URL, publicBaseUrl: REDLIB_PUBLIC_URL };
 
-        const primaryUrl = `${REDLIB_BASE_URL}/r/${subreddit}/comments/${postId}${query}`;
-        let response = await fetch(primaryUrl);
-        if (response.status === 404) {
-          // User-profile posts live under /user/<name>/comments/<id> (not /r/<name>/...),
-          // so fall back to the /user/ path when the /r/ path 404s.
-          const fallbackUrl = `${REDLIB_BASE_URL}/user/${subreddit}/comments/${postId}${query}`;
-          response = await fetch(fallbackUrl);
-        }
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
+        // Parse the post reference (pure, no I/O)
+        const ref = parsePostReference(postId, subreddit, bases);
+
+        // Fetch the HTML through the bounded, Redlib-only fetch helper
+        const { html, expectedPostId: fetchedId } = await fetchPostHtml(ref, bases, { commentSort: comment_sort });
+
+        // Parse post details (unchanged parser)
         const postData = parsePostDetails(html, comment_limit, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+
+        // Validity guard: enforce title and post ID before returning JSON
+        if (!postData.title || postData.title.trim().length === 0) {
+          throw new Error("No valid post found: page has no title");
+        }
+
+        const returnedId = postData.id;
+        if (!returnedId || !/^[A-Za-z0-9]+$/.test(returnedId)) {
+          throw new Error("No valid post found: page has no valid post ID");
+        }
+
+        if (fetchedId !== undefined && returnedId.toLowerCase() !== fetchedId.toLowerCase()) {
+          throw new Error(`Post ID mismatch: expected ${fetchedId}, got ${returnedId}`);
+        }
 
         return {
           content: [{
