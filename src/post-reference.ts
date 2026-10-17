@@ -11,9 +11,13 @@
  *  - Scoped `r/<name>` / `user/<name>` / `u/<name>` (alias -> `/user/`) routes
  *    are authoritative: an external hint never rewrites them and no fallback is
  *    emitted.
- *  - Unscoped ids (bare id, `/comments/<id>`, `/<id>`, redd.it short links) use
- *    the `subreddit` hint when valid: `/r/<hint>/comments/<id>` with
- *    `/user/<hint>/comments/<id>` fallback.
+ *  - Unscoped ids (`/comments/<id>`, `/<id>`, redd.it short links, canonical and
+ *    configured-origin URLs) always resolve to `/comments/<id>` with NO
+ *    fallback.
+ *  - Only a BARE single-token id (slashless `1x7hpcl` / `t3_1x7hpcl`) uses the
+ *    `subreddit` hint when valid: `/r/<hint>/comments/<id>` with
+ *    `/user/<hint>/comments/<id>` fallback. Explicit routes/URLs never take the
+ *    hint.
  *  - Only exact Reddit hosts, redd.it/www.redd.it, and the configured
  *    REDLIB_URL / REDLIB_PUBLIC_URL origins are accepted.
  *  - Tracking query/fragment is dropped and never forwarded; only a recognised
@@ -169,6 +173,16 @@ function pathToRoute(pathname: string): MatchedRoute | undefined {
   return matchPostRoute(segments);
 }
 
+// A bare, slashless single-token id (optionally `t3_`-prefixed). Reserved route
+// words (`r`, `user`, `comments`, `search`, `all`, ...) are routes, not ids, so
+// they are excluded exactly as in the `/<id>` rule. This is the only relative
+// form the subreddit hint may scope.
+function bareIdToken(raw: string): string | undefined {
+  if (raw.startsWith('/') || raw.includes('/')) return undefined;
+  if (RESERVED_ROUTE_SEGMENTS.has(raw.toLowerCase())) return undefined;
+  return parseIdToken(raw);
+}
+
 function buildUnscoped(
   id: string,
   hint: string | undefined,
@@ -185,13 +199,10 @@ function buildUnscoped(
   return sort === undefined ? ref : { ...ref, urlCommentSort: sort };
 }
 
-function buildFromRoute(
-  route: MatchedRoute,
-  hint: string | undefined,
-  sort: CommentSort | undefined
-): PostReference {
-  if (!route.scoped) return buildUnscoped(route.id, hint, sort);
-  const ref: PostReference = { path: route.path, expectedPostId: route.id };
+function buildFromRoute(route: MatchedRoute, sort: CommentSort | undefined): PostReference {
+  const ref: PostReference = route.scoped
+    ? { path: route.path, expectedPostId: route.id }
+    : { path: `/comments/${route.id}`, expectedPostId: route.id };
   return sort === undefined ? ref : { ...ref, urlCommentSort: sort };
 }
 
@@ -226,28 +237,24 @@ function parseHttpUrl(raw: string): URL {
   }
 }
 
-function fromUrl(
-  url: URL,
-  hint: string | undefined,
-  config: { baseUrl: string; publicBaseUrl: string }
-): PostReference {
+function fromUrl(url: URL, config: { baseUrl: string; publicBaseUrl: string }): PostReference {
   const host = url.hostname.toLowerCase();
   const sort = extractSort(url.searchParams);
 
   if (SHORT_LINK_HOSTS.has(host)) {
     const id = shortLinkId(url.pathname) ?? reject('unexpected short-link path');
-    return buildUnscoped(id, hint, sort);
+    return buildFromRoute({ scoped: false, id }, sort);
   }
 
   const basePath = matchConfiguredOrigin(url, config);
   if (basePath !== undefined) {
     const route = pathToRoute(stripBasePath(url.pathname, basePath)) ?? reject('unsupported route');
-    return buildFromRoute(route, hint, sort);
+    return buildFromRoute(route, sort);
   }
 
   if (REDDIT_HOSTS.has(host)) {
     const route = pathToRoute(url.pathname) ?? reject('unsupported route');
-    return buildFromRoute(route, hint, sort);
+    return buildFromRoute(route, sort);
   }
 
   reject('unsupported host');
@@ -278,11 +285,18 @@ export function parsePostReference(
     if (!HTTP_URL.test(raw)) reject(`unsupported scheme ${scheme[1]}`);
     const url = parseHttpUrl(raw);
     if (url.username !== '' || url.password !== '') reject('userinfo in URL');
-    return fromUrl(url, hint, config);
+    return fromUrl(url, config);
   }
 
   const { pathPart, sort } = splitQueryFragment(raw);
+
+  // A bare, slashless single-token id is the ONLY relative form the subreddit
+  // hint may scope. Everything else (explicit `/comments/<id>`, `/<id>`, scoped
+  // routes, URLs) keeps its own route and never takes the hint.
+  const bare = bareIdToken(pathPart);
+  if (bare !== undefined) return buildUnscoped(bare, hint, sort);
+
   const logical = pathPart.startsWith('/') ? pathPart : `/${pathPart}`;
   const route = pathToRoute(logical) ?? reject('unsupported route');
-  return buildFromRoute(route, hint, sort);
+  return buildFromRoute(route, sort);
 }

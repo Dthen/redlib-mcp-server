@@ -152,14 +152,10 @@ const commentsRouteCases: ValidCase[] = [
     expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
-    name: '/comments/<id> applies hint when unscoped',
+    name: 'explicit /comments/<id> ignores hint (no fallback)',
     input: '/comments/1x7hpcl',
     subreddit: 'webscraping',
-    expected: {
-      path: '/r/webscraping/comments/1x7hpcl',
-      expectedPostId: '1x7hpcl',
-      fallbackPath: '/user/webscraping/comments/1x7hpcl',
-    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
 ];
 
@@ -170,14 +166,10 @@ const barePathCases: ValidCase[] = [
     expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
-    name: '/<id> applies hint when unscoped',
+    name: 'explicit /<id> ignores hint (no fallback)',
     input: '/1x7hpcl',
     subreddit: 'webscraping',
-    expected: {
-      path: '/r/webscraping/comments/1x7hpcl',
-      expectedPostId: '1x7hpcl',
-      fallbackPath: '/user/webscraping/comments/1x7hpcl',
-    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
 ];
 
@@ -228,14 +220,16 @@ const redditHostCases: ValidCase[] = [
     expected: { path: '/user/spez/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
-    name: 'reddit unscoped permalink applies hint',
+    name: 'canonical unscoped URL ignores hint (no fallback)',
     input: 'https://www.reddit.com/comments/1x7hpcl',
     subreddit: 'webscraping',
-    expected: {
-      path: '/r/webscraping/comments/1x7hpcl',
-      expectedPostId: '1x7hpcl',
-      fallbackPath: '/user/webscraping/comments/1x7hpcl',
-    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'canonical scoped URL ignores contradictory hint',
+    input: 'https://www.reddit.com/r/foo/comments/1x7hpcl',
+    subreddit: 'other-hint',
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
 ];
 
@@ -288,14 +282,17 @@ const configuredOriginCases: ValidCase[] = [
     expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
-    name: 'configured REDLIB_URL origin, unscoped applies hint',
+    name: 'configured origin unscoped URL ignores hint (no fallback)',
     input: 'http://127.0.0.1:8080/comments/1x7hpcl',
     subreddit: 'webscraping',
-    expected: {
-      path: '/r/webscraping/comments/1x7hpcl',
-      expectedPostId: '1x7hpcl',
-      fallbackPath: '/user/webscraping/comments/1x7hpcl',
-    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'public-origin unscoped URL ignores hint (no fallback)',
+    input: 'https://rd.example.com/comments/1x7hpcl',
+    subreddit: 'webscraping',
+    config: INSTANCE_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
     name: 'custom instance origin (non-Reddit host), scoped route',
@@ -352,14 +349,10 @@ const shortLinkCases: ValidCase[] = [
     expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
   {
-    name: 'redd.it compact id applies hint',
+    name: 'redd.it compact id ignores hint (no fallback)',
     input: 'https://redd.it/1x7hpcl',
     subreddit: 'webscraping',
-    expected: {
-      path: '/r/webscraping/comments/1x7hpcl',
-      expectedPostId: '1x7hpcl',
-      fallbackPath: '/user/webscraping/comments/1x7hpcl',
-    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
   },
 ];
 
