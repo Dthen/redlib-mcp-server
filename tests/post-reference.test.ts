@@ -41,6 +41,67 @@ const BASE_PATH_TRAILING_CONFIG: Config = {
   publicBaseUrl: 'https://rd.example.com/redlib/',
 };
 
+// Follow-up (Task 2) — same origin, two DISTINCT configured path prefixes. The
+// reported bug: the first configured origin matched unconditionally, so the
+// public prefix was shadowed (stripped with the internal prefix, then rejected).
+const SAME_ORIGIN_PREFIX_CONFIG: Config = {
+  baseUrl: 'http://same.example/internal',
+  publicBaseUrl: 'http://same.example/public',
+};
+const SAME_ORIGIN_PREFIX_REVERSED_CONFIG: Config = {
+  baseUrl: 'http://same.example/public',
+  publicBaseUrl: 'http://same.example/internal',
+};
+
+// Same origin, OVERLAPPING prefixes: the most-specific boundary match wins.
+const OVERLAP_PREFIX_CONFIG: Config = {
+  baseUrl: 'http://same.example/redlib',
+  publicBaseUrl: 'http://same.example/redlib/public',
+};
+const OVERLAP_PREFIX_REVERSED_CONFIG: Config = {
+  baseUrl: 'http://same.example/redlib/public',
+  publicBaseUrl: 'http://same.example/redlib',
+};
+
+// Same origin, root prefix versus a non-root prefix.
+const ROOT_PREFIX_CONFIG: Config = {
+  baseUrl: 'http://same.example',
+  publicBaseUrl: 'http://same.example/redlib',
+};
+const ROOT_PREFIX_REVERSED_CONFIG: Config = {
+  baseUrl: 'http://same.example/redlib',
+  publicBaseUrl: 'http://same.example',
+};
+
+// Route-marker collision: root base plus an `/r` public base. A naive longest
+// match strips `/r` and yields the unsupported `/foo/comments/1x7hpcl`.
+const ROUTE_MARKER_PREFIX_CONFIG: Config = {
+  baseUrl: 'http://same.example',
+  publicBaseUrl: 'http://same.example/r',
+};
+const ROUTE_MARKER_PREFIX_REVERSED_CONFIG: Config = {
+  baseUrl: 'http://same.example/r',
+  publicBaseUrl: 'http://same.example',
+};
+
+// Segment boundary: `/public` must not be stripped from `/publicity`.
+const BOUNDARY_CONFIG: Config = {
+  baseUrl: 'http://same.example',
+  publicBaseUrl: 'http://same.example/public',
+};
+
+// Legacy configured landing-page rejection: the first configured base is the
+// internal prefix, in three public-base shapes (distinct prefix, other origin,
+// same-origin root).
+const LANDING_PAGE_OTHER_ORIGIN_CONFIG: Config = {
+  baseUrl: 'http://same.example/internal',
+  publicBaseUrl: 'http://public.example',
+};
+const LANDING_PAGE_ROOT_PUBLIC_CONFIG: Config = {
+  baseUrl: 'http://same.example/internal',
+  publicBaseUrl: 'http://same.example',
+};
+
 interface ValidCase {
   name: string;
   input: string;
@@ -497,6 +558,138 @@ const baseUrlVariantCases: ValidCase[] = [
   },
 ];
 
+// Follow-up (Task 2) — configured base-prefix SELECTION. Each configured base is
+// recognised by a segment-boundary prefix match on the same origin; the most
+// specific prefix whose stripped route the existing grammar supports wins, in
+// EITHER configuration order. An unsupported stripped route never masks a
+// shorter valid interpretation, and `share-bare` is never selected (a full URL
+// cannot borrow the subreddit hint). This is pure grammar selection, no retry.
+const configuredPrefixCases: ValidCase[] = [
+  {
+    name: 'distinct prefixes: internal prefix resolves (internal base first)',
+    input: 'http://same.example/internal/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: public prefix resolves (internal base first)',
+    input: 'http://same.example/public/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: internal prefix resolves (public base first)',
+    input: 'http://same.example/internal/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: public prefix resolves (public base first)',
+    input: 'http://same.example/public/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: public-prefixed scoped route with a trailing slash',
+    input: 'http://same.example/public/r/foo/comments/1x7hpcl/',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: trailing-slash bases still select the public prefix',
+    input: 'http://same.example/public/comments/1x7hpcl',
+    config: {
+      baseUrl: 'http://same.example/internal/',
+      publicBaseUrl: 'http://same.example/public/',
+    },
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: unprefixed scoped route stays accepted',
+    input: 'http://same.example/r/foo/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'distinct prefixes: unprefixed /comments route stays accepted',
+    input: 'http://same.example/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'overlap: most-specific prefix wins (short base first)',
+    input: 'http://same.example/redlib/public/comments/1x7hpcl',
+    config: OVERLAP_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'overlap: most-specific prefix wins (long base first)',
+    input: 'http://same.example/redlib/public/comments/1x7hpcl',
+    config: OVERLAP_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'overlap: the shorter prefix resolves its own route (short base first)',
+    input: 'http://same.example/redlib/r/foo/comments/1x7hpcl',
+    config: OVERLAP_PREFIX_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'overlap: the shorter prefix resolves its own route (long base first)',
+    input: 'http://same.example/redlib/r/foo/comments/1x7hpcl',
+    config: OVERLAP_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'root vs non-root: specific prefix wins (root base first)',
+    input: 'http://same.example/redlib/comments/1x7hpcl',
+    config: ROOT_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'root vs non-root: specific prefix wins (specific base first)',
+    input: 'http://same.example/redlib/comments/1x7hpcl',
+    config: ROOT_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'root vs non-root: an unprefixed route still resolves on the root base',
+    input: 'http://same.example/comments/1x7hpcl',
+    config: ROOT_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: '/r collision: root base first keeps the scoped route',
+    input: 'http://same.example/r/foo/comments/1x7hpcl',
+    config: ROUTE_MARKER_PREFIX_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: '/r collision: /r base first keeps the scoped route',
+    input: 'http://same.example/r/foo/comments/1x7hpcl',
+    config: ROUTE_MARKER_PREFIX_REVERSED_CONFIG,
+    expected: { path: '/r/foo/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: '/r collision: a genuine /r-prefixed route still strips the /r base',
+    input: 'http://same.example/r/comments/1x7hpcl',
+    config: ROUTE_MARKER_PREFIX_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'segment boundary: /public is stripped only at a boundary',
+    input: 'http://same.example/public/comments/1x7hpcl',
+    config: BOUNDARY_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+  {
+    name: 'legacy landing page config: an unprefixed control still resolves',
+    input: 'http://same.example/comments/1x7hpcl',
+    config: LANDING_PAGE_ROOT_PUBLIC_CONFIG,
+    expected: { path: '/comments/1x7hpcl', expectedPostId: '1x7hpcl' },
+  },
+];
+
 const sortCases: ValidCase[] = [
   {
     name: 'sort=confidence surfaced as urlCommentSort',
@@ -636,6 +829,43 @@ const rejectCases: RejectCase[] = [
   { name: 'redd.it share path is not a compact id', input: 'https://redd.it/s/yf4R7bbaHP' },
   { name: 'invalid post id punctuation', input: '/comments/1x7!pcl' },
   { name: 'unsupported wiki route', input: '/r/foo/wiki/bar' },
+  // Follow-up (Task 2) — configured base-prefix selection must not reinterpret a
+  // configured landing page as a bare post id, nor mis-strip at a non-boundary.
+  {
+    name: 'legacy landing page is not a bare post id (distinct prefixes)',
+    input: 'http://same.example/internal',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+  },
+  {
+    name: 'legacy landing page with a trailing slash stays unsupported',
+    input: 'http://same.example/internal/',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+  },
+  {
+    name: 'legacy landing page stays unsupported with a different public origin',
+    input: 'http://same.example/internal',
+    config: LANDING_PAGE_OTHER_ORIGIN_CONFIG,
+  },
+  {
+    name: 'legacy landing page stays unsupported with a same-origin root public base',
+    input: 'http://same.example/internal',
+    config: LANDING_PAGE_ROOT_PUBLIC_CONFIG,
+  },
+  {
+    name: 'legacy landing page trailing slash stays unsupported with a root public base',
+    input: 'http://same.example/internal/',
+    config: LANDING_PAGE_ROOT_PUBLIC_CONFIG,
+  },
+  {
+    name: 'a longer segment is not mis-stripped as the public prefix (/publicity)',
+    input: 'http://same.example/publicity/comments/1x7hpcl',
+    config: SAME_ORIGIN_PREFIX_CONFIG,
+  },
+  {
+    name: 'prefix boundary holds with a root internal base (/publicity)',
+    input: 'http://same.example/publicity/comments/1x7hpcl',
+    config: BOUNDARY_CONFIG,
+  },
 ];
 
 function runValid(cases: ValidCase[]): void {
@@ -682,6 +912,9 @@ describe('parsePostReference — slug/comment suffix stripping', () => {
 
 describe('parsePostReference — configured instance/public origins', () => {
   runValid(configuredOriginCases);
+
+  // Follow-up (Task 2) — selection between same-origin configured prefixes.
+  runValid(configuredPrefixCases);
 });
 
 describe('parsePostReference — redd.it short links', () => {

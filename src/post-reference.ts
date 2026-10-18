@@ -28,6 +28,13 @@
  *    and extra segments.
  *  - Only exact Reddit hosts, redd.it/www.redd.it, and the configured
  *    REDLIB_URL / REDLIB_PUBLIC_URL origins are accepted.
+ *  - When the two configured origins share an exact origin with distinct or
+ *    overlapping path prefixes, the most-specific segment-boundary prefix whose
+ *    stripped route the grammar supports wins, in EITHER configuration order; an
+ *    unsupported stripped route never masks a shorter valid interpretation. The
+ *    first-origin prefix stays the fallback so the unchanged caller keeps its
+ *    original strip/validate behavior (including configured landing-page
+ *    rejection). This is pure grammar selection, never a network retry.
  *  - Tracking query/fragment is dropped and never forwarded; only a recognised
  *    `sort` survives as `urlCommentSort`.
  *  - No ID/token case folding or "repair": supplied spelling is preserved.
@@ -280,6 +287,7 @@ function matchConfiguredOrigin(
   url: URL,
   config: { baseUrl: string; publicBaseUrl: string }
 ): string | undefined {
+  const prefixes: string[] = [];
   for (const candidate of [config.baseUrl, config.publicBaseUrl]) {
     if (typeof candidate !== 'string' || candidate === '') continue;
     let parsed: URL;
@@ -288,9 +296,32 @@ function matchConfiguredOrigin(
     } catch {
       continue;
     }
-    if (parsed.origin === url.origin) return normalizeBasePath(parsed.pathname);
+    if (parsed.origin === url.origin) prefixes.push(normalizeBasePath(parsed.pathname));
   }
-  return undefined;
+  if (prefixes.length === 0) return undefined;
+
+  // The legacy first-origin prefix: the caller's unchanged strip+validate keeps
+  // its original meaning when no prefix yields a supported route.
+  const legacyPrefix = prefixes[0];
+  // A configured landing page must not become a bare post ID, even when the
+  // other configured base is the same-origin root (which would otherwise strip
+  // to an unsupported route and fall through to an empty prefix).
+  if (normalizeBasePath(url.pathname) === legacyPrefix) return legacyPrefix;
+
+  // Only segment-boundary matches may strip; consider the most specific first so
+  // an unsupported stripped route never masks a shorter valid interpretation.
+  const matching = prefixes.filter(
+    (prefix) =>
+      prefix === '' || url.pathname === prefix || url.pathname.startsWith(`${prefix}/`)
+  );
+  matching.sort((a, b) => b.length - a.length);
+  for (const prefix of matching) {
+    const route = pathToRoute(stripBasePath(url.pathname, prefix));
+    // `share-bare` cannot be resolved from a full URL (it needs the hint), so it
+    // is not a supported interpretation here.
+    if (route !== undefined && route.kind !== 'share-bare') return prefix;
+  }
+  return legacyPrefix;
 }
 
 function shortLinkId(pathname: string): string | undefined {

@@ -416,3 +416,38 @@ describe('fetchPostHtml over real HTTP — canonical id-case redirect (follow-up
     expect(requests).toEqual(['/comments/1X7HPCL', '/comments/1x7hpcl']);
   });
 });
+
+describe('fetchPostHtml over real HTTP — same-origin configured prefix selection (follow-up)', () => {
+  it('starts from a public-prefixed reference and follows a public-prefixed canonical redirect', async () => {
+    const origin = bases.baseUrl;
+    const prefixed = { baseUrl: `${origin}/internal`, publicBaseUrl: `${origin}/public` };
+
+    // Distinct logical paths (scoped post route -> unscoped canonical route), so
+    // the redirect is a genuine canonicalisation and not a same-path loop.
+    route(
+      '/internal/r/webscraping/comments/1x7hpcl',
+      redirectRoute(302, `${origin}/public/comments/1x7hpcl`)
+    );
+    route('/internal/comments/1x7hpcl', plainRoute(VALID_HTML));
+
+    const ref = parsePostReference(
+      `${origin}/public/r/webscraping/comments/1x7hpcl`,
+      undefined,
+      prefixed
+    );
+    expect(ref).toEqual({ path: '/r/webscraping/comments/1x7hpcl', expectedPostId: '1x7hpcl' });
+
+    // No injected fetch: the helper's own default node-fetch drives real sockets.
+    const result = await fetchPostHtml(ref, prefixed);
+
+    expect(result.html).toBe(VALID_HTML);
+    expect(result.expectedPostId).toBe('1x7hpcl');
+    // The internal prefix appears exactly once per request; the public prefix is
+    // a reference origin and is NEVER put on the wire.
+    expect(requests).toEqual([
+      '/internal/r/webscraping/comments/1x7hpcl',
+      '/internal/comments/1x7hpcl',
+    ]);
+    expect(requests.some((path) => path.includes('/public'))).toBe(false);
+  });
+});

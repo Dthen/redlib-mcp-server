@@ -602,6 +602,35 @@ describe('fetchPostHtml — origin and identity boundaries (Task 5)', () => {
     expectAllOnConfiguredOrigin(requested, BASE, '/redlib');
   });
 
+  it('selects the public prefix of a same-origin configured base and fetches only the internal prefix', async () => {
+    const bases = { baseUrl: `${BASE}/internal`, publicBaseUrl: `${BASE}/public` };
+    const ref = parsePostReference(`${BASE}/public/r/webscraping/comments/1x7hpcl`, undefined, bases);
+    expect(ref).toEqual({ path: '/r/webscraping/comments/1x7hpcl', expectedPostId: '1x7hpcl' });
+
+    const internalPrimary = `${BASE}/internal/r/webscraping/comments/1x7hpcl`;
+    const internalCanonical = `${BASE}/internal/comments/1x7hpcl`;
+    const { result, requested } = await runFetch(
+      ref,
+      {
+        [internalPrimary]: {
+          status: 302,
+          location: `${BASE}/public/comments/1x7hpcl/`,
+        },
+        [internalCanonical]: { status: 200, body: VALID_HTML },
+      },
+      {},
+      bases
+    );
+
+    // The public prefix is a reference origin only: it never reaches the wire,
+    // and the internal prefix is prepended exactly once per request.
+    expect(requested).toEqual([internalPrimary, internalCanonical]);
+    expect(requested.some((u) => u.includes('/public'))).toBe(false);
+    expect(result?.expectedPostId).toBe('1x7hpcl');
+    expect(result?.html).toBe(VALID_HTML);
+    expectAllOnConfiguredOrigin(requested, BASE, '/internal');
+  });
+
   it('rejects an arbitrary input origin in the pure grammar before any I/O', () => {
     // The helper consumes an already-parsed ref whose `path` is origin-free, so
     // an input URL on an unconfigured origin can never reach the wire: the grammar
