@@ -228,26 +228,44 @@ function createFixtureServer(): Promise<FixtureServer> {
 const activeFixture: { current: FixtureServer | null } = { current: null };
 const activeChild: { current: ChildProcess | null } = { current: null };
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+/** True once the child has exited, whether by exit code or by signal. */
+function hasExited(child: ChildProcess): boolean {
+  return child.exitCode !== null || child.signalCode !== null;
 }
 
-async function killChild(child: ChildProcess | null): Promise<void> {
-  if (!child || child.exitCode !== null) return;
-  const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()));
+/**
+ * Bounded wait for a child's exit. Never registers a listener for an exit that
+ * already happened, and always cancels its timer/listener so no cleanup handle
+ * outlives the wait.
+ */
+function waitForExit(child: ChildProcess, timeoutMs: number): Promise<boolean> {
+  if (hasExited(child)) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    let timer: NodeJS.Timeout;
+    const onExit = (): void => {
+      clearTimeout(timer);
+      resolve(true);
+    };
+    timer = setTimeout(() => {
+      child.removeListener("exit", onExit);
+      resolve(false);
+    }, timeoutMs);
+    child.once("exit", onExit);
+  });
+}
+
+/**
+ * Awaited termination with bounded SIGTERM → SIGKILL escalation. Resolves true
+ * when the child is gone (already exited, or exited within the bounds), false
+ * when even SIGKILL did not end it in time. Exit by signal counts as exited.
+ */
+async function killChild(child: ChildProcess | null): Promise<boolean> {
+  if (!child) return true;
+  if (hasExited(child)) return true;
   child.kill("SIGTERM");
-  await Promise.race([
-    exited,
-    delay(KILL_GRACE_MS).then(() => {
-      if (child.exitCode === null) child.kill("SIGKILL");
-    }),
-  ]);
-  if (child.exitCode === null) {
-    await Promise.race([
-      new Promise<void>((resolve) => child.once("exit", () => resolve())),
-      delay(KILL_GRACE_MS),
-    ]);
-  }
+  if (await waitForExit(child, KILL_GRACE_MS)) return true;
+  child.kill("SIGKILL");
+  return waitForExit(child, KILL_GRACE_MS);
 }
 
 async function closeFixture(fixture: FixtureServer | null): Promise<void> {
@@ -401,9 +419,31 @@ function spawnCandidate(distPath: string, env: Record<string, string>): Promise<
           init: initResp,
         });
       })
-      .catch((err) => {
-        activeChild.current = null;
-        reject(err);
+      .catch(async (err: unknown) => {
+        // Startup rejected — most importantly on a JSON-RPC initialize error.
+        // Keep ownership of the child until its termination has been awaited:
+        // settle the startup state FIRST so the exit/error callbacks above can
+        // neither race a second rejection nor drop the registry handle, then
+        // terminate the child, and only then release the handle.
+        settled = true;
+        const startupError = err instanceof Error ? err : new Error(String(err));
+        let cleanupFailure: string | undefined;
+        try {
+          if (!(await killChild(child))) {
+            cleanupFailure = `child pid ${child.pid ?? "unknown"} survived SIGKILL`;
+          }
+        } catch (cleanupErr) {
+          cleanupFailure = cleanupErr instanceof Error ? cleanupErr.message : String(cleanupErr);
+        } finally {
+          activeChild.current = null;
+        }
+        // Preserve the original initialization diagnostic when cleanup
+        // succeeded; report a cleanup failure honestly when it did not.
+        reject(
+          cleanupFailure === undefined
+            ? startupError
+            : new Error(`${startupError.message} (child cleanup failed: ${cleanupFailure})`)
+        );
       });
   });
 }
