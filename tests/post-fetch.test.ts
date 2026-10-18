@@ -632,6 +632,53 @@ describe('fetchPostHtml — origin and identity boundaries (Task 5)', () => {
     expect(result?.expectedPostId).toBeUndefined();
     expect(requested).toEqual([`${BASE}/r/webscraping/s/yf4R7bbaHP`]);
   });
+
+  it('accepts a redirect that changes only the id case and preserves the requested spelling', async () => {
+    const ref = { path: '/comments/1X7HPCL', expectedPostId: '1X7HPCL' };
+    const { result, error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1X7HPCL`]: { status: 302, location: '/comments/1x7hpcl' },
+      [`${BASE}/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(error).toBeUndefined();
+    expect(result?.html).toBe(VALID_HTML);
+    expect(result?.expectedPostId).toBe('1X7HPCL');
+    expect(requested).toEqual([`${BASE}/comments/1X7HPCL`, `${BASE}/comments/1x7hpcl`]);
+    expectAllOnConfiguredOrigin(requested);
+  });
+
+  it('follows a share through two canonical redirects that differ only in id case', async () => {
+    const ref = { path: '/r/webscraping/s/yf4R7bbaHP' };
+    const { result, error, requested } = await runFetch(ref, {
+      [`${BASE}/r/webscraping/s/yf4R7bbaHP`]: {
+        status: 302,
+        location: '/r/webscraping/comments/1X7HPCL',
+      },
+      [`${BASE}/r/webscraping/comments/1X7HPCL`]: { status: 302, location: '/comments/1x7hpcl' },
+      [`${BASE}/comments/1x7hpcl`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect(error).toBeUndefined();
+    expect(result?.html).toBe(VALID_HTML);
+    expect(result?.expectedPostId).toBe('1X7HPCL');
+    expect(requested).toEqual([
+      `${BASE}/r/webscraping/s/yf4R7bbaHP`,
+      `${BASE}/r/webscraping/comments/1X7HPCL`,
+      `${BASE}/comments/1x7hpcl`,
+    ]);
+    expectAllOnConfiguredOrigin(requested);
+  });
+
+  it('still rejects a genuinely different redirected id before requesting it', async () => {
+    const ref = { path: '/comments/1X7HPCL', expectedPostId: '1X7HPCL' };
+    const { error, requested } = await runFetch(ref, {
+      [`${BASE}/comments/1X7HPCL`]: { status: 302, location: '/comments/2Y8IQDM' },
+      [`${BASE}/comments/2Y8IQDM`]: { status: 200, body: VALID_HTML },
+    });
+
+    expect((error as PostFetchError).code).toBe('redirect-id-conflict');
+    expect(requested).toEqual([`${BASE}/comments/1X7HPCL`]);
+  });
 });
 
 describe('fetchPostHtml — operation-wide wiring and body disposal (Task 5)', () => {

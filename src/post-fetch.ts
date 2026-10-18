@@ -240,7 +240,7 @@ export async function fetchPostHtml(
         if (target.expectedPostId !== undefined) {
           if (expectedPostId === undefined) {
             expectedPostId = target.expectedPostId;
-          } else if (expectedPostId !== target.expectedPostId) {
+          } else if (expectedPostId.toLowerCase() !== target.expectedPostId.toLowerCase()) {
             throw new PostFetchError(
               'redirect-id-conflict',
               `Redirect changed the post id from ${expectedPostId} to ${target.expectedPostId}`

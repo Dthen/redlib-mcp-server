@@ -401,3 +401,18 @@ describe('fetchPostHtml over real HTTP — socket/body release and fixture hygie
     expect(requests).toContain('/comments/real01');
   });
 });
+
+describe('fetchPostHtml over real HTTP — canonical id-case redirect (follow-up)', () => {
+  it('follows a real loopback redirect that changes only the id case, preserving the requested spelling', async () => {
+    route('/comments/1X7HPCL', redirectRoute(302, '/comments/1x7hpcl'));
+    route('/comments/1x7hpcl', plainRoute(VALID_HTML));
+
+    // No injected fetch: the helper's own default node-fetch drives real sockets.
+    const ref = parsePostReference('/comments/1X7HPCL', undefined, bases);
+    const result = await fetchPostHtml(ref, bases);
+
+    expect(result.html).toBe(VALID_HTML);
+    expect(result.expectedPostId).toBe('1X7HPCL');
+    expect(requests).toEqual(['/comments/1X7HPCL', '/comments/1x7hpcl']);
+  });
+});
