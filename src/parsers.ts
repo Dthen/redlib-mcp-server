@@ -66,6 +66,7 @@ export interface PostDetails {
   nsfw?: boolean;
   spoiler?: boolean;
   post_type?: 'self' | 'link' | 'image' | 'video' | 'gallery';
+  external_url?: string;
   author_flair?: 'moderator' | 'admin';
 }
 
@@ -88,8 +89,11 @@ function extractFlairFromAnchor($: cheerio.CheerioAPI, $flair: cheerio.Cheerio<a
 
   const text = $flair.find('span:not(.emoji)').map((_, s) => $(s).text()).get().join(' ').trim();
   const styleAttr = $flair.attr('style') || '';
-  const text_color = styleAttr.match(/color:\s*([^;]+)/)?.[1]?.trim();
-  const bg_color = styleAttr.match(/background:\s*([^;]+)/)?.[1]?.trim();
+  // Property-boundary match: `color` must be its own declaration, so the
+  // `color` inside `background-color` is not mistaken for the text color
+  // (and `background` does not match `background-color`/`background-image`).
+  const text_color = styleAttr.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i)?.[1]?.trim();
+  const bg_color = styleAttr.match(/(?:^|;)\s*background\s*:\s*([^;]+)/i)?.[1]?.trim();
   const emoji_urls = $flair.find('span.emoji').map((_, s) => {
     const sStyle = $(s).attr('style') || '';
     const match = sStyle.match(/background-image:\s*url\('?([^')]+)'?\)/);
@@ -199,12 +203,100 @@ function normalizeSubredditLabel(text: string): string {
 }
 
 /**
+ * True when the value carries any RFC 3986 scheme (`http:`, `https:`, `ftp:`,
+ * `mailto:`, …). Scheme-bearing destinations are returned by the parsers as
+ * data only; nothing fetches or follows them.
+ */
+function hasUrlScheme(url: string): boolean {
+  return /^[a-z][a-z0-9+.-]*:/i.test(url.trim());
+}
+
+/**
+ * Resolves a list/detail destination (`external_url`) against the public base.
+ * Scheme-bearing destinations and protocol-relative URLs are returned verbatim;
+ * only path-relative values are prefixed with the public base. This is passive
+ * returned data and never broadens request/redirect policy.
+ */
+function resolveDestinationUrl(url: string, publicBaseUrl: string): string {
+  const value = url.trim();
+  if (!value || hasUrlScheme(value) || value.startsWith('//')) return value;
+  return `${publicBaseUrl.replace(/\/+$/, '')}${value.startsWith('/') ? '' : '/'}${value}`;
+}
+
+/**
+ * Canonical destination identity for the negative emission guard.
+ *
+ * WHATWG URL parsing normalizes scheme/host case and default ports, and
+ * resolves scheme-relative input against `base`; path case, query values and
+ * fragments are preserved. Only trailing slashes on the path are ignored, so a
+ * comment/fragment destination is never collapsed into its thread permalink.
+ * This is pure string parsing: no request is made and no redirect or
+ * server-specific alias is inferred.
+ */
+function destinationIdentity(url: string, base: string): string | undefined {
+  try {
+    const parsed = new URL(url, base);
+    const path = parsed.pathname.replace(/\/+$/, '');
+    return `${parsed.protocol}//${parsed.host}${path}${parsed.search}${parsed.hash}`;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * True when both destination strings denote the same URL under
+ * `destinationIdentity`. Unparseable values are never treated as identical, so
+ * an unreadable destination is reported rather than silently dropped.
+ */
+function sameDestination(a: string, b: string, base: string): boolean {
+  const identityA = destinationIdentity(a, base);
+  const identityB = destinationIdentity(b, base);
+  return identityA !== undefined && identityA === identityB;
+}
+
+/**
+ * Post type asserted by a list thumbnail anchor's own label.
+ *
+ * The pinned template renders the post type for every non-link post and the
+ * destination domain for link posts, so:
+ *   - `self` → self, and the legacy `self.<subreddit>` domain label → self only
+ *     when it is paired with a relative Reddit permalink (that convention never
+ *     carries an external href); a `self.` domain with a scheme-bearing or
+ *     protocol-relative href is an external destination → link,
+ *   - `gallery` / `image` / `video` / `gif` → that type (`gif` posts are typed
+ *     video in the same union used for `.post_media_video`),
+ *   - any other non-empty label is a destination domain → link.
+ * An empty or absent label carries no type/domain evidence and returns
+ * undefined so the caller can fall back to the href shape.
+ */
+function thumbnailLabelPostType($anchor: cheerio.Cheerio<any>): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
+  const label = $anchor.find('span').first().text().trim().toLowerCase();
+  if (!label) return undefined;
+  if (label === 'self') return 'self';
+  if (label.startsWith('self.')) {
+    const href = ($anchor.attr('href') || '').trim();
+    return hasUrlScheme(href) || href.startsWith('//') ? 'link' : 'self';
+  }
+  if (label === 'gallery') return 'gallery';
+  if (label === 'image') return 'image';
+  if (label === 'video' || label === 'gif') return 'video';
+  return 'link';
+}
+
+/**
  * Detects the post type based on DOM elements on the post element.
+ * Handles both list markup (thumbnail labels/anchors, post previews) and the
+ * detail template (media containers, #post_url, the body div).
  */
 function determinePostType($el: cheerio.Cheerio<any>): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
-  // Check for gallery (thumbnail span contains "gallery" text)
-  const $thumbnailSpan = $el.find('.post_thumbnail span').first();
-  if ($thumbnailSpan.length && $thumbnailSpan.text().trim().toLowerCase() === 'gallery') {
+  // List thumbnails label their own type/domain; detail pages wrap every
+  // gallery image in a .gallery container.
+  const $thumbnail = $el.find('a.post_thumbnail').first();
+  const labelType = $thumbnail.length ? thumbnailLabelPostType($thumbnail) : undefined;
+  if (labelType === 'gallery') {
+    return 'gallery';
+  }
+  if ($el.find('.gallery').length > 0) {
     return 'gallery';
   }
 
@@ -218,20 +310,39 @@ function determinePostType($el: cheerio.Cheerio<any>): 'self' | 'link' | 'image'
     return 'image';
   }
 
-  // Check for link (external thumbnail href)
-  const $thumbnail = $el.find('a.post_thumbnail').first();
-  if ($thumbnail.length) {
-    const href = $thumbnail.attr('href') || '';
-    // If href is a self-post path (contains /comments/), it's a self post
-    if (href.includes('/comments/')) {
-      return 'self';
-    }
-    // Otherwise it's an external link
+  // Check for link (detail pages render the destination in #post_url)
+  if ($el.find('#post_url').length > 0) {
     return 'link';
   }
 
-  // Check for self post (has post_body.post_preview or no media)
+  // Remaining list labels: a type token stays that type and a domain label is a
+  // link destination. The label wins over the href shape, so an absolute
+  // destination is never mistaken for a self permalink (and vice versa).
+  if (labelType) {
+    return labelType;
+  }
+
+  // No label evidence (older captures render an empty span): fall back to the
+  // href shape. Redlib renders post permalinks relative, so an absolute
+  // thumbnail href is a destination; a relative href under /comments/ is
+  // treated as the post's own permalink.
+  if ($thumbnail.length) {
+    const href = ($thumbnail.attr('href') || '').trim();
+    if (isAbsoluteUrl(href)) return 'link';
+    if (href.includes('/comments/')) return 'self';
+    if (href) return 'link';
+  }
+
+  // Check for self post: list items carry the preview body; on detail pages the
+  // body container is the last remaining evidence. redlib renders
+  // <div class="post_body"> for every detail post type (utils.html:156-159), so
+  // this only decides pages where no media container and no #post_url exist;
+  // self is the closed-set inference there, and a page with no body either
+  // stays absent (markup redlib does not emit).
   if ($el.find('.post_body.post_preview').length > 0) {
+    return 'self';
+  }
+  if ($el.find('.post_body').length > 0) {
     return 'self';
   }
 
@@ -239,16 +350,129 @@ function determinePostType($el: cheerio.Cheerio<any>): 'self' | 'link' | 'image'
 }
 
 /**
- * Checks if the post title contains NSFW or Spoiler text.
- * Redlib renders these as text nodes after the title link.
+ * Exact comment count from the `.post_comments` title attribute, e.g.
+ * title="3426 comments" → 3426. Returns undefined when the attribute is
+ * absent or not a count, so the caller can fall back to display text.
  */
-function checkPostTitleTag($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>): { nsfw: boolean; spoiler: boolean } {
-  // Get the full text content of .post_title, which includes NSFW/Spoiler text nodes
-  const fullTitleText = $el.find('.post_title').text().trim();
-  return {
-    nsfw: /\bNSFW\b/.test(fullTitleText),
-    spoiler: /\bSpoiler\b/i.test(fullTitleText),
+function parseExactCommentCount(title: string | undefined): number | undefined {
+  if (!title) return undefined;
+  const match = title.trim().match(/^(\d[\d,]*)\s+comments?$/i);
+  if (!match) return undefined;
+  const digits = match[1].replace(/,/g, '');
+  if (!/^\d+$/.test(digits)) return undefined;
+  return parseInt(digits, 10);
+}
+
+/**
+ * Supported visible comment-count text: plain digits ("857"), comma-grouped
+ * digits ("1,234") or a compact k/m value ("3.4k"). Returns undefined for
+ * anything else so the caller keeps the previous first-integer semantics.
+ */
+function parseDisplayCommentCount(text: string): number | undefined {
+  const body = text.trim().replace(/\s*comments?$/i, '').trim();
+  if (!body) return undefined;
+  if (/^\d+$/.test(body)) return parseInt(body, 10);
+  if (/^\d{1,3}(?:,\d{3})+$/.test(body)) return parseInt(body.replace(/,/g, ''), 10);
+  if (!/^(?:\d+(?:\.\d+)?|\.\d+)\s*[km]$/i.test(body)) return undefined;
+  return parseCompactScore(body.replace(/\s+/g, ''));
+}
+
+/**
+ * Comment count for a list post: prefer the exact `.post_comments` title
+ * attribute, then a supported compact/comma display count, else the previous
+ * first-integer text behaviour (0 when nothing parses).
+ */
+function parseCommentCount($el: cheerio.Cheerio<any>): number {
+  const $comments = $el.find('.post_comments').first();
+  const exact = parseExactCommentCount($comments.attr('title'));
+  if (exact !== undefined) return exact;
+  const text = $comments.text().trim();
+  const display = parseDisplayCommentCount(text);
+  if (display !== undefined) return display;
+  const legacy = text.match(/(\d+)/);
+  return legacy ? parseInt(legacy[1], 10) : 0;
+}
+
+/** A text node made up solely of whitespace-separated NSFW/Spoiler flag tokens. */
+const BARE_FLAG_TOKENS = /^\s*(?:NSFW|Spoiler)(?:\s+(?:NSFW|Spoiler))*\s*$/i;
+
+interface TitleFlagInfo {
+  nsfw: boolean;
+  spoiler: boolean;
+  /** The metadata element/text nodes found (used to exclude them from titles). */
+  metadataNodes: any[];
+}
+
+/**
+ * Detects NSFW/spoiler metadata inside a scoped `.post_title` container.
+ *
+ * Positive markup is `small.nsfw`/`small.spoiler` (current redlib) and legacy
+ * `.nsfw`/`.spoiler` elements, but only outside the actual title link and the
+ * flair anchor. A bare flag word is accepted only as a direct text-node child
+ * of the title container, only when a non-flair title anchor exists, and only
+ * when the node is nothing but flag tokens/whitespace. Plain title words (or
+ * flair text) are never flags.
+ */
+function analyzeTitleFlags($: cheerio.CheerioAPI, $title: cheerio.Cheerio<any>): TitleFlagInfo {
+  const info: TitleFlagInfo = { nsfw: false, spoiler: false, metadataNodes: [] };
+  if (!$title.length) return info;
+
+  const $titleAnchor = $title.find('a').not('.post_flair').first();
+  const titleAnchorNode = $titleAnchor.get(0);
+
+  $title.find('small.nsfw, small.spoiler, .nsfw, .spoiler').each((_i, el) => {
+    const $el = $(el);
+    // The actual title link and the flair anchor are structural, never flag
+    // metadata, even when they themselves carry a legacy .nsfw/.spoiler class.
+    if (titleAnchorNode && el === titleAnchorNode) return;
+    if ($el.hasClass('post_flair')) return;
+    let insideFlair = false;
+    let insideTitleAnchor = false;
+    $el.parents('a').each((_j, anchor) => {
+      if ($(anchor).hasClass('post_flair')) insideFlair = true;
+      if (titleAnchorNode && anchor === titleAnchorNode) insideTitleAnchor = true;
+    });
+    if (insideFlair || insideTitleAnchor) return;
+    if ($el.hasClass('nsfw')) info.nsfw = true;
+    if ($el.hasClass('spoiler')) info.spoiler = true;
+    info.metadataNodes.push($el.get(0));
+  });
+
+  if (titleAnchorNode) {
+    $title.contents().each((_i, node) => {
+      if (node.type !== 'text') return;
+      const data = (node as any).data || '';
+      if (!BARE_FLAG_TOKENS.test(data)) return;
+      let flagged = false;
+      if (/\bNSFW\b/i.test(data)) { info.nsfw = true; flagged = true; }
+      if (/\bSpoiler\b/i.test(data)) { info.spoiler = true; flagged = true; }
+      if (flagged) info.metadataNodes.push(node);
+    });
+  }
+
+  return info;
+}
+
+/**
+ * Text of a title container excluding the flair anchor and the identified flag
+ * metadata nodes; actual title words (including words like "NSFW") are kept.
+ */
+function titleTextExcluding($: cheerio.CheerioAPI, $title: cheerio.Cheerio<any>, excluded: any[]): string {
+  const excludedSet = new Set(excluded);
+  let text = '';
+  const walk = (node: any) => {
+    if (excludedSet.has(node)) return;
+    if (node.type === 'text') {
+      text += node.data || '';
+      return;
+    }
+    if (node.type !== 'tag') return;
+    if (node.name === 'a' && $(node).hasClass('post_flair')) return;
+    for (const child of node.children || []) walk(child);
   };
+  const root = $title.get(0);
+  for (const child of root?.children || []) walk(child);
+  return text.trim();
 }
 
 /**
@@ -323,7 +547,11 @@ function extractMedia($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, baseU
     const $fig = $(el);
     const imgSrc = $fig.find('img[src]').first().attr('src');
     const href = $fig.find('a[href]').first().attr('href');
-    const url = imgSrc || href || '';
+    // A figure that wraps a <video> carries that video asset: its anchor href
+    // is the video's own source, so it must not be reported as an image. The
+    // video branch below emits the single, correctly typed item. A genuine
+    // <img> in the same figure is still reported.
+    const url = imgSrc || ($fig.find('video').length > 0 ? '' : href) || '';
     if (!url) return;
     // Classify by the MOST specific signal: if either the proxied img or the
     // anchor href is a .gif, the media is a gif (a static .jpg preview img can
@@ -347,13 +575,29 @@ function extractMedia($: cheerio.CheerioAPI, $scope: cheerio.Cheerio<any>, baseU
     const src = $(el).attr('src') || '';
     if (src) push(mediaType(src), src);
   });
-  $scope.find('video source[src]').each((_i, el) => {
-    const src = $(el).attr('src') || '';
-    if (src) push('video', src);
-  });
-  $scope.find('video[src]').each((_i, el) => {
-    const src = $(el).attr('src') || '';
-    if (src) push('video', src);
+  // One logical media item per video: the element's own src, else its MP4
+  // rendition, else the first usable source. Two <source> tags of one video
+  // (e.g. HLS + MP4) are renditions of the same asset, not distinct media, so
+  // they never become two items; distinct <video> elements are never merged.
+  $scope.find('video').each((_i, el) => {
+    const $video = $(el);
+    const direct = ($video.attr('src') || '').trim();
+    if (direct) {
+      media.push({ type: 'video', url: absoluteUrl(direct, baseUrl) });
+      return;
+    }
+    let firstUsable = '';
+    let mp4 = '';
+    $video.find('source[src]').each((_j, source) => {
+      const $source = $(source);
+      const src = ($source.attr('src') || '').trim();
+      if (!src) return;
+      if (!firstUsable) firstUsable = src;
+      const type = ($source.attr('type') || '').trim().toLowerCase();
+      if (!mp4 && (type === 'video/mp4' || /\.mp4(?:[?#]|$)/i.test(src))) mp4 = src;
+    });
+    const chosen = mp4 || firstUsable;
+    if (chosen) media.push({ type: 'video', url: absoluteUrl(chosen, baseUrl) });
   });
   return media;
 }
@@ -385,9 +629,7 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
   const subreddit = normalizeSubredditLabel($el.find('.post_subreddit').text());
   const author = $el.find('.post_author').text().trim();
   const { score, score_hidden, score_exact } = parseScore($, $el);
-  const commentsText = $el.find('.post_comments').first().text().trim();
-  const commentCountMatch = commentsText.match(/(\d+)/);
-  const commentCount = commentCountMatch ? parseInt(commentCountMatch[1]) : 0;
+  const commentCount = parseCommentCount($el);
 
   // Extract created timestamps from <span class="created">
   const $created = $el.find('.post_header span.created').first();
@@ -396,19 +638,31 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
 
   // Extract new metadata fields
   const stickied = $el.hasClass('stickied');
-  const { nsfw, spoiler } = checkPostTitleTag($, $el);
+  const { nsfw, spoiler } = analyzeTitleFlags($, $el.find('.post_title').first());
   const post_type = determinePostType($el);
   const author_flair = extractAuthorFlair($el);
+
+  // Public permalink of this post (title anchor). Also the negative guard for
+  // destination emission below.
+  const permalink = href.trim() ? absolutePublicUrl(href, publicBaseUrl) : undefined;
 
   // Extract thumbnail URL from post_thumbnail (svg image href or img src)
   const $thumbnail = $el.find('a.post_thumbnail').first();
   let thumbnail_url: string | undefined;
   let external_url: string | undefined;
   if ($thumbnail.length) {
-    const thumbHref = $thumbnail.attr('href') || '';
-    // external_url: only when href is an external link (starts with http)
-    if (isAbsoluteUrl(thumbHref)) {
-      external_url = thumbHref;
+    const thumbHref = ($thumbnail.attr('href') || '').trim();
+    // The thumbnail anchor holds a destination only for link posts (see
+    // determinePostType); every other type renders the post's own permalink
+    // there, which must never be reported as a destination. A legacy capture
+    // can also label a non-link post with a media domain while still pointing
+    // at the post's own permalink, so the resolved destination is compared with
+    // the permalink as a negative guard before emission.
+    if (thumbHref && post_type === 'link') {
+      const destination = resolveDestinationUrl(thumbHref, publicBaseUrl);
+      if (!(permalink && sameDestination(destination, permalink, publicBaseUrl))) {
+        external_url = destination;
+      }
     }
     // thumbnail_url: from svg image href or img src (absolute against the instance base)
     const svgImageHref = $thumbnail.find('svg image').attr('href');
@@ -424,7 +678,7 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
     author,
     score,
     commentCount,
-    ...(href.trim() ? { permalink: absolutePublicUrl(href, publicBaseUrl) } : {}),
+    ...(permalink ? { permalink } : {}),
     ...(flair ? { flair } : {}),
     ...(created_utc ? { created_utc } : {}),
     ...(created_relative ? { created_relative } : {}),
@@ -485,31 +739,174 @@ export function parseSubredditSearch(html: string): SubredditSearchResult[] {
   return results;
 }
 
+export interface CommentSearchItem {
+  text: string;
+  author: string;
+  score: number | null;
+  score_hidden?: boolean;
+  linkTitle?: string;
+  permalink?: string;
+  parent_permalink?: string;
+  subreddit?: string;
+  created_utc?: string;
+  created_relative?: string;
+  media?: MediaItem[];
+}
+
+/**
+ * Recognised Reddit-style comment/post path inside a permalink: an optional
+ * `/r/<sub>/` prefix followed by `/comments/<post-id>`, where the post ID
+ * segment ends at the next slash or at the end of the path. Anything else
+ * (e.g. redlib's profile-comment path `/user/<name>/comments/…`, an author
+ * page or an arbitrary destination) does not establish a parent post.
+ */
+const REDDIT_COMMENT_PATH = /^\/(?:r\/[^/]+\/)?comments\/([a-z0-9]+)(?:\/|$)/i;
+
+/**
+ * Parent post permalink of a comment permalink, or undefined when the parent
+ * cannot be established.
+ *
+ * The derivation is explicit and conservative: parse the resolved permalink,
+ * keep everything up to and including the post ID, and drop the comment-specific
+ * segments (title slug, comment id), the query string and the fragment. The
+ * origin of the supplied permalink is preserved; no ID is invented and no
+ * request is made.
+ */
+function deriveParentPermalink(permalink: string | undefined): string | undefined {
+  if (!permalink) return undefined;
+  let parsed: URL;
+  try {
+    parsed = new URL(permalink);
+  } catch {
+    return undefined;
+  }
+  const match = parsed.pathname.match(REDDIT_COMMENT_PATH);
+  if (!match) return undefined;
+  const throughPost = `${parsed.protocol}//${parsed.host}${parsed.pathname.slice(0, match[0].length)}`;
+  return throughPost.endsWith('/') ? throughPost : `${throughPost}/`;
+}
+
+/**
+ * Parses Redlib comment-search results (#search_results_comments →
+ * .comment.user-comment) into a flat list, in document order.
+ *
+ * Fields are frozen at text/author/score plus the optional values the markup
+ * supplies. `author` is the displayed text, exactly as detail comments keep it
+ * ("u/name"). `text` comes from the comment body's rendered markdown when one
+ * is present, else from the body container. `permalink` is the supplied
+ * comment link resolved against the public base and `parent_permalink` is the
+ * derived parent post permalink (absent when it cannot be established). No
+ * `id` is invented: the search markup does not carry one.
+ */
+export function parseCommentSearch(html: string, baseUrl: string = "http://localhost:8080", publicBaseUrl: string = "https://www.reddit.com"): CommentSearchItem[] {
+  const $ = cheerio.load(html);
+  const results: CommentSearchItem[] = [];
+
+  $('.comment.user-comment').each((_i: number, el: any) => {
+    const $el = $(el);
+    const $link = $el.find('.comment_link').first();
+    const href = ($link.attr('href') || '').trim();
+    const author = $el.find('.comment_author').first().text().trim();
+
+    // Body: redlib renders <p class="comment_body">{{ body|safe }}</p> and the
+    // body HTML usually starts with <div class="md">. HTML parsing closes the
+    // <p> before that <div>, so the markdown wrapper normally lands as a
+    // sibling of .comment_body. Prefer a markdown container inside the body,
+    // then the comment's own markdown wrapper, then the body container itself.
+    const $body = $el.find('.comment_body').first();
+    let $scope = $body.find('.md').first();
+    if (!$scope.length) $scope = $el.find('.md').first();
+    if (!$scope.length) $scope = $body;
+    const text = $scope.text().trim();
+
+    // A .comment.user-comment element that carries no author, link or body is
+    // page chrome, not a result.
+    if (!author && !href && !text) return;
+
+    const { score, score_hidden } = parseScore($, $el, '.comment_score');
+    const linkTitle = ($link.attr('title') || '').trim() || $link.text().trim();
+    const permalink = href ? absolutePublicUrl(href, publicBaseUrl) : undefined;
+    const parent_permalink = deriveParentPermalink(permalink);
+    const media = extractMedia($, $scope, baseUrl);
+
+    const $created = $el.find('.created').first();
+    const created_utc = $created.attr('title')?.trim() || undefined;
+    const created_relative = $created.text().trim() || undefined;
+    const subreddit = normalizeSubredditLabel($el.find('.comment_subreddit').first().text());
+
+    results.push({
+      text,
+      author,
+      score,
+      ...(score_hidden ? { score_hidden } : {}),
+      ...(linkTitle ? { linkTitle } : {}),
+      ...(permalink ? { permalink } : {}),
+      ...(parent_permalink ? { parent_permalink } : {}),
+      ...(subreddit ? { subreddit } : {}),
+      ...(created_utc ? { created_utc } : {}),
+      ...(created_relative ? { created_relative } : {}),
+      ...(media.length > 0 ? { media } : {}),
+    });
+  });
+
+  return results;
+}
+
 export interface UserSearchResult {
   username: string;
   description?: string;
 }
 
 /**
- * Parses Redlib user search results HTML into structured JSON.
- * User results appear as .comment divs (posts with empty titles).
+ * Username carried by an href that resolves to the user route `/u/NAME` or
+ * `/user/NAME`, else undefined. Subreddit cards (`/r/NAME`), the More-results
+ * anchor (`?q=…`), bare `/user/` hrefs and profile-post paths
+ * (`/user/NAME/comments/…`) are not user routes. Pure URL resolution against
+ * the public base: no request is made and the name is returned verbatim, with
+ * its case preserved.
  */
-export function parseUserSearch(html: string): UserSearchResult[] {
+function userNameFromHref(href: string, publicBaseUrl: string): string | undefined {
+  if (!href.trim()) return undefined;
+  let pathname: string;
+  try {
+    pathname = new URL(href.trim(), publicBaseUrl).pathname;
+  } catch {
+    return undefined;
+  }
+  const match = pathname.match(/^\/(?:u|user)\/([^/]+)\/?$/);
+  return match ? match[1] : undefined;
+}
+
+/**
+ * Parses Redlib user search results HTML into structured JSON.
+ *
+ * Two result markups are supported and preserved:
+ *  - legacy user results: `.comment` divs whose `.comment_link` points at the
+ *    user (description from `.comment_body`), and
+ *  - current people cards: `a.search_subreddit` cards whose href is the user
+ *    route (`u/NAME` display text, no description in the template).
+ * Subreddit cards and the More-results anchor fail the user-route check and are
+ * not results. Document order is preserved.
+ */
+export function parseUserSearch(html: string, publicBaseUrl: string = "https://www.reddit.com"): UserSearchResult[] {
   const $ = cheerio.load(html);
   const results: UserSearchResult[] = [];
 
-  $('.comment').each((_i: number, el: any) => {
+  $('.comment, a.search_subreddit').each((_i: number, el: any) => {
     const $el = $(el);
-    const $link = $el.find('.comment_link').first();
-    const href = $link.attr('href') || '';
+    const isCard = $el.is('a');
+    const href = isCard
+      ? ($el.attr('href') || '')
+      : ($el.find('.comment_link').first().attr('href') || '');
 
-    // Extract username from href like /user/USERNAME or /u/USERNAME
-    const userMatch = href.match(/\/u(?:ser)?\/([^/?]+)/i);
-    const username = userMatch ? userMatch[1] : '';
-
+    const username = userNameFromHref(href, publicBaseUrl);
     if (!username) return;
 
-    const description = $el.find('.comment_body').first().text().trim() || undefined;
+    // Legacy comment results carry their description in .comment_body; the
+    // current card template supplies none, so none is invented for a card.
+    const description = isCard
+      ? undefined
+      : ($el.find('.comment_body').first().text().trim() || undefined);
 
     results.push({
       username,
@@ -652,6 +1049,7 @@ export interface UserComment {
   subreddit?: string;
   created_utc?: string;
   created_relative?: string;
+  media?: MediaItem[];
 }
 
 export interface UserProfile {
@@ -708,6 +1106,17 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
 
     const bodyText = $el.find('.md').first().text().trim();
     const { score } = parseScore($, $el, '.comment_score');
+    // Optional media from the comment body, using the shared extractor. The
+    // markdown body is preferred; the comment body container is the fallback
+    // when a comment has no rendered markdown wrapper. Legacy fixtures wrap the
+    // markdown div in a <p class="comment_body">, which HTML parsing splits into
+    // siblings, so an unwrapped .md inside the comment is equally valid.
+    const $nestedMd = $el.find('.comment_body .md').first();
+    const $mdBody = $nestedMd.length ? $nestedMd : $el.find('.md').first();
+    const $commentBodyScope = $mdBody.length
+      ? $mdBody
+      : $el.find('.comment_body').first();
+    const media = extractMedia($, $commentBodyScope, baseUrl);
 
     const subreddit = normalizeSubredditLabel($el.find('.comment_subreddit').first().text());
 
@@ -726,6 +1135,7 @@ export function parseUserProfile(html: string, baseUrl: string = "http://localho
       ...(subreddit ? { subreddit } : {}),
       ...(created_utc ? { created_utc } : {}),
       ...(created_relative ? { created_relative } : {}),
+      ...(media.length > 0 ? { media } : {}),
     });
   });
 
@@ -745,6 +1155,51 @@ export interface WikiPage {
 }
 
 /**
+ * Block-level tags that start and end a text line when extracting wiki bodies.
+ * This is deliberate word separation for a plain-text field, not markdown
+ * rendering: inline elements stay on their surrounding line.
+ */
+const WIKI_BLOCK_TAGS = new Set([
+  'address', 'article', 'aside', 'blockquote', 'dd', 'details', 'div', 'dl', 'dt',
+  'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header',
+  'hr', 'li', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'summary', 'table',
+  'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'ul',
+]);
+
+/**
+ * Text of a wiki body element with block boundaries turned into newlines and
+ * runs of horizontal whitespace collapsed. Body words and their order are
+ * preserved; blank lines are dropped rather than rendered.
+ */
+function blockSeparatedText($root: cheerio.Cheerio<any>): string {
+  let text = '';
+  const newline = () => { if (text && !text.endsWith('\n')) text += '\n'; };
+  const walk = (node: any) => {
+    if (node.type === 'text') {
+      text += node.data || '';
+      return;
+    }
+    if (node.type !== 'tag') return;
+    const name = String(node.name || '').toLowerCase();
+    if (name === 'br') {
+      newline();
+      return;
+    }
+    const block = WIKI_BLOCK_TAGS.has(name);
+    if (block) newline();
+    for (const child of node.children || []) walk(child);
+    if (block) newline();
+  };
+  const root = $root.get(0);
+  for (const child of root?.children || []) walk(child);
+  return text
+    .split('\n')
+    .map(line => line.replace(/[ \t\u00a0]+/g, ' ').trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+/**
  * Parses Redlib wiki page HTML into structured JSON.
  * Extracts title from <title> tag and content from #wiki .md.
  */
@@ -757,9 +1212,13 @@ export function parseWikiPage(html: string): WikiPage {
   const dashIndex = titleRaw.lastIndexOf(' - ');
   const title = dashIndex > 0 ? titleRaw.substring(0, dashIndex).trim() : titleRaw;
 
-  // Content: extract text from #wiki .md (.wiki or .md.wiki)
+  // Content: extract text from #wiki .md (.wiki or .md.wiki). The generated
+  // table of contents is navigation that duplicates every body heading, so it
+  // is removed before extraction.
   const $wikiMd = $('#wiki .md').first();
-  const content = $wikiMd.text().trim();
+  const $wikiBody = $wikiMd.clone();
+  $wikiBody.find('.toc').remove();
+  const content = blockSeparatedText($wikiBody);
 
   return { title, content };
 }
@@ -823,8 +1282,11 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     permalink = absolutePublicUrl(postPath, publicBaseUrl);
   }
 
-  // Get title text, excluding any flair link text  
-  const title = $postTitle.clone().find('a.post_flair').remove().end().text().trim();
+  // Title text excludes the flair anchor and the identified NSFW/Spoiler
+  // metadata nodes; actual title words are preserved. The same metadata nodes
+  // drive the flags, so title words alone never set them.
+  const titleFlags = analyzeTitleFlags($, $postTitle);
+  const title = titleTextExcluding($, $postTitle, titleFlags.metadataNodes);
   const author = $('.post_author').first().text().trim();
   const subreddit = normalizeSubredditLabel($('.post_subreddit').first().text());
   const body = $('.post_body').first().text().trim();
@@ -835,10 +1297,8 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   const created_utc = $created.attr('title')?.trim() || undefined;
   const created_relative = $created.text().trim() || undefined;
 
-  // Check NSFW/Spoiler in post title full text
-  const fullTitleText = $postTitle.text().trim();
-  const nsfw = /\bNSFW\b/.test(fullTitleText);
-  const spoiler = /\bSpoiler\b/i.test(fullTitleText);
+  const nsfw = titleFlags.nsfw;
+  const spoiler = titleFlags.spoiler;
 
   // Determine post type from the whole page
   const $postDiv = $('.post').first();
@@ -850,8 +1310,22 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
   if ($postAuthor.hasClass('moderator')) author_flair = 'moderator';
   else if ($postAuthor.hasClass('admin')) author_flair = 'admin';
 
-  // Post-level media: image/gif/video URLs from the post's media content region
-  const postMedia = extractMedia($, $postDiv, baseUrl);
+  // Post-level media: image/gif/video URLs from the post's content region.
+  // Header (awards/author badges), title (flair/tag markup), footer
+  // (permalink/download/reddit popup) and thumbnail images are decoration and
+  // navigation, not content, so they are excluded before extraction; body and
+  // media-container assets (including bare body images) are retained.
+  const $mediaScope = $postDiv.clone();
+  $mediaScope.find('.post_header, .post_title, .post_footer, .post_thumbnail').remove();
+  const postMedia = extractMedia($, $mediaScope, baseUrl);
+
+  // Link destination (link posts only): the detail template renders it in
+  // #post_url[href]. Reddit-relative targets resolve against the public base,
+  // scheme-bearing and protocol-relative targets are returned verbatim, and
+  // when the anchor or its href is absent the field is absent — the post
+  // permalink is never substituted.
+  const postUrlHref = ($postDiv.find('#post_url').first().attr('href') || '').trim();
+  const external_url = postUrlHref ? resolveDestinationUrl(postUrlHref, publicBaseUrl) : undefined;
 
   // Recursive comment parsing
   function parseComment($comment: cheerio.Cheerio<any>, depth: number): CommentData {
@@ -934,6 +1408,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
     ...(nsfw ? { nsfw } : {}),
     ...(spoiler ? { spoiler } : {}),
     ...(post_type ? { post_type } : {}),
+    ...(external_url ? { external_url } : {}),
     ...(author_flair ? { author_flair } : {}),
   };
 }

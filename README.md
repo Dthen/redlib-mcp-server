@@ -1,342 +1,94 @@
 # Redlib MCP Server
 
-A **Model Context Protocol (MCP) server** that enables AI agents to interact with Reddit through your private **Redlib** instance. No Reddit API keys required — just a running Redlib instance.
+An MCP server that puts a private [Redlib](https://github.com/redlib-org/redlib) instance behind ten tools: search posts, subreddits, users and comments; read front pages, subreddit info and wikis, user profiles, and posts with their comments. No Reddit API key is needed — every request goes to your Redlib instance, which does the fetching.
 
-This is a fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes/redlib-mcp-server), extended from 3 to 10 tools with full coverage of Redlib's capabilities.
+Fork of [Devthatdoes/redlib-mcp-server](https://github.com/Devthatdoes/redlib-mcp-server).
 
-## Features
+## Requirements
 
-- **Privacy-First** — Uses your self-hosted Redlib, no tracking or API keys
-- **10 Tools** — Search posts, subreddits, users, comments; browse front page, user profiles, wiki pages; fetch posts with comments
-- **Structured Output** — Returns clean JSON instead of raw HTML
-- **Post-Reference Resolution** — `get_post` accepts bare IDs, scoped paths, full Reddit URLs, and share references with bounded, Redlib-only fetching
+- **Node.js `>=20.18.1`.** That is the `engines` floor, required by `cheerio` 1.2.0. Verified on Node 22.23.4; the 20.18.x minimum itself was not exercised.
+- A reachable Redlib instance.
+- An MCP client (Claude Desktop, Cursor, VS Code, Codex, or any MCP-compatible client).
 
-## Prerequisites
+## Install
 
-1. **Redlib Instance** — A running Redlib instance (default: `http://localhost:8080`)
-   - [Redlib GitHub](https://github.com/redlib-org/redlib)
-2. **MCP Client** — Claude Desktop, Cursor, VS Code, Codex, or any MCP-compatible client
-
-## Quick Start
-
-### Local Development
+### From source
 
 ```bash
-git clone https://github.com/Dthen/redlib-mcp-server.git
-cd redlib-mcp-server
 npm install
 npm run build
 npm start
+```
+
+`npm start` runs the compiled `dist/index.js`.
+
+### Packed tarball (runtime only)
+
+`npm pack` in the source checkout builds `dist/` (via `prepack`) and writes a runtime tarball containing compiled `dist/` plus `package.json`, `README.md` and `LICENSE`. Installing it needs neither the source tree nor `devDependencies`.
+
+```bash
+npm pack                                      # → redlib-mcp-server-2.0.0.tgz
+npm install ./redlib-mcp-server-2.0.0.tgz     # in your own project
+./node_modules/.bin/redlib-mcp-server
 ```
 
 ## Configuration
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `REDLIB_URL` | `http://localhost:8080` | URL of your Redlib instance. `get_post`'s bounded fetch ensures every outbound request targets this origin (no escape via redirects). The other 9 handlers make direct `fetch` calls to this URL without redirect re-validation. |
-| `REDLIB_PUBLIC_URL` | `https://www.reddit.com` | Public base URL for permalinks and flair filter links in tool output |
+| `REDLIB_URL` | `http://localhost:8080` | Base URL of your Redlib instance. A path prefix is preserved and every outbound request stays inside this origin and prefix. |
+| `REDLIB_PUBLIC_URL` | `https://www.reddit.com` | Public base used to build permalinks in tool output. It is never fetched. |
 
-## Tools
-
-### `search_posts`
-Search Reddit posts. Supports sort order, time filter, and subreddit scoping.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `query` | yes | — | Search query string |
-| `subreddit` | no | — | Limit search to a specific subreddit |
-| `sort` | no | `relevance` | `relevance`, `hot`, `top`, `new`, `comments` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (applies to all sort modes) |
-| `limit` | no | 25 | Maximum results |
-| `flair` | no | — | Filter by flair name (e.g. 'discussion') |
-| `author` | no | — | Filter by author username (e.g. 'spez') |
-| `selftext` | no | — | Search within post body text |
-| `self_post_only` | no | — | Only return self/text posts (no links) |
-
-### `get_posts`
-Get posts from a subreddit. Supports all sort modes and time filters.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `subreddit` | yes | — | Subreddit name (without r/) |
-| `sort` | no | `hot` | `hot`, `new`, `top`, `rising`, `controversial` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (only with `top` or `controversial`) |
-| `limit` | no | 25 | Maximum posts |
-
-### `get_post`
-Get a post and its comments. `postId` accepts a Reddit post ID (from search or hot results), a full Reddit URL, or a share reference (`s/<token>` or `r/<sub>/s/<token>`). The optional `subreddit` hint scopes bare IDs and bare share fragments (`s/<token>`) to a subreddit or user profile. Full scoped paths (`r/<sub>/comments/<id>`) and full scoped URLs do NOT use the hint.
-
-#### Accepted `postId` forms
-
-| Form | Example | Needs `subreddit`? | Resolution |
-|------|---------|---------------------|------------|
-| Bare ASCII base36 ID | `1x7hpcl` | Optional | No hint: `/comments/<id>`. With hint: `/r/<hint>/comments/<id>` → 404 fallback `/user/<hint>/comments/<id>` |
-| `t3_`-prefixed fullname | `t3_1x7hpcl` | Optional | Same as bare ID (prefix stripped internally) |
-| Scoped path | `r/webscraping/comments/1x7hpcl` | No | Direct: `/r/webscraping/comments/1x7hpcl` |
-| Profile path | `user/spez/comments/1x7hpcl` or `/u/spez/comments/1x7hpcl` | No | Direct: `/user/spez/comments/1x7hpcl` (`/u/` alias → `/user/`) |
-| `/comments/<id>` | `/comments/1x7hpcl` | No | Direct: `/comments/1x7hpcl` |
-| Compact `/<id>` | `/1x7hpcl` | No | Direct: `/comments/1x7hpcl` (no hint, no fallback) |
-| Reddit permalink URL | `https://www.reddit.com/r/webscraping/comments/1x7hpcl/` | No | Host must be in allow-list; path extracted; slug and comment-id suffix stripped → `/r/webscraping/comments/1x7hpcl` |
-| Full share URL | `https://www.reddit.com/r/webscraping/s/yf4R7bbaHP` | No | `/r/webscraping/s/<token>` → 302 → canonical |
-| Bare share fragment | `s/yf4R7bbaHP` | **Required** | `/r/<hint>/s/<token>` → 302 → canonical |
-| Scoped share path | `r/webscraping/s/yf4R7bbaHP` | No | `/r/webscraping/s/<token>` → 302 → canonical |
-| Short link | `https://redd.it/1x7hpcl` | No | `/comments/1x7hpcl` (shortener never fetched) |
-
-A Reddit comment URL (e.g. `https://www.reddit.com/r/<sub>/comments/<id>/<slug>/<comment_id>/`) resolves to the **parent post**: the slug and comment-id suffix are stripped, yielding `/r/<sub>/comments/<id>`. This is not a comment-scoped lookup.
-
-Share tokens are opaque, case-sensitive ASCII alphanumeric strings (`[A-Za-z0-9]+`). The supplied spelling is preserved exactly — never decoded, re-encoded, or repaired. Share references under `user/` or `u/` are not part of the contract and are rejected. A full scoped share URL ignores the `subreddit` hint.
-
-#### Example `get_post` requests
-
-```json
-{"subreddit": "webscraping", "postId": "s/yf4R7bbaHP"}
-```
-
-```json
-{"postId": "https://www.reddit.com/r/webscraping/s/yf4R7bbaHP"}
-```
-
-```json
-{"postId": "1x7hpcl"}
-```
-
-#### Subreddit hint policy
-
-- **Only** bare single-token IDs and bare `s/<token>` fragments use the hint.
-- Scoped paths (`r/<name>/...`, `/comments/<id>`), full URLs, and scoped shares are authoritative — the hint is ignored.
-- The `subreddit` parameter is an optional string in the tool schema; non-string values are rejected at the tool boundary by schema validation. The parser's internal `typeof` guard is defensive — it treats a non-string hint as absent (never coerced to `"null"`), but this path is not reachable through the tool API.
-- The hint must be a valid `[A-Za-z0-9_-]+` segment.
-
-#### Profile fallback semantics
-
-- **Bare ID + hint**: Primary `/r/<hint>/comments/<id>`. On HTTP 404 only (never on 403/429/empty-200/error), falls back to `/user/<hint>/comments/<id>`.
-- **Bare share fragment + hint**: No fallback (shares under `user/` are not part of the contract).
-- **Scoped paths / full URLs / explicit `/user/` routes**: No fallback.
-- **Explicit user URLs** (`https://www.reddit.com/user/<name>/comments/<id>`) do NOT trigger profile fallback.
-
-#### Supported origins
-
-Only these hosts are accepted in URL form (exact match, no wildcards):
-
-- `reddit.com`, `www.reddit.com`, `old.reddit.com`, `new.reddit.com`, `np.reddit.com`, `m.reddit.com`, `sh.reddit.com`
-- `redd.it`, `www.redd.it` (short-link hosts; the shortener is never fetched)
-- The configured `REDLIB_URL` and `REDLIB_PUBLIC_URL` origins (including any base-path prefix)
-
-All other hosts are rejected before any network I/O. Unconfigured Redlib hostnames need a supported relative path or intentional admin config.
-
-#### URL parameter handling
-
-- **Fragment and tracking parameters are stripped** from all URL inputs and never forwarded.
-- Only a recognised `sort` parameter is preserved: `confidence`, `top`, `new`, `controversial`, `old`.
-- An explicit `comment_sort` tool argument always wins over a URL `sort` parameter.
-
-#### Comment sort and limit
-
-- `comment_sort`: Optional. `confidence`, `top`, `new`, `controversial`, `old`. Defaults to Redlib's native sort (confidence). Overrides URL `sort` when both present.
-- `comment_limit`: Maximum top-level comments returned (default: 10). Replies under each top-level comment are unchanged.
-
-#### Fetch budget and failure modes
-
-- **Timeout**: 30 seconds total per operation (covers all redirects, the 404 fallback, and body consumption).
-- **Redirects**: At most 5 hops per operation (the 404 profile fallback is not itself a redirect hop).
-- **Body cap**: 5 MiB decompressed. Oversize bodies fail with a typed error (not truncated).
-- **Redirect handling**: `redirect: 'manual'`. Only 301/302/303/307/308 are followed. Redirect `Location` is re-parsed through the same pure reference grammar; external hosts, unsafe routes, userinfo, non-HTTP schemes, https→http downgrades, and loops are rejected.
-- **Outbound target (get_post only)**: Every `get_post` outbound request targets the configured `REDLIB_URL` origin and its base-path prefix. Reddit URLs and `REDLIB_PUBLIC_URL` are reference origins — they are recognised and remapped, never fetched. This scoped no-escape policy applies only to `get_post`; the other 9 handlers make direct `fetch` calls to `REDLIB_BASE_URL` without the same redirect re-validation.
-
-#### Validity guard
-
-A non-empty `title` and a valid ASCII base36 post ID (matching the expected ID, case-insensitive) are required. Legitimate posts with deleted authors, empty bodies, zero comments, hidden scores, or images-only pages are valid. Invalid pages produce `Error fetching post: ...` with `isError: true`.
-
-#### Error responses
-
-All tool errors return `isError: true` with a human-readable message prefixed by `Error fetching post:`. Invalid input is rejected before any fetch (before any I/O). An unsafe redirect `Location` is rejected before following it — the primary request has already been fetched at that point. Internal typed errors (e.g. `PostFetchError` with codes like `unsafe-redirect`, `timeout`, `too-large`) are an implementation detail of the fetch helper, not a new structured tool error API — callers see only the human-readable `isError: true` envelope.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `postId` | yes | — | Reddit post ID, permalink URL, or share reference (`s/<token>` or `r/<sub>/s/<token>`) |
-| `subreddit` | no | — | Optional scope hint for bare IDs and share fragments (subreddit or username). Scoped paths and URLs ignore it. |
-| `comment_sort` | no | — | `confidence`, `top`, `new`, `controversial`, `old` |
-| `comment_limit` | no | 10 | Maximum comments to return |
-
-### `search_subreddits`
-Search for subreddits. Returns names, subscriber counts, and descriptions.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `query` | yes | — | Search query for subreddits |
-| `limit` | no | 25 | Maximum results |
-
-### `search_users`
-Search for Reddit users. Returns usernames and optional profile descriptions.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `query` | yes | — | Search query for users |
-| `limit` | no | 25 | Maximum results |
-
-### `search_comments`
-Search Reddit comments. Returns comment text, authors, scores, and links to parent posts.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `query` | yes | — | Search query for comments |
-| `subreddit` | no | — | Limit search to a specific subreddit |
-| `sort` | no | `relevance` | `relevance`, `hot`, `top`, `new`, `comments` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` |
-| `limit` | no | 25 | Maximum results |
-
-### `get_subreddit_info`
-Get detailed subreddit info (description, rules, subscriber count, etc.).
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `subreddit` | yes | — | Subreddit name (without r/) |
-
-### `get_user`
-Get a user's profile, posts, and comments. Supports listing type, sort, and time filters.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `username` | yes | — | Reddit username (without u/) |
-| `listing` | no | `overview` | `overview`, `submitted`, `comments` |
-| `sort` | no | — | `hot`, `new`, `top`, `controversial` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (only with `top` or `controversial`) |
-| `limit` | no | 25 | Maximum posts/comments |
-
-### `get_front_page`
-Get posts from the front page (popular or r/all). Supports sort modes and time filters.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `feed` | no | `popular` | `popular` or `all` (r/all) |
-| `sort` | no | `hot` | `hot`, `new`, `top`, `rising`, `controversial` |
-| `t` | no | — | `hour`, `day`, `week`, `month`, `year`, `all` (only with `top` or `controversial`) |
-| `limit` | no | 25 | Maximum posts |
-
-### `get_wiki_page`
-Get a subreddit's wiki page.
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `subreddit` | yes | — | Subreddit name (without r/) |
-| `page` | no | `index` | Wiki page name |
-
-## Integration
-
-### Hermes Agent
-
-Add to `~/.hermes/config.yaml`:
-
-```yaml
-mcp_servers:
-  redlib:
-    command: node
-    args:
-      - /path/to/redlib-mcp-server/dist/index.js
-    env:
-      REDLIB_URL: http://127.0.0.1:8080
-    enabled: true
-```
-
-### Other MCP Clients
-
-All MCP clients use the same command. Adjust `REDLIB_URL` if your Redlib runs on a different port.
+Client entry (paths adjusted):
 
 ```json
 {
   "mcpServers": {
     "redlib": {
       "command": "node",
-      "args": ["/path/to/redlib-mcp-server/dist/index.js"],
-      "env": { "REDLIB_URL": "http://localhost:8080" }
+      "args": ["/path/to/node_modules/redlib-mcp-server/dist/index.js"],
+      "env": { "REDLIB_URL": "http://127.0.0.1:8080" }
     }
   }
 }
 ```
 
-- **Claude Desktop**: Edit `~/.config/claude/claude_desktop_config.json` (Linux/macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows), then restart.
-- **Cursor**: Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project).
-- **VS Code**: Create `.vscode/mcp.json` (workspace) or use Command Palette → "MCP: Open User Configuration".
-- **Codex**: Edit `~/.codex/config.toml` — `[mcp_servers.redlib]` with the command/args above.
+## Protocol
 
-## Development
+stdio transport, MCP JSON-RPC 2.0. This build negotiates protocol version `2025-11-25`.
 
-### Project Structure
+## Tools
 
-```
-redlib-mcp-server/
-├── src/
-│   ├── index.ts          # Server entry point (stdio transport)
-│   ├── parsers.ts        # HTML parsing with Cheerio
-│   ├── post-reference.ts # Pure post-reference grammar (no I/O)
-│   ├── post-fetch.ts     # Bounded, Redlib-only fetch helper
-│   └── tools.ts          # Tool registration and handlers
-├── tests/
-│   ├── fixtures/         # HTML fixtures for parser tests
-│   ├── parsers.test.ts   # Parser unit tests
-│   ├── post-reference.test.ts
-│   ├── post-fetch.test.ts
-│   ├── post-fetch-http.test.ts
-│   ├── tools.test.ts
-│   ├── parser-error.test.ts
-│   ├── integration.test.ts
-│   ├── qa.test.ts
-│   └── mcp-smoke.ts      # Standalone stdio JSON-RPC smoke harness
-├── package.json
-├── tsconfig.json
-├── jest.config.ts
-├── LICENSE
-└── README.md
-```
+| Tool | Returns | Required | Options |
+|------|---------|----------|---------|
+| `search_posts` | Post listings | `query` | `subreddit`, `sort`, `t`, `limit`, `flair`, `author`, `selftext`, `self_post_only` |
+| `get_posts` | Post listings for a subreddit | `subreddit` | `sort`, `t`, `limit` |
+| `get_post` | One post with its comments | `postId` | `subreddit` hint, `comment_sort`, `comment_limit` |
+| `search_subreddits` | Subreddit cards | `query` | `limit` |
+| `search_users` | User cards | `query` | `limit` |
+| `search_comments` | Comment results | `query` | `subreddit`, `sort` (`relevance`/`top`/`new`), `t`, `limit` |
+| `get_subreddit_info` | Description, rules, member counts | `subreddit` | — |
+| `get_user` | Profile plus a listing | `username` | `listing`, `sort`, `t`, `limit` |
+| `get_front_page` | Post listings from `popular` or `all` | — | `feed`, `sort`, `t`, `limit` |
+| `get_wiki_page` | Wiki page text | `subreddit` | `page` (default `index`, may contain `/`) |
 
-### Build & Test
+`postId` accepts a base36 post ID, `t3_`-prefixed ID, `/comments/<id>`, a scoped path (`r/<sub>/comments/<id>`, `user/<name>/comments/<id>`), a Reddit post or share URL, or a bare share reference (`s/<token>`) together with the `subreddit` hint. Comment URLs resolve to their parent post. URL inputs are only accepted from Reddit hosts, `redd.it`, and the configured `REDLIB_URL`/`REDLIB_PUBLIC_URL` origins; anything else is rejected before any request.
 
-```bash
-npm install
-npm run build
-npm test
-```
+## Output, limits and errors
 
-**`npm test`** runs all unit test suites via Jest with no INTERNET access. The `post-fetch-http.test.ts` suite uses real ephemeral `127.0.0.1` loopback HTTP servers (bound to port 0) to exercise the fetch helper against actual HTTP responses — no external network is contacted. The standalone live harness (`tests/mcp-smoke.ts`) and integration/QA suites are excluded from the default Jest run.
-
-### Smoke Harness
-
-The smoke harness (`tests/mcp-smoke.ts`) exercises the compiled MCP server over real stdio JSON-RPC 2.0. It does NOT require internet access in default (mock) mode.
-
-#### Commands
-
-```bash
-# Default mode — hermetic mock (local fixture server, no internet)
-./node_modules/.bin/tsx tests/mcp-smoke.ts
-# or equivalently:
-./node_modules/.bin/tsx tests/mcp-smoke.ts --mock
-
-# Live mode — requires a reachable Redlib instance
-REDLIB_URL=http://127.0.0.1:8080 ./node_modules/.bin/tsx tests/mcp-smoke.ts --live
-```
-
-- **Default (mock)**: Starts a local HTTP fixture server on `127.0.0.1`, spawns the compiled server with a scoped `REDLIB_URL`, and exercises a core post-reference form matrix through the real MCP protocol boundary (initialize, notifications/initialized, tools/list, tools/call). The matrix covers legacy ID + hint, unscoped `/comments/<id>`, full share URL (302 redirect), bare share fragment + hint, invalid host rejection, and the HTTP 200 invalid-page guard — not every possible form (e.g., profile shares, `t3_`-prefixed IDs, and all allow-list hosts are not compiled into the mock). All traffic stays on loopback. 10 test cases.
-- **Explicit live** (`--live`): Requires a reachable Redlib at `REDLIB_URL` (default `http://127.0.0.1:8080`). A bounded 3s upstream probe runs before any child spawn; if unreachable, live cases are recorded as `BLOCKED` (never a fake pass). Otherwise exactly 3 bounded `get_post` calls are made (legacy ID with comment_sort=new + comment_limit=1, full share URL, bare share fragment). 8 test cases.
-
-#### Exit codes
-
-| Code | Meaning |
-|------|---------|
-| 0 | All cases passed |
-| 1 | At least one case failed (or harness error) |
-| 2 | Usage error (unknown or conflicting args) — raised before any spawn or network activity |
-| 3 | Overall deadline exceeded (awaited cleanup, then exit) |
-| 4 | Live upstream blocked, no failures |
-
-No global installs, Docker, or new package managers are required — the harness runs via the project's existing `tsx` dev dependency.
+- Each result is one `text` content block containing JSON. Field sets differ per tool; optional fields are omitted rather than guessed.
+- `limit` (default 25) and `comment_limit` (default 10) are nonnegative integers. `0` returns an empty collection and still performs the normal request. They cap items taken from the single upstream page that was fetched — there is no pagination, and the server does not fetch further pages or invent global totals. `get_user` limits its posts and comments independently.
+- `get_post.commentCount` counts every comment element on the fetched page, nested replies included, before any limit is applied; `comment_limit` slices top-level comments and keeps their replies. It is therefore not the length of the returned `comments` array.
+- Per operation: 30 s deadline across request and body, 5 MiB decompressed body cap, at most 5 redirect hops, redirects only within the configured origin and prefix. Oversize and timeout failures are errors, not truncated results.
+- Upstream error pages produce `isError: true` and a message starting `Error searching …` (`search_posts`, `search_subreddits`, `search_users`, `search_comments`) or `Error fetching …` (the other six tools). A genuinely empty listing, wiki body or user collection is a success. A `get_post` ID that 404s on a subreddit path retries once under `/user/<hint>/comments/<id>`; other statuses do not fall back.
 
 ## License
 
-MIT
+MIT — see `LICENSE`.
 
 ## Acknowledgments
 
-- [Redlib](https://github.com/redlib-org/redlib) — The private Reddit front-end
-- [Model Context Protocol](https://modelcontextprotocol.io/) — The protocol
-- [Cheerio](https://github.com/cheeriojs/cheerio) — HTML parsing
-- [Devthatdoes](https://github.com/Devthatdoes/redlib-mcp-server) — Original MCP server
+- [Redlib](https://github.com/redlib-org/redlib) — the private Reddit front-end this server reads.
+- [Model Context Protocol](https://modelcontextprotocol.io/) — the protocol and SDK.
+- [Cheerio](https://github.com/cheeriojs/cheerio) — HTML parsing.
+- [Devthatdoes](https://github.com/Devthatdoes/redlib-mcp-server) — the original MCP server.

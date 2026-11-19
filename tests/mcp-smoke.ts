@@ -160,6 +160,14 @@ const ERROR_PAGE_HTML = `<!DOCTYPE html>
 <body><p>Something went wrong. This is a synthetic error page.</p></body>
 </html>`;
 
+// Synthetic empty listing page: the pinned templates still render #column_one
+// when a listing has no posts, so this is a valid empty success.
+const LISTING_PAGE_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head><title>webscraping</title></head>
+<body><main><div id="column_one"><div id="posts"></div></div></main></body>
+</html>`;
+
 function sendHtml(res: ServerResponse, status: number, html: string): void {
   const buf = Buffer.from(html);
   res.writeHead(status, {
@@ -201,6 +209,12 @@ function createFixtureServer(): Promise<FixtureServer> {
       path === `/comments/${FIXTURE_POST_ID}`
     ) {
       sendHtml(res, 200, FIXTURE_POST_HTML);
+      return;
+    }
+
+    // Valid empty listing used by the numeric limit boundary checks.
+    if (path === `/r/${FIXTURE_SUBREDDIT}/hot`) {
+      sendHtml(res, 200, LISTING_PAGE_HTML);
       return;
     }
 
@@ -696,6 +710,100 @@ async function runMockMode(): Promise<void> {
           "fixture observation: scoped + unscoped + share + error-page paths hit the local fixture",
           missing.length === 0 ? "PASS" : "FAIL",
           `observed=${observed.map((r) => `${r}:${fixture.requests.includes(r)}`).join(", ")} missing=[${missing.join(", ")}]`
+        );
+      }
+
+      // 10. Numeric limit schema — real SDK dispatch rejects bad values with
+      //     zero HTTP, accepts zero and large finite integers, and the
+      //     advertised schemas express the actual nonnegative integer domain.
+      {
+        const before = fixture.requests.length;
+        const rejections: Array<[string, Record<string, unknown>, string]> = [
+          ["get_posts", { subreddit: FIXTURE_SUBREDDIT, limit: -1 }, "negative"],
+          ["get_posts", { subreddit: FIXTURE_SUBREDDIT, limit: 2.5 }, "fractional"],
+          ["get_user", { username: FIXTURE_SUBREDDIT, limit: "5" }, "non-numeric"],
+          ["get_post", { postId: FIXTURE_POST_ID, comment_limit: -2 }, "negative-comment"],
+        ];
+        let rejected = 0;
+        for (const [name, args, label] of rejections) {
+          const result = await callTool(transport, name, args);
+          if (result.isError === true) rejected += 1;
+          else console.log(`  [FAIL] ${label} limit was dispatched`);
+        }
+        const zeroHttp = fixture.requests.length === before;
+        record(
+          "numeric limits: negative/fractional/non-numeric rejected at the SDK boundary with zero HTTP",
+          rejected === rejections.length && zeroHttp ? "PASS" : "FAIL",
+          `rejected=${rejected}/${rejections.length} requests=${fixture.requests.length - before}`
+        );
+
+        const beforeDispatch = fixture.requests.length;
+        const zero = await callTool(transport, "get_posts", {
+          subreddit: FIXTURE_SUBREDDIT,
+          limit: 0,
+        });
+        const large = await callTool(transport, "get_posts", {
+          subreddit: FIXTURE_SUBREDDIT,
+          limit: 1e30,
+        });
+        const zeroBody = parseResultBody(zero) as { resultCount?: number };
+        const largeBody = parseResultBody(large) as { resultCount?: number };
+        const listingRequests = fixture.requests
+          .slice(beforeDispatch)
+          .filter((r) => r === `/r/${FIXTURE_SUBREDDIT}/hot`).length;
+        record(
+          "numeric limits: zero and large finite (1e30) accepted through the SDK as valid empty collections",
+          zero.isError !== true && large.isError !== true &&
+            zeroBody.resultCount === 0 && largeBody.resultCount === 0 &&
+            listingRequests === 2
+            ? "PASS"
+            : "FAIL",
+          `zero=${zero.isError !== true}/${zeroBody.resultCount} large=${large.isError !== true}/${largeBody.resultCount} listingRequests=${listingRequests}`
+        );
+
+        const expectedDefaults: Record<string, number> = {
+          search_posts: 25,
+          get_posts: 25,
+          get_post: 10,
+          search_subreddits: 25,
+          search_users: 25,
+          get_user: 25,
+          get_front_page: 25,
+          search_comments: 25,
+        };
+        const advertised = Object.entries(expectedDefaults).map(([name, expected]) => {
+          const schema = tools.find((t) => t.name === name)?.inputSchema as
+            | {
+                properties?: Record<
+                  string,
+                  {
+                    type?: string;
+                    default?: number;
+                    minimum?: number;
+                    multipleOf?: number;
+                    maximum?: number;
+                    exclusiveMaximum?: number;
+                  }
+                >;
+              }
+            | undefined;
+          const fieldName = name === "get_post" ? "comment_limit" : "limit";
+          const field = schema?.properties?.[fieldName];
+          const ok =
+            field?.type === "number" &&
+            field?.default === expected &&
+            field?.minimum === 0 &&
+            field?.multipleOf === 1 &&
+            field?.maximum === undefined &&
+            field?.exclusiveMaximum === undefined;
+          return { name, ok, field };
+        });
+        record(
+          "numeric limits: advertised schema is type=number, minimum=0, multipleOf=1, defaults 25 (comment 10), no maximum",
+          advertised.every((entry) => entry.ok) ? "PASS" : "FAIL",
+          advertised
+            .map((entry) => `${entry.name}:${entry.ok ? "ok" : JSON.stringify(entry.field)}`)
+            .join(", ")
         );
       }
     } finally {

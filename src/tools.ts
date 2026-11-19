@@ -1,18 +1,59 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
-import fetch from "node-fetch";
-import { parsePostList, parsePostDetails, parseSubredditSearch, parseUserSearch, parseSubredditInfo, parseSubredditMeta, parseUserProfile, parseWikiPage } from "./parsers.js";
+import { parsePostList, parsePostDetails, parseSubredditSearch, parseUserSearch, parseCommentSearch, parseSubredditInfo, parseSubredditMeta, parseUserProfile, parseWikiPage } from "./parsers.js";
 import { parsePostReference } from "./post-reference.js";
 import { fetchPostHtml } from "./post-fetch.js";
+import {
+  encodeSubredditName,
+  encodeUserName,
+  encodeWikiPage,
+  fetchRedlibHtml,
+  fetchRedlibHtmlPair,
+  normalizeRedlibBase,
+  redlibUrl,
+  withQuery,
+} from "./request.js";
+import type { FetchLike, RedlibLimits } from "./request.js";
 
-const REDLIB_BASE_URL = process.env.REDLIB_URL || "http://localhost:8080";
-// Public base for permalinks / navigation links (the private instance URLs are useless to consumers)
-const REDLIB_PUBLIC_URL = (process.env.REDLIB_PUBLIC_URL || "https://www.reddit.com").replace(/\/+$/, "");
+/** Test-only injection seam (never exposed as tool input or environment knobs). */
+export interface ToolRuntime {
+  baseUrl?: string;
+  publicBaseUrl?: string;
+  fetch?: FetchLike;
+  limits?: Partial<RedlibLimits>;
+}
+
+/**
+ * Advertised result/comment limits are nonnegative integers, including zero.
+ * `min(0)` + `multipleOf(1)` is the uncapped integer domain: it projects to
+ * `{type: "number", minimum: 0, multipleOf: 1}` in the compiled tools/list
+ * schema (visible to clients) and accepts large finite integers such as 1e30.
+ * `.int()` is deliberately NOT used: Zod's convenience helper also advertises
+ * `maximum: Number.MAX_SAFE_INTEGER`, which the card forbids.
+ *
+ * The SDK validates inputs and applies defaults before dispatch, so handlers
+ * never re-parse these values.
+ */
+function limitSchema(description: string, defaultValue = 25) {
+  return z
+    .number()
+    .min(0)
+    .multipleOf(1)
+    .optional()
+    .default(defaultValue)
+    .describe(description);
+}
 
 /**
  * Registers all Redlib MCP tools on the given server instance.
  */
-export function registerTools(server: McpServer): void {
+export function registerTools(server: McpServer, runtime: ToolRuntime = {}): void {
+  // Normalise the configured base ONCE for every tool in this registration.
+  const base = normalizeRedlibBase(runtime.baseUrl ?? process.env.REDLIB_URL ?? "http://localhost:8080");
+  // Public base for permalinks / navigation links (the private instance URLs are useless to consumers)
+  const REDLIB_PUBLIC_URL = (runtime.publicBaseUrl ?? process.env.REDLIB_PUBLIC_URL ?? "https://www.reddit.com").replace(/\/+$/, "");
+  const context = { base, fetch: runtime.fetch, limits: runtime.limits };
+
   // Tool 1: Search Reddit posts via Redlib
   server.registerTool(
     "search_posts",
@@ -24,7 +65,7 @@ export function registerTools(server: McpServer): void {
         subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
         sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
         t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
+        limit: limitSchema("Maximum number of results to return (nonnegative integer, default: 25)"),
         flair: z.string().optional().describe("Filter by flair name (e.g. 'discussion')"),
         author: z.string().optional().describe("Filter by author username (e.g. 'spez')"),
         selftext: z.string().optional().describe("Search within post body text"),
@@ -56,13 +97,11 @@ export function registerTools(server: McpServer): void {
         if (limit) params.set("limit", String(limit));
 
         const url = subreddit
-          ? `${REDLIB_BASE_URL}/r/${subreddit}/search?${params.toString()}`
-          : `${REDLIB_BASE_URL}/search?${params.toString()}`;
+          ? withQuery(redlibUrl(base, "r", encodeSubredditName(subreddit), "search"), params)
+          : withQuery(redlibUrl(base, "search"), params);
 
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
+        const results = parsePostList(html, base.url, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit since Redlib may ignore the query param
         const limited = results.slice(0, limit);
@@ -101,7 +140,7 @@ export function registerTools(server: McpServer): void {
         subreddit: z.string().describe("Subreddit name (without r/)"),
         sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
         t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
+        limit: limitSchema("Maximum number of posts to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -113,11 +152,9 @@ export function registerTools(server: McpServer): void {
           params.set("t", t);
         }
 
-        const url = `${REDLIB_BASE_URL}/r/${subreddit}/${sort}${params.toString() ? `?${params.toString()}` : ''}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const url = withQuery(redlibUrl(base, "r", encodeSubredditName(subreddit), sort!), params);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
+        const results = parsePostList(html, base.url, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit since Redlib may ignore the query param
         const limited = results.slice(0, limit);
@@ -156,13 +193,13 @@ export function registerTools(server: McpServer): void {
         postId: z.string().min(1).describe("Reddit post ID, permalink URL, or share reference (s/<token> or r/<sub>/s/<token>)"),
         subreddit: z.string().optional().describe("Optional scope hint for bare IDs and share fragments (subreddit or username). Scoped paths and URLs ignore it."),
         comment_sort: z.enum(["confidence", "top", "new", "controversial", "old"]).optional().describe("Comment sort order (optional, Redlib default is confidence)"),
-        comment_limit: z.number().optional().default(10).describe("Maximum number of comments to return (default: 10)"),
+        comment_limit: limitSchema("Maximum number of comments to return (nonnegative integer, default: 10)", 10),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
     async ({ postId, subreddit, comment_sort, comment_limit }) => {
       try {
-        const bases = { baseUrl: REDLIB_BASE_URL, publicBaseUrl: REDLIB_PUBLIC_URL };
+        const bases = { baseUrl: base.url, publicBaseUrl: REDLIB_PUBLIC_URL };
 
         // Parse the post reference (pure, no I/O)
         const ref = parsePostReference(postId, subreddit, bases);
@@ -171,7 +208,7 @@ export function registerTools(server: McpServer): void {
         const { html, expectedPostId: fetchedId } = await fetchPostHtml(ref, bases, { commentSort: comment_sort });
 
         // Parse post details (unchanged parser)
-        const postData = parsePostDetails(html, comment_limit, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const postData = parsePostDetails(html, comment_limit, base.url, REDLIB_PUBLIC_URL);
 
         // Validity guard: enforce title and post ID before returning JSON
         if (!postData.title || postData.title.trim().length === 0) {
@@ -213,7 +250,7 @@ export function registerTools(server: McpServer): void {
       description: "Search for subreddits on Reddit via Redlib. Returns subreddit names, subscriber counts, and descriptions.",
       inputSchema: z.object({
         query: z.string().describe("Search query for subreddits"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
+        limit: limitSchema("Maximum number of results to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -223,10 +260,8 @@ export function registerTools(server: McpServer): void {
         params.set("q", query);
         params.set("type", "sr");
 
-        const url = `${REDLIB_BASE_URL}/search?${params.toString()}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
+        const url = withQuery(redlibUrl(base, "search"), params);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
         const results = parseSubredditSearch(html);
 
         // Apply client-side limit
@@ -259,10 +294,10 @@ export function registerTools(server: McpServer): void {
     "search_users",
     {
       title: "Search Users",
-      description: "Search for Reddit users via Redlib. Returns usernames and optional profile descriptions.",
+      description: "Search for Reddit users via Redlib. Returns usernames; profile descriptions are included only when the result markup supplies one.",
       inputSchema: z.object({
         query: z.string().describe("Search query for users"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
+        limit: limitSchema("Maximum number of results to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -272,11 +307,9 @@ export function registerTools(server: McpServer): void {
         params.set("q", query);
         params.set("type", "user");
 
-        const url = `${REDLIB_BASE_URL}/search?${params.toString()}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const results = parseUserSearch(html);
+        const url = withQuery(redlibUrl(base, "search"), params);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
+        const results = parseUserSearch(html, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limited = results.slice(0, limit);
@@ -316,21 +349,18 @@ export function registerTools(server: McpServer): void {
     },
     async ({ subreddit }) => {
       try {
+        const sub = encodeSubredditName(subreddit);
         // Fetch sidebar (wiki content: description, rules) and main page (stats, icon)
-        const [sidebarRes, mainRes] = await Promise.all([
-          fetch(`${REDLIB_BASE_URL}/r/${subreddit}/about/sidebar`),
-          fetch(`${REDLIB_BASE_URL}/r/${subreddit}/hot`),
-        ]);
-        if (!sidebarRes.ok) throw new Error(`Redlib sidebar returned ${sidebarRes.status}: ${sidebarRes.statusText}`);
-        if (!mainRes.ok) throw new Error(`Redlib main page returned ${mainRes.status}: ${mainRes.statusText}`);
-
-        const [sidebarHtml, mainHtml] = await Promise.all([
-          sidebarRes.text(),
-          mainRes.text(),
-        ]);
+        // on ONE shared operation budget. Either failure aborts, settles and
+        // disposes the sibling before this throws.
+        const [sidebarHtml, mainHtml] = await fetchRedlibHtmlPair(
+          context,
+          { url: redlibUrl(base, "r", sub, "about", "sidebar"), kind: "wiki" },
+          { url: redlibUrl(base, "r", sub, "hot"), kind: "listing" }
+        );
 
         const sidebarInfo = parseSubredditInfo(sidebarHtml);
-        const meta = parseSubredditMeta(mainHtml, REDLIB_BASE_URL);
+        const meta = parseSubredditMeta(mainHtml, base.url);
 
         // Merge: main-page meta first, sidebar fields fill in / override
         const merged = {
@@ -370,7 +400,7 @@ export function registerTools(server: McpServer): void {
         listing: z.enum(["overview", "submitted", "comments"]).optional().default("overview").describe("Content listing type (default: overview)"),
         sort: z.enum(["hot", "new", "top", "controversial"]).optional().describe("Sort order (optional)"),
         t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts/comments to return (default: 25)"),
+        limit: limitSchema("Maximum number of posts/comments to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -380,12 +410,11 @@ export function registerTools(server: McpServer): void {
         if (sort) params.set("sort", sort);
         if (t) params.set("t", t);
 
+        const user = encodeUserName(username);
         const listingPath = listing === "overview" ? "" : `/${listing}`;
-        const url = `${REDLIB_BASE_URL}/user/${username}${listingPath}${params.toString() ? `?${params.toString()}` : ''}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const profile = parseUserProfile(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const url = withQuery(`${redlibUrl(base, "user", user)}${listingPath}`, params);
+        const html = await fetchRedlibHtml(context, { url, kind: "user" });
+        const profile = parseUserProfile(html, base.url, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limitedPosts = profile.posts.slice(0, limit);
@@ -431,7 +460,7 @@ export function registerTools(server: McpServer): void {
         feed: z.enum(["popular", "all"]).optional().default("popular").describe("Feed type: popular (default Reddit front page) or all (r/all)"),
         sort: z.enum(["hot", "new", "top", "rising", "controversial"]).optional().default("hot").describe("Sort mode (default: hot)"),
         t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (only applies when sort is top or controversial)"),
-        limit: z.number().optional().default(25).describe("Maximum number of posts to return (default: 25)"),
+        limit: limitSchema("Maximum number of posts to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -442,27 +471,16 @@ export function registerTools(server: McpServer): void {
           params.set("t", t);
         }
 
-        let url: string;
-        if (feed === "all") {
-          // r/all: /r/all for hot, /r/all/<sort> for other sorts
-          url = sort === "hot"
-            ? `${REDLIB_BASE_URL}/r/all`
-            : `${REDLIB_BASE_URL}/r/all/${sort}`;
-        } else {
-          // popular: / for hot, /<sort> for other sorts
-          url = sort === "hot"
-            ? `${REDLIB_BASE_URL}/`
-            : `${REDLIB_BASE_URL}/${sort}`;
-        }
+        const url = feed === "all"
+          ? sort === "hot"
+            ? withQuery(redlibUrl(base, "r", "all"), params)
+            : withQuery(redlibUrl(base, "r", "all", sort!), params)
+          : sort === "hot"
+            ? withQuery(redlibUrl(base), params)
+            : withQuery(redlibUrl(base, sort!), params);
 
-        if (params.toString()) {
-          url += `?${params.toString()}`;
-        }
-
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
+        const results = parsePostList(html, base.url, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limited = results.slice(0, limit);
@@ -496,13 +514,13 @@ export function registerTools(server: McpServer): void {
     "search_comments",
     {
       title: "Search Comments",
-      description: "Search Reddit comments via Redlib. Returns comment text, authors, scores, and links to the parent posts.",
+      description: "Search Reddit comments via Redlib. Returns comment text, author, score, and the comment permalink plus a derived parent-post permalink when the link identifies the post. Supported sorts: relevance, top, new.",
       inputSchema: z.object({
         query: z.string().describe("Search query for comments"),
         subreddit: z.string().optional().describe("Limit search to a specific subreddit (optional)"),
-        sort: z.enum(["relevance", "hot", "top", "new", "comments"]).optional().default("relevance").describe("Sort order (default: relevance)"),
+        sort: z.enum(["relevance", "top", "new"]).optional().default("relevance").describe("Sort order (relevance, top, new; default: relevance)"),
         t: z.enum(["hour", "day", "week", "month", "year", "all"]).optional().describe("Time filter (applies to all sort modes)"),
-        limit: z.number().optional().default(25).describe("Maximum number of results to return (default: 25)"),
+        limit: limitSchema("Maximum number of results to return (nonnegative integer, default: 25)"),
       }),
       annotations: { readOnlyHint: true, openWorldHint: true },
     },
@@ -517,14 +535,13 @@ export function registerTools(server: McpServer): void {
         if (limit) params.set("limit", String(limit));
 
         const url = subreddit
-          ? `${REDLIB_BASE_URL}/r/${subreddit}/search?${params.toString()}`
-          : `${REDLIB_BASE_URL}/search?${params.toString()}`;
+          ? withQuery(redlibUrl(base, "r", encodeSubredditName(subreddit), "search"), params)
+          : withQuery(redlibUrl(base, "search"), params);
 
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        // Redlib renders comment search results as .post elements on search pages
-        const results = parsePostList(html, REDLIB_BASE_URL, REDLIB_PUBLIC_URL);
+        const html = await fetchRedlibHtml(context, { url, kind: "listing" });
+        // Comment search results are .comment.user-comment elements (the post
+        // template above is not used on the comment tab).
+        const results = parseCommentSearch(html, base.url, REDLIB_PUBLIC_URL);
 
         // Apply client-side limit
         const limited = results.slice(0, limit);
@@ -567,16 +584,16 @@ export function registerTools(server: McpServer): void {
     },
     async ({ subreddit, page }) => {
       try {
-        const url = `${REDLIB_BASE_URL}/r/${subreddit}/wiki/${page}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Redlib returned ${response.status}: ${response.statusText}`);
-        const html = await response.text();
-        const wikiPage = parseWikiPage(html);
+        const sub = encodeSubredditName(subreddit);
+        const wikiPage = encodeWikiPage(page);
+        const url = redlibUrl(base, "r", sub, "wiki", ...wikiPage.split("/"));
+        const html = await fetchRedlibHtml(context, { url, kind: "wiki" });
+        const parsed = parseWikiPage(html);
 
         return {
           content: [{
             type: "text",
-            text: JSON.stringify(wikiPage, null, 2),
+            text: JSON.stringify(parsed, null, 2),
           }],
         };
       } catch (error) {
