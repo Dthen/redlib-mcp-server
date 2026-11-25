@@ -1552,6 +1552,36 @@ describe('parseUserSearch with current people cards', () => {
     expect(parseUserSearch(cards, BASE)).toEqual([{ username: 'dave' }]);
   });
 
+  it('accepts only profile routes on the configured public origin with a username segment', () => {
+    const card = (href: string) => `<html><body><a href="${href}" class="search_subreddit"><span class="search_subreddit_name">u/x</span></a></body></html>`;
+    const cases: Array<{ href: string; publicBase?: string; expected: Array<{ username: string }> }> = [
+      // Relative local routes are the pinned template's own shape.
+      { href: '/user/alice', expected: [{ username: 'alice' }] },
+      { href: '/u/Alice_99', expected: [{ username: 'Alice_99' }] },
+      // Historic accounts keep hyphens and their case.
+      { href: '/user/Bob-42', expected: [{ username: 'Bob-42' }] },
+      // Absolute and protocol-relative spellings of the configured public origin.
+      { href: 'https://www.reddit.com/user/carol', expected: [{ username: 'carol' }] },
+      { href: '//www.reddit.com/u/dave', expected: [{ username: 'dave' }] },
+      // Origin comparison normalises scheme/host case and the default port.
+      { href: 'HTTPS://WWW.REDDIT.COM:443/user/erin', expected: [{ username: 'erin' }] },
+      // The configured public base is honoured, not a hard-coded reddit.com.
+      { href: 'https://reddit.example/user/frank', publicBase: 'https://reddit.example', expected: [{ username: 'frank' }] },
+      // Off-origin, wrong scheme, lookalike host and non-username segments are not users.
+      { href: 'https://elsewhere.example/user/mallory', expected: [] },
+      { href: '//elsewhere.example/u/mallory', expected: [] },
+      { href: 'ftp://elsewhere.example/user/mallory', expected: [] },
+      { href: 'https://www.reddit.com.evil.example/user/mallory', expected: [] },
+      { href: 'http://www.reddit.com/user/mallory', expected: [] },
+      { href: '/user/a%20b', expected: [] },
+      { href: '/user/a%2Fb', expected: [] },
+    ];
+    for (const row of cases) {
+      expect({ href: row.href, users: parseUserSearch(card(row.href), row.publicBase ?? BASE) })
+        .toEqual({ href: row.href, users: row.expected });
+    }
+  });
+
   it('keeps legacy comment results as a positive neighbour on the same page', () => {
     const mixed = `<html><body>
       <div id="search_subreddits">
@@ -3152,11 +3182,14 @@ describe('link targets: external_url on list results', () => {
       expect({ label, type: relative.post_type, external: relative.external_url })
         .toEqual({ label, type: 'link', external: undefined });
       const absolute = parsePostList(page(label, 'https://www.reddit.com/r/test/comments/own1/title/'))[0];
+      expect({ label, type: absolute.post_type, external: absolute.external_url })
+        .toEqual({ label, type: 'link', external: undefined });
       expect(absolute.external_url).toBeUndefined();
     }
     // Same suppression under a configured public base (both sides resolve there).
     const configured = parsePostList(page('i.redd.it', '/r/test/comments/own1/title/'), 'http://127.0.0.1:8080', 'https://reddit.example')[0];
-    expect(configured.external_url).toBeUndefined();
+    expect({ type: configured.post_type, external: configured.external_url })
+      .toEqual({ type: 'link', external: undefined });
     // A genuinely different destination keeps its target.
     const other = parsePostList(page('i.redd.it', '/r/other/comments/other1/title/'))[0];
     expect(other.post_type).toBe('link');
@@ -3187,6 +3220,22 @@ describe('link targets: external_url on list results', () => {
     const legacy = parsePostList(page('self.testsub', '/r/testsub/comments/abc/title/'))[0];
     expect(legacy.post_type).toBe('self');
     expect(legacy.external_url).toBeUndefined();
+    // The absolute spelling of the same own permalink is the same self post, and
+    // a configured public base is honoured on both sides of the comparison.
+    const ownAbsolute = parsePostList(page('self.testsub', 'https://www.reddit.com/r/test/comments/selfio/title/'))[0];
+    expect({ type: ownAbsolute.post_type, external: ownAbsolute.external_url })
+      .toEqual({ type: 'self', external: undefined });
+    const ownConfigured = parsePostList(
+      page('self.testsub', 'https://reddit.example/r/test/comments/selfio/title/'),
+      'http://127.0.0.1:8080',
+      'https://reddit.example'
+    )[0];
+    expect({ type: ownConfigured.post_type, external: ownConfigured.external_url })
+      .toEqual({ type: 'self', external: undefined });
+    // A same-origin thread that is genuinely different stays a link destination.
+    const otherThread = parsePostList(page('self.testsub', 'https://www.reddit.com/r/other/comments/other9/title/'))[0];
+    expect({ type: otherThread.post_type, external: otherThread.external_url })
+      .toEqual({ type: 'link', external: 'https://www.reddit.com/r/other/comments/other9/title/' });
   });
 
   it('preserves scheme-bearing and protocol-relative destinations verbatim in list output (synthetic)', () => {
@@ -3230,7 +3279,8 @@ describe('link targets: external_url on list results', () => {
     expect(sibling.external_url).toBe('https://www.reddit.com/r/test/comments/own4/other_slug/');
     // Only a trailing slash differs → the same destination → suppressed.
     const same = parsePostList(page('/r/test/comments/own5/title/', '/r/test/comments/own5/title'))[0];
-    expect(same.external_url).toBeUndefined();
+    expect({ type: same.post_type, external: same.external_url })
+      .toEqual({ type: 'link', external: undefined });
     // R3: canonical spellings of the same destination are equivalent for the
     // guard — scheme-relative, scheme/host case, default port — while the
     // emitted string would otherwise stay verbatim.
@@ -3241,7 +3291,8 @@ describe('link targets: external_url on list results', () => {
     ];
     for (const href of suppressedForms) {
       const post = parsePostList(page('/r/test/comments/own5/title/', href))[0];
-      expect({ href, external: post.external_url }).toEqual({ href, external: undefined });
+      expect({ href, type: post.post_type, external: post.external_url })
+        .toEqual({ href, type: 'link', external: undefined });
     }
     // A protocol-relative destination resolves against the public base scheme.
     const schemeRelativeBase = parsePostList(
@@ -3249,7 +3300,8 @@ describe('link targets: external_url on list results', () => {
       'http://127.0.0.1:8080',
       'https://reddit.example'
     )[0];
-    expect(schemeRelativeBase.external_url).toBeUndefined();
+    expect({ type: schemeRelativeBase.post_type, external: schemeRelativeBase.external_url })
+      .toEqual({ type: 'link', external: undefined });
     // Genuinely different destinations are kept: path case is not folded, query
     // and fragment values are significant, and a different host is not aliased.
     const keptForms = [

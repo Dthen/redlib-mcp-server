@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import type { IncomingMessage, ServerResponse, Server } from 'node:http';
 import type { AddressInfo, Socket } from 'node:net';
 import { gzipSync } from 'node:zlib';
+import { McpServer, type JSONRPCMessage, type Transport } from '@modelcontextprotocol/server';
 import { registerTools } from '../src/tools.js';
 
 /**
@@ -52,6 +53,47 @@ function register(baseUrl: string, limits?: { timeoutMs?: number; maxRedirects?:
 function call(registry: Registry, name: string, args: unknown) {
   const tool = registry[name];
   return tool.callback(tool.config.inputSchema.parse(args));
+}
+
+/**
+ * Minimal raw JSON-RPC client half for a real `McpServer` connection. Messages
+ * are fed to the SDK's own protocol dispatcher; server replies are captured
+ * here. This exercises the SDK boundary (including its input validation and
+ * defaulting), not `inputSchema.parse` inside the test.
+ */
+class RawClientTransport implements Transport {
+  onclose?: () => void;
+  onerror?: (error: Error) => void;
+  onmessage?: (message: JSONRPCMessage) => void;
+  private readonly replies: JSONRPCMessage[] = [];
+  private readonly waiters: Array<() => void> = [];
+
+  async start(): Promise<void> {}
+  async close(): Promise<void> {
+    this.onclose?.();
+  }
+  async send(message: JSONRPCMessage): Promise<void> {
+    this.replies.push(message);
+    for (const wake of this.waiters.splice(0)) wake();
+  }
+  sendToServer(message: JSONRPCMessage): void {
+    this.onmessage?.(message);
+  }
+  async replyFor(id: number, deadlineMs = 5000): Promise<any> {
+    const deadline = Date.now() + deadlineMs;
+    while (!this.replies.some((message: any) => message.id === id)) {
+      const left = deadline - Date.now();
+      if (left <= 0) throw new Error(`no SDK reply for request ${id}`);
+      await new Promise<void>((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error(`no SDK reply for request ${id}`)), left);
+        this.waiters.push(() => {
+          clearTimeout(timer);
+          resolve();
+        });
+      });
+    }
+    return this.replies.find((message: any) => message.id === id);
+  }
 }
 
 function after(ms: number, fn: () => void): void {
@@ -542,5 +584,45 @@ describe('usable-page validation over real loopback', () => {
 
     expect(result.isError).toBe(true);
     expect(result.content[0].text).toContain('missing the expected wiki container');
+  });
+});
+
+describe('real SDK boundary — comment-sort rejection before HTTP', () => {
+  it('rejects unsupported sorts at the SDK with zero requests and accepts a supported sort', async () => {
+    routes.set('/search?q=x&type=comment&sort=top&limit=25', plain(LISTING_HTML));
+    const transport = new RawClientTransport();
+    const server = new McpServer({ name: 'sdk-boundary-test', version: '1' });
+    registerTools(server, { baseUrl: origin, publicBaseUrl: 'https://www.reddit.com' });
+    await server.connect(transport);
+    let nextId = 0;
+    const request = async (method: string, params: unknown) => {
+      const id = ++nextId;
+      transport.sendToServer({ jsonrpc: '2.0', id, method, params } as JSONRPCMessage);
+      return transport.replyFor(id);
+    };
+    try {
+      const init = await request('initialize', {
+        protocolVersion: '2025-11-25',
+        capabilities: {},
+        clientInfo: { name: 'sdk-boundary-test', version: '1' },
+      });
+      expect(init.result).toBeDefined();
+      transport.sendToServer({ jsonrpc: '2.0', method: 'notifications/initialized' } as JSONRPCMessage);
+
+      for (const sort of ['hot', 'comments']) {
+        const reply = await request('tools/call', { name: 'search_comments', arguments: { query: 'x', sort } });
+        expect(reply.result.isError).toBe(true);
+        // Rejection must precede dispatch: no HTTP request may be made.
+        expect(requests).toEqual([]);
+        // The SDK's own validation diagnostic, not a handler error envelope.
+        expect(reply.result.content[0].text).toContain('Input validation error');
+      }
+
+      const accepted = await request('tools/call', { name: 'search_comments', arguments: { query: 'x', sort: 'top' } });
+      expect(accepted.result.isError).not.toBe(true);
+      expect(requests).toEqual(['/search?q=x&type=comment&sort=top&limit=25']);
+    } finally {
+      await server.close();
+    }
   });
 });

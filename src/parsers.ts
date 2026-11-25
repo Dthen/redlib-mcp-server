@@ -259,23 +259,31 @@ function sameDestination(a: string, b: string, base: string): boolean {
  *
  * The pinned template renders the post type for every non-link post and the
  * destination domain for link posts, so:
- *   - `self` → self, and the legacy `self.<subreddit>` domain label → self only
- *     when it is paired with a relative Reddit permalink (that convention never
- *     carries an external href); a `self.` domain with a scheme-bearing or
- *     protocol-relative href is an external destination → link,
+ *   - `self` → self, and the legacy `self.<subreddit>` domain label → self when
+ *     its href is a relative Reddit permalink or the absolute/protocol-relative
+ *     spelling of this post's own permalink; a `self.` label whose scheme-bearing
+ *     href resolves to a different destination (self.io, self.com, another
+ *     thread) is an external destination → link,
  *   - `gallery` / `image` / `video` / `gif` → that type (`gif` posts are typed
  *     video in the same union used for `.post_media_video`),
  *   - any other non-empty label is a destination domain → link.
  * An empty or absent label carries no type/domain evidence and returns
  * undefined so the caller can fall back to the href shape.
  */
-function thumbnailLabelPostType($anchor: cheerio.Cheerio<any>): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
+function thumbnailLabelPostType(
+  $anchor: cheerio.Cheerio<any>,
+  publicBaseUrl: string,
+  permalink: string | undefined
+): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
   const label = $anchor.find('span').first().text().trim().toLowerCase();
   if (!label) return undefined;
   if (label === 'self') return 'self';
   if (label.startsWith('self.')) {
     const href = ($anchor.attr('href') || '').trim();
-    return hasUrlScheme(href) || href.startsWith('//') ? 'link' : 'self';
+    if (!hasUrlScheme(href) && !href.startsWith('//')) return 'self';
+    // The absolute spelling of this post's own permalink is still the same self
+    // post; only a genuinely different destination stays a link target.
+    return permalink && sameDestination(href, permalink, publicBaseUrl) ? 'self' : 'link';
   }
   if (label === 'gallery') return 'gallery';
   if (label === 'image') return 'image';
@@ -288,11 +296,15 @@ function thumbnailLabelPostType($anchor: cheerio.Cheerio<any>): 'self' | 'link' 
  * Handles both list markup (thumbnail labels/anchors, post previews) and the
  * detail template (media containers, #post_url, the body div).
  */
-function determinePostType($el: cheerio.Cheerio<any>): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
+function determinePostType(
+  $el: cheerio.Cheerio<any>,
+  publicBaseUrl: string,
+  permalink: string | undefined
+): 'self' | 'link' | 'image' | 'video' | 'gallery' | undefined {
   // List thumbnails label their own type/domain; detail pages wrap every
   // gallery image in a .gallery container.
   const $thumbnail = $el.find('a.post_thumbnail').first();
-  const labelType = $thumbnail.length ? thumbnailLabelPostType($thumbnail) : undefined;
+  const labelType = $thumbnail.length ? thumbnailLabelPostType($thumbnail, publicBaseUrl, permalink) : undefined;
   if (labelType === 'gallery') {
     return 'gallery';
   }
@@ -639,12 +651,14 @@ function parsePostElement($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, base
   // Extract new metadata fields
   const stickied = $el.hasClass('stickied');
   const { nsfw, spoiler } = analyzeTitleFlags($, $el.find('.post_title').first());
-  const post_type = determinePostType($el);
   const author_flair = extractAuthorFlair($el);
 
   // Public permalink of this post (title anchor). Also the negative guard for
   // destination emission below.
   const permalink = href.trim() ? absolutePublicUrl(href, publicBaseUrl) : undefined;
+  // Classification needs the permalink so an absolute spelling of this post's
+  // own href is recognised as the same post, not a destination.
+  const post_type = determinePostType($el, publicBaseUrl, permalink);
 
   // Extract thumbnail URL from post_thumbnail (svg image href or img src)
   const $thumbnail = $el.find('a.post_thumbnail').first();
@@ -859,22 +873,38 @@ export interface UserSearchResult {
 
 /**
  * Username carried by an href that resolves to the user route `/u/NAME` or
- * `/user/NAME`, else undefined. Subreddit cards (`/r/NAME`), the More-results
- * anchor (`?q=…`), bare `/user/` hrefs and profile-post paths
- * (`/user/NAME/comments/…`) are not user routes. Pure URL resolution against
- * the public base: no request is made and the name is returned verbatim, with
- * its case preserved.
+ * `/user/NAME` on the configured public origin, else undefined. Subreddit cards
+ * (`/r/NAME`), the More-results anchor (`?q=…`), bare `/user/` hrefs and
+ * profile-post paths (`/user/NAME/comments/…`) are not user routes.
+ *
+ * Origin comparison includes scheme, host and port: relative hrefs resolve
+ * onto the configured public base, while absolute or protocol-relative
+ * profile-shaped links on any other origin or scheme are foreign destinations,
+ * not Reddit users. The name segment accepts ASCII letters, digits, underscore
+ * and hyphen, covering the pinned fixtures (`TestBot42`, `test_dev`,
+ * `Alice_99`, `Bob-42`); percent-encoded or otherwise non-name segments are
+ * rejected. No length bound is invented — the repository's evidence does not
+ * establish one, and a guess could reject a historic account. Pure URL
+ * resolution: no request is made and the name is returned verbatim, with its
+ * case preserved.
  */
+const USERNAME_SEGMENT = /^[A-Za-z0-9_-]+$/;
+
 function userNameFromHref(href: string, publicBaseUrl: string): string | undefined {
-  if (!href.trim()) return undefined;
-  let pathname: string;
+  const value = href.trim();
+  if (!value) return undefined;
+  let base: URL;
+  let parsed: URL;
   try {
-    pathname = new URL(href.trim(), publicBaseUrl).pathname;
+    base = new URL(publicBaseUrl);
+    parsed = new URL(value, base);
   } catch {
     return undefined;
   }
-  const match = pathname.match(/^\/(?:u|user)\/([^/]+)\/?$/);
-  return match ? match[1] : undefined;
+  if (parsed.origin !== base.origin) return undefined;
+  const match = parsed.pathname.match(/^\/(?:u|user)\/([^/]+)\/?$/);
+  if (!match || !USERNAME_SEGMENT.test(match[1])) return undefined;
+  return match[1];
 }
 
 /**
@@ -1302,7 +1332,7 @@ export function parsePostDetails(html: string, limit: number = 10, baseUrl: stri
 
   // Determine post type from the whole page
   const $postDiv = $('.post').first();
-  const post_type = determinePostType($postDiv);
+  const post_type = determinePostType($postDiv, publicBaseUrl, permalink);
 
   // Author flair
   const $postAuthor = $('.post_author').first();
